@@ -1,0 +1,21 @@
+#Internal package file, do not edit.
+#Thu Apr 12 12:22:04 BST 2018
+2.base=C\:\\Users\\franc\\Documents\\TESTE\\android\\build\\intermediates\\assets\\debug
+5.file=C\:\\Users\\franc\\Documents\\TESTE\\android\\build\\intermediates\\assets\\debug\\air_hockey_splash.png
+5.set=ASSET
+3.base=C\:\\Users\\franc\\Documents\\TESTE\\android\\build\\intermediates\\res\\resources-debug.ap_
+2.set=ASSET
+4.base=C\:\\Users\\franc\\Documents\\TESTE\\android\\build\\intermediates\\res\\resources-debug.ap_
+count=6
+0.file=C\:\\Users\\franc\\Documents\\TESTE\\android\\build\\intermediates\\assets\\debug\\badlogic.jpg
+5.base=C\:\\Users\\franc\\Documents\\TESTE\\android\\build\\intermediates\\assets\\debug
+4.set=ANDROID_RESOURCE
+1.file=C\:\\Users\\franc\\Documents\\TESTE\\android\\build\\intermediates\\res\\resources-debug.ap_\\AndroidManifest.xml
+1.set=ANDROID_RESOURCE
+2.file=C\:\\Users\\franc\\Documents\\TESTE\\android\\build\\intermediates\\assets\\debug\\rubenneves.jpg
+0.base=C\:\\Users\\franc\\Documents\\TESTE\\android\\build\\intermediates\\assets\\debug
+3.file=C\:\\Users\\franc\\Documents\\TESTE\\android\\build\\intermediates\\res\\resources-debug.ap_\\resources.arsc
+3.set=ANDROID_RESOURCE
+1.base=C\:\\Users\\franc\\Documents\\TESTE\\android\\build\\intermediates\\res\\resources-debug.ap_
+4.file=C\:\\Users\\franc\\Documents\\TESTE\\android\\build\\intermediates\\res\\resources-debug.ap_\\res\\drawable-xxhdpi-v4\\ic_launcher.png
+0.set=ASSET
