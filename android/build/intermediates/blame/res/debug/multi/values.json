@@ -1,23 +1,23 @@
 [
     {
-        "outputFile": "C:\\Users\\franc\\Documents\\TESTE\\android\\build\\intermediates\\incremental\\mergeDebugResources\\merged.dir\\values\\values.xml",
+        "outputFile": "/home/zephyrminas/Documentos/LPOO1718_T5G6_T2/android/build/intermediates/incremental/mergeDebugResources/merged.dir/values/values.xml",
         "map": [
             {
                 "to": {
                     "startLine": 2,
                     "startColumn": 4,
                     "startOffset": 55,
-                    "endColumn": 47,
-                    "endOffset": 98
+                    "endColumn": 51,
+                    "endOffset": 102
                 },
                 "from": {
-                    "file": "C:\\Users\\franc\\Documents\\TESTE\\android\\res\\values\\strings.xml",
+                    "file": "/home/zephyrminas/Documentos/LPOO1718_T5G6_T2/android/res/values/strings.xml",
                     "position": {
                         "startLine": 3,
                         "startColumn": 4,
                         "startOffset": 56,
-                        "endColumn": 47,
-                        "endOffset": 99
+                        "endColumn": 51,
+                        "endOffset": 103
                     }
                 }
             },
@@ -25,13 +25,13 @@
                 "to": {
                     "startLine": 3,
                     "startColumn": 4,
-                    "startOffset": 103,
+                    "startOffset": 107,
                     "endLine": 10,
                     "endColumn": 12,
-                    "endOffset": 561
+                    "endOffset": 565
                 },
                 "from": {
-                    "file": "C:\\Users\\franc\\Documents\\TESTE\\android\\res\\values\\styles.xml",
+                    "file": "/home/zephyrminas/Documentos/LPOO1718_T5G6_T2/android/res/values/styles.xml",
                     "position": {
                         "startLine": 2,
                         "startColumn": 4,

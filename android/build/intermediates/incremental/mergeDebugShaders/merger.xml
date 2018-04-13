@@ -1,2 +1,2 @@
 <?xml version="1.0" encoding="utf-8"?>
-<merger version="3"><dataSet config="main"><source path="C:\Users\franc\Documents\TESTE\android\src\main\shaders"/></dataSet><dataSet config="debug"><source path="C:\Users\franc\Documents\TESTE\android\src\debug\shaders"/></dataSet></merger>
+<merger version="3"><dataSet config="main"><source path="/home/zephyrminas/Documentos/LPOO1718_T5G6_T2/android/src/main/shaders"/></dataSet><dataSet config="debug"><source path="/home/zephyrminas/Documentos/LPOO1718_T5G6_T2/android/src/debug/shaders"/></dataSet></merger>
