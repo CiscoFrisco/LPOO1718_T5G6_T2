@@ -1,4 +1,0 @@
-#Fri Apr 13 20:45:23 WEST 2018
-base.0=/home/zephyrminas/Documentos/LPOO1718_T5G6_T2/android/build/intermediates/transforms/dex/debug/folders/1000/1f/main
-renamed.0=classes.dex
-file.0=/home/zephyrminas/Documentos/LPOO1718_T5G6_T2/android/build/intermediates/transforms/dex/debug/folders/1000/1f/main/classes.dex
