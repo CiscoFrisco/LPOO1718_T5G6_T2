@@ -1,12 +1,12 @@
 package com.ciscominas.airhockeymania;
 
-import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.ciscominas.airhockeymania.screens.GameScreen;
+import com.ciscominas.airhockeymania.screens.Splash;
 
 public class AirHockeyMania extends Game {
 	private SpriteBatch batch;
@@ -17,7 +17,7 @@ public class AirHockeyMania extends Game {
 	    assetManager = new AssetManager();
 		batch = new SpriteBatch();
 
-		setScreen(new Splash(this));
+		setScreen(new GameScreen());
 	}
 
 	@Override
