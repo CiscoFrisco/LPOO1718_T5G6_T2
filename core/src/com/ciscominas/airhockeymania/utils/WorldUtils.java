@@ -54,4 +54,18 @@ public class WorldUtils {
         shape.dispose();
         return body;
     }
+
+    public static Body createHandle(World world)
+    {
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.position.set(new Vector2(Constants.HANDLE_X, Constants.HANDLE_Y));
+        CircleShape shape = new CircleShape();
+        shape.setRadius(Constants.HANDLE_RADIUS);
+        Body body = world.createBody(bodyDef);
+        body.createFixture(shape, Constants.EDGE_DENSITY);
+        body.resetMassData();
+        shape.dispose();
+        return body;
+    }
 }

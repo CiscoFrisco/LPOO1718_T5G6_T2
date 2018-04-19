@@ -11,4 +11,8 @@ public abstract class GameActor extends Actor {
     {
         this.body = body;
     }
+
+    public Body getBody() {
+        return body;
+    }
 }
