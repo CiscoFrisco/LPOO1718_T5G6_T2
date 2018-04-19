@@ -1,4 +1,4 @@
-package com.mygdx.game;
+package com.ciscominas.airhockeymania;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
