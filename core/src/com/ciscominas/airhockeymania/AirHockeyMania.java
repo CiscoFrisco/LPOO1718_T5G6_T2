@@ -1,4 +1,4 @@
-package com.ciscominas.airhockeymania;
+package com.mygdx.game;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Game;
@@ -32,5 +32,13 @@ public class AirHockeyMania extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
+	}
+
+	public AssetManager getAssetManager() {
+		return assetManager;
+	}
+
+	public SpriteBatch getBatch() {
+		return batch;
 	}
 }

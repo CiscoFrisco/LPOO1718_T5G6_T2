@@ -1,20 +1,21 @@
-package com.ciscominas.airhockeymania;
+package com.mygdx.game;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
-public class Splash implements Screen {
+public class Splash extends ScreenAdapter {
 
-    private Game myGame;
+    private AirHockeyMania myGame;
     private SpriteBatch spriteBatch;
     private Texture splash;
 
-    public Splash(Game g) {
+    public Splash(AirHockeyMania g) {
         myGame = g;
     }
 
@@ -28,11 +29,11 @@ public class Splash implements Screen {
     public void render(float delta) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         spriteBatch.begin();
-        spriteBatch.draw(splash, 100, 852);
+        spriteBatch.draw(splash, 240, 852);
         spriteBatch.end();
 
         if (Gdx.input.justTouched())
-            myGame.setScreen(new MainMenu(myGame));
+            myGame.setScreen(new GameScreen(myGame));
     }
 
     @Override
