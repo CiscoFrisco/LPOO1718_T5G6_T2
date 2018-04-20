@@ -2,6 +2,7 @@ package com.ciscominas.airhockeymania.stages;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
@@ -81,6 +82,22 @@ public class GameStage extends Stage implements ContactListener{
     {
         touchPoint = new Vector3();
         Gdx.input.setInputProcessor(this);
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int point, int button)
+    {
+        camera.unproject(touchPoint.set(screenX, screenY, 0));
+
+        // calculte the normalized direction from the body to the touch position
+        Vector2 direction = new Vector2(touchPoint.x, touchPoint.y);
+        direction.sub(handle.getBody().getPosition());
+        direction.nor();
+
+        float speed = 10;
+        handle.getBody().setLinearVelocity(direction.scl(speed));
+
+        return true;
     }
 
     @Override
