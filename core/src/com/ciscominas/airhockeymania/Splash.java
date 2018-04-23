@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.PolygonSpriteBatch;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.ciscominas.airhockeymania.screens.GameScreen;
 
 public class Splash extends ScreenAdapter {
 
@@ -33,7 +34,7 @@ public class Splash extends ScreenAdapter {
         spriteBatch.end();
 
         if (Gdx.input.justTouched())
-            myGame.setScreen(new GameScreen(myGame));
+            myGame.setScreen(new GameScreen());
     }
 
     @Override
