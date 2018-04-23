@@ -35,6 +35,8 @@ public class GameScreen extends ScreenAdapter {
         stage.draw();
         stage.act(delta);
     }
+
+
 }
 
 
@@ -170,4 +172,4 @@ public class GameScreen extends ScreenAdapter {
     {
         gamePort.update(width, height);
     }
-}**/
+}*/

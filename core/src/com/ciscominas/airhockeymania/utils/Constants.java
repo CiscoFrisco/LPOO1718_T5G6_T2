@@ -9,7 +9,7 @@ public class Constants {
     public static final float WORLD_TO_SCREEN = 32;
 
 
-    public static final Vector2 WORLD_GRAVITY = new Vector2(0, 0);;
+    public static final Vector2 WORLD_GRAVITY = new Vector2(0, 0);
     public static final float L_EDGE_X = 0;
     public static final float R_EDGE_X = 20f;
     public static final float EDGE_Y = 0;
@@ -28,5 +28,19 @@ public class Constants {
     public static final String PUCK_IMAGE_PATH = "puck.png";
     public static final String LOGO_IMAGE_PATH = "air_hockey_mania.png";
 
+    public static final float PUCK_DENSITY = 1f;
+    public static final float RESTITUTION = 1f;
+
+    public static final float UPL_GL_X = 0;
+    public static final float UP_GL_Y = 15;
+    public static final float GL_WIDTH = 15;
+    public static final float GL_HEIGHT = 1;
+
+    public static final float UPR_GL_X = 20;
+
+    public static final float DOWNL_GL_X = 0;
+    public static final float DOWN_GL_Y = 0;
+
+    public static final float DOWNR_GL_X = 20;
 
 }

@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.ciscominas.airhockeymania.actors.Edge;
@@ -17,21 +18,23 @@ import com.ciscominas.airhockeymania.actors.Handle;
 import com.ciscominas.airhockeymania.actors.Puck;
 import com.ciscominas.airhockeymania.utils.Constants;
 import com.ciscominas.airhockeymania.utils.WorldUtils;
+import com.ciscominas.airhockeymania.utils.BodyUtils;
+
 
 public class GameStage extends Stage implements ContactListener{
     // This will be our viewport measurements while working with the debug renderer
     private static final int VIEWPORT_WIDTH = 20;
-    private static final int VIEWPORT_HEIGHT = 13;
+    private static final int VIEWPORT_HEIGHT = 15;
 
     private Puck puck;
     private Handle handle;
     private World world;
     private Edge lEdge;
     private Edge rEdge;
-    private Body gLine1;
-    private Body gLine2;
-    private Body gLine3;
-    private Body gLine4;
+    private Edge ulEdge;
+    private Edge urEdge;
+    private Edge dlEdge;
+    private Edge drEdge;
 
     private Vector3 touchPoint;
 
@@ -63,8 +66,16 @@ public class GameStage extends Stage implements ContactListener{
     private void setUpEdges() {
         lEdge = new Edge(WorldUtils.createEdge(world, Constants.L_EDGE_X, Constants.EDGE_Y));
         rEdge = new Edge(WorldUtils.createEdge(world, Constants.R_EDGE_X, Constants.EDGE_Y));
+        ulEdge = new Edge(WorldUtils.createGoalLine(world, Constants.UPL_GL_X, Constants.UP_GL_Y, Constants.GL_WIDTH, Constants.GL_HEIGHT));
+        urEdge = new Edge(WorldUtils.createGoalLine(world, Constants.UPR_GL_X, Constants.UP_GL_Y, Constants.GL_WIDTH, Constants.GL_HEIGHT));
+        dlEdge = new Edge(WorldUtils.createGoalLine(world, Constants.DOWNL_GL_X, Constants.DOWN_GL_Y, Constants.GL_WIDTH, Constants.GL_HEIGHT));
+        drEdge = new Edge(WorldUtils.createGoalLine(world, Constants.DOWNR_GL_X, Constants.DOWN_GL_Y, Constants.GL_WIDTH, Constants.GL_HEIGHT));
         addActor(lEdge);
         addActor(rEdge);
+        addActor(ulEdge);
+        addActor(urEdge);
+        addActor(dlEdge);
+        addActor(drEdge);
     }
 
     private void setUpPuck() {
@@ -88,7 +99,6 @@ public class GameStage extends Stage implements ContactListener{
     public boolean touchDown(int screenX, int screenY, int point, int button)
     {
         camera.unproject(touchPoint.set(screenX, screenY, 0));
-
         // calculte the normalized direction from the body to the touch position
         Vector2 direction = new Vector2(touchPoint.x, touchPoint.y);
         direction.sub(handle.getBody().getPosition());
@@ -129,6 +139,28 @@ public class GameStage extends Stage implements ContactListener{
     @Override
     public void beginContact(Contact contact) {
 
+       /* Body a = contact.getFixtureA().getBody();
+        Body b = contact.getFixtureB().getBody();
+
+        if (BodyUtils.bodyIsPuck(a) || BodyUtils.bodyIsPuck(b))
+        {
+            if(BodyUtils.bodyIsEdge(a))
+            {
+               Vector2 curr_vel =  new Vector2(b.getLinearVelocity());
+
+                curr_vel *= a.getRebound();
+
+                b.setLinearVelocity(curr_vel);
+            }
+            else if(BodyUtils.bodyIsEdge(b))
+            {
+                Vector2 curr_vel =  new Vector2(a.getLinearVelocity());
+
+                curr_vel *= b.getRebound();
+
+                a.setLinearVelocity(curr_vel);
+            }
+        }*/
     }
 
     @Override
