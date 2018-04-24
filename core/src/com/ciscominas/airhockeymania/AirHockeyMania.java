@@ -22,8 +22,11 @@ public class AirHockeyMania extends Game {
 	private GameScreen gameScreen;
 	private PreferencesScreen preferencesScreen;
 
+	private AppPreferences preferences;
+
 	@Override
 	public void create () {
+		preferences = new AppPreferences();
 		gameScreen = new GameScreen();
 		assetManager = new GameAssetManager();
 		mainMenu = new MainMenu(this);
@@ -48,7 +51,7 @@ public class AirHockeyMania extends Game {
 				this.setScreen(mainMenu);
 				break;
 			case 1:
-				if(preferencesScreen == null) preferencesScreen = new PreferencesScreen();
+				if(preferencesScreen == null) preferencesScreen = new PreferencesScreen(this);
 				this.setScreen(preferencesScreen);
 				break;
 			case 2:
@@ -61,6 +64,7 @@ public class AirHockeyMania extends Game {
 	@Override
 	public void dispose () {
 		batch.dispose();
+		assetManager.manager.dispose();
 	}
 
 	public GameAssetManager getAssetManager() {
@@ -69,5 +73,9 @@ public class AirHockeyMania extends Game {
 
 	public SpriteBatch getBatch() {
 		return batch;
+	}
+
+	public AppPreferences getPreferences() {
+		return preferences;
 	}
 }

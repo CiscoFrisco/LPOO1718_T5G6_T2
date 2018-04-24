@@ -39,10 +39,13 @@ public class MainMenu extends ScreenAdapter {
 // Create a table that fills the screen. Everything else will go inside this table.
         Gdx.input.setInputProcessor(stage);
 
+// Create a table that fills the screen. Everything else will go inside this table.
         Table table = new Table();
         table.setFillParent(true);
         table.setDebug(true);
         stage.addActor(table);
+
+        Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
 
         TextButton newGame = new TextButton("New Game", skin);
         TextButton preferences = new TextButton("Preferences", skin);

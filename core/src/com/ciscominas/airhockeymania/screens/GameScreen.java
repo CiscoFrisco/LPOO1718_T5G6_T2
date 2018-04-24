@@ -21,6 +21,11 @@ public class GameScreen extends ScreenAdapter {
 
     private GameStage stage;
 
+    @Override
+    public void show() {
+        Gdx.input.setInputProcessor(stage);
+    }
+
     public GameScreen()
     {
         stage = new GameStage();
