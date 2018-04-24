@@ -20,6 +20,8 @@ import com.ciscominas.airhockeymania.utils.Constants;
 import com.ciscominas.airhockeymania.utils.WorldUtils;
 import com.ciscominas.airhockeymania.utils.BodyUtils;
 
+import org.omg.CORBA.CODESET_INCOMPATIBLE;
+
 
 public class GameStage extends Stage implements ContactListener{
     // This will be our viewport measurements while working with the debug renderer
@@ -43,6 +45,8 @@ public class GameStage extends Stage implements ContactListener{
 
     private OrthographicCamera camera;
     private Box2DDebugRenderer renderer;
+    private int scorePlayer;
+    private int scoreOpponent;
 
     public GameStage() {
 
@@ -50,6 +54,9 @@ public class GameStage extends Stage implements ContactListener{
         setupCamera();
         setUpTouch();
         renderer = new Box2DDebugRenderer();
+
+        scorePlayer = 0;
+        scoreOpponent = 0;
     }
 
     private void setUpWorld() {
@@ -122,8 +129,27 @@ public class GameStage extends Stage implements ContactListener{
             accumulator -= TIME_STEP;
         }
 
+        if(puck.getBody().getPosition().y < 0)
+        {
+            scorePlayer++;
+            resetActors();
+        } else if (puck.getBody().getPosition().y > 20) {
+            scoreOpponent++;
+            resetActors();
+        }
+
         //TODO: Implement interpolation
 
+    }
+
+    private void resetActors() {
+        handle.reset();
+        puck.reset();
+    }
+
+    public String getScore()
+    {
+        return "Score: " + scorePlayer + " - " + scoreOpponent;
     }
 
     @Override

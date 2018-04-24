@@ -20,15 +20,17 @@ public class GameScreen extends ScreenAdapter {
 
 
     private GameStage stage;
+    private AirHockeyMania myGame;
 
     @Override
     public void show() {
         Gdx.input.setInputProcessor(stage);
     }
 
-    public GameScreen()
+    public GameScreen(AirHockeyMania game)
     {
         stage = new GameStage();
+        myGame = game;
     }
 
     @Override
@@ -39,6 +41,10 @@ public class GameScreen extends ScreenAdapter {
         //Update the stage
         stage.draw();
         stage.act(delta);
+
+        myGame.batch.begin();
+        myGame.font.draw(myGame.batch, stage.getScore(), 100, 150);
+        myGame.batch.end();
     }
 
 

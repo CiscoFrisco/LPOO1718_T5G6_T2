@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ciscominas.airhockeymania.screens.GameScreen;
 import com.ciscominas.airhockeymania.screens.PreferencesScreen;
@@ -15,7 +16,8 @@ import com.ciscominas.airhockeymania.utils.GameAssetManager;
 import java.util.ArrayList;
 
 public class AirHockeyMania extends Game {
-	private SpriteBatch batch;
+	public SpriteBatch batch;
+	public BitmapFont font;
 	public GameAssetManager assetManager;
 
 	private MainMenu mainMenu;
@@ -27,10 +29,11 @@ public class AirHockeyMania extends Game {
 	@Override
 	public void create () {
 		preferences = new AppPreferences();
-		gameScreen = new GameScreen();
+		gameScreen = new GameScreen(this);
 		assetManager = new GameAssetManager();
 		mainMenu = new MainMenu(this);
 		batch = new SpriteBatch();
+		font = new BitmapFont();
 
 		setScreen(mainMenu);
 	}
@@ -55,7 +58,7 @@ public class AirHockeyMania extends Game {
 				this.setScreen(preferencesScreen);
 				break;
 			case 2:
-				if(gameScreen == null) gameScreen = new GameScreen();
+				if(gameScreen == null) gameScreen = new GameScreen(this);
 				this.setScreen(gameScreen);
 				break;
 		}

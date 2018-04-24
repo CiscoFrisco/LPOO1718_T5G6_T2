@@ -34,7 +34,7 @@ public class Splash extends ScreenAdapter {
         spriteBatch.end();
 
         if (Gdx.input.justTouched())
-            myGame.setScreen(new GameScreen());
+            myGame.setScreen(new GameScreen(myGame));
     }
 
     @Override
