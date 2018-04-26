@@ -28,3 +28,14 @@ In game, the user will have access to the current score, and a pause option (onl
 ### Mock ups
 
 ## Test Design
+
+- Menu Navigation tests: the purpose of this tests is to check whether or not the buttons do the expected behaviour (i.e. when touching the Settings Button, the user should be redirected to the Settings Menu).
+
+- Test Settings: This tests check if the changes in the game settings are applied to the game (i.e. if the user changes the difficulty
+from easy to hard, the game should be harder to win).
+
+-Test Movements: Test in game movements of our objects according to their attributes (i.e. check if the puck moves upwards when it has a linear velocity positive int the y axis).
+
+-Test Collisions: Check if the object collide with each other.
+
+-Test Score/ End Game: Check if the score updates when a player scores a goal and if the game ends (win or loss) when a player reachs the max score. 
