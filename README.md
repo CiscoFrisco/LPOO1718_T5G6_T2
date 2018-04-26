@@ -3,7 +3,7 @@ Second project for FEUP MIEIC's curricular unit LPOO: AirHockey on Android.
 
 ## UML
 
-### Package Diagram and Class Diagram
+### Package and Class Diagram
 
 ### Sequence/Activity/State Diagram
 
@@ -21,11 +21,22 @@ Off game state is represented by the menu's, which may include the following:
     - MultiPlayer
   - Settings
     - Sound
+    - SP Settings
+    - SP Costumization
   - About
   
 In game, the user will have access to the current score, and a pause option (only in singleplayer mode, in multiplayer this feature may be added but requires both users to press the button in order for it to work) that may allow the user to forfeit, or change the game's options, such like puck speed or bounciness.
 
 ### Mock ups
+
+Note: The following images only try to show what features the GUI may have, not what it may look like. The final GUI may very well be different, these are just ideas.
+
+![main menu](https://github.com/CiscoFrisco/LPOO1718_T5G6_T2/blob/master/res/menu-mockups/main.png "Main Menu")
+![new game](https://github.com/CiscoFrisco/LPOO1718_T5G6_T2/blob/master/res/menu-mockups/new.png "New Game")
+![settings](https://github.com/CiscoFrisco/LPOO1718_T5G6_T2/blob/master/res/menu-mockups/settings.png "Settings")
+![about](https://github.com/CiscoFrisco/LPOO1718_T5G6_T2/blob/master/res/menu-mockups/about.png "About")
+![ingame](https://github.com/CiscoFrisco/LPOO1718_T5G6_T2/blob/master/res/menu-mockups/ingame.png "In Game")
+![pause](https://github.com/CiscoFrisco/LPOO1718_T5G6_T2/blob/master/res/menu-mockups/pause.png "Pause")
 
 ## Test Design
 
