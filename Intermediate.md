@@ -1,10 +1,10 @@
 # Intermediate Check-Point
 
 ## UML
-
 ### Package and Class Diagram
-
-### Sequence/Activity/State Diagram
+![package and class diagram](res/diagrams/class_package.png)
+### State Diagram
+![state diagram](res/diagrams/game_behaviour.png)
 
 ## Design Patterns
 
