@@ -9,6 +9,26 @@ Second project for FEUP MIEIC's curricular unit LPOO: AirHockey on Android.
 
 ## Design Patterns
 
+Note: As we have already started coding and separating the project by concerns, we have selected the following design patterns which we think that fit the objective of this game.
+
+- Composite
+
+  The UI outside the game is composed by menus which themselves may be composed by other menus. The user may navigate between a menu and its childs in a linear direction, so each menu should also know its parent, and according to the user input, change the current screen accordingly.
+  
+- Singleton
+
+  The game will have a single asset manager, that should be available throught the duration of the game. Therefore, it can be a singleton.
+  There will also only ever be one game, thus the main class, AirHockeyMania, should be a singleton.
+  
+- Model-View-Controller
+
+  Our game has several models (menu buttons, puck, handles), views (menu screens, the game screen), and an interface that allows the user to change the state of the game
+    - which view is currently shown
+    - where the objects are located
+    - what the objects' data (speed, etc) are
+  Therefore, the models are represented by Actors, the views by Screens, and the controllers by input controllers and Stages.
+  
+
 ## GUI Design
 
 ### Main functionalities
