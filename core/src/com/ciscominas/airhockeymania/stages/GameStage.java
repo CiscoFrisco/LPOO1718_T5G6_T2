@@ -102,7 +102,7 @@ public class GameStage extends Stage implements ContactListener{
         Gdx.input.setInputProcessor(this);
     }
 
-    @Override
+    /*@Override
     public boolean touchDown(int screenX, int screenY, int point, int button)
     {
         camera.unproject(touchPoint.set(screenX, screenY, 0));
@@ -114,6 +114,14 @@ public class GameStage extends Stage implements ContactListener{
         float speed = 10;
         handle.getBody().setLinearVelocity(direction.scl(speed));
 
+        return true;
+    }*/
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer)
+    {
+        camera.unproject(touchPoint.set(screenX, screenY, 0));
+        handle.getBody().setTransform(touchPoint.x, touchPoint.y, 0);
         return true;
     }
 

@@ -65,7 +65,7 @@ public class WorldUtils {
     public static Body createHandle(World world)
     {
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = BodyDef.BodyType.KinematicBody;
         bodyDef.position.set(new Vector2(Constants.HANDLE_X, Constants.HANDLE_Y));
         CircleShape shape = new CircleShape();
         shape.setRadius(Constants.HANDLE_RADIUS);
