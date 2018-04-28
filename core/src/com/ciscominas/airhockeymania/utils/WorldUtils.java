@@ -13,7 +13,7 @@ public class WorldUtils {
 
     public static World createWorld()
     {
-        return new World(Constants.WORLD_GRAVITY, true);
+        return new World(Constants.WORLD_GRAVITY, false);
     }
 
     public static Body createEdge(World world, float x, float y)
