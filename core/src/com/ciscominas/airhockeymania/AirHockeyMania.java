@@ -40,7 +40,7 @@ public class AirHockeyMania extends Game {
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(96/255f, 176/255f, 244/255f, 1);
+		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		batch.begin();
 		batch.end();

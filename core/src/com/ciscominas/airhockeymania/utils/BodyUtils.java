@@ -12,6 +12,12 @@ public class BodyUtils {
         return userData != null && userData.getUserDataType() == UserDataType.PUCK;
     }
 
+    public static boolean bodyIsHandle(Body body) {
+        UserData userData = (UserData) body.getUserData();
+
+        return userData != null && userData.getUserDataType() == UserDataType.HANDLE;
+    }
+
     public static boolean bodyIsEdge(Body body) {
         UserData userData = (UserData) body.getUserData();
 
