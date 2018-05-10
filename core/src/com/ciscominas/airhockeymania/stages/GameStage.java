@@ -23,6 +23,8 @@ import org.omg.CORBA.CODESET_INCOMPATIBLE;
 
 import com.ciscominas.airhockeymania.utils.Constants;
 
+import static com.ciscominas.airhockeymania.utils.Constants.BOT_X;
+import static com.ciscominas.airhockeymania.utils.Constants.BOT_Y;
 import static com.ciscominas.airhockeymania.utils.Constants.DOWNL_GL_X;
 import static com.ciscominas.airhockeymania.utils.Constants.DOWNR_GL_X;
 import static com.ciscominas.airhockeymania.utils.Constants.DOWN_GL_Y;
@@ -41,10 +43,12 @@ import static com.ciscominas.airhockeymania.utils.Constants.MID_WIDTH;
 import static com.ciscominas.airhockeymania.utils.Constants.MID_X;
 import static com.ciscominas.airhockeymania.utils.Constants.MID_Y;
 import static com.ciscominas.airhockeymania.utils.Constants.PUCK_BODY;
+import static com.ciscominas.airhockeymania.utils.Constants.PUCK_X;
 import static com.ciscominas.airhockeymania.utils.Constants.R_EDGE_X;
 import static com.ciscominas.airhockeymania.utils.Constants.UPL_GL_X;
 import static com.ciscominas.airhockeymania.utils.Constants.UPR_GL_X;
 import static com.ciscominas.airhockeymania.utils.Constants.UP_GL_Y;
+import static java.lang.Math.abs;
 
 public class GameStage extends Stage implements ContactListener{
     // This will be our viewport measurements while working with the debug renderer
@@ -62,6 +66,8 @@ public class GameStage extends Stage implements ContactListener{
     private Edge dlEdge;
     private Edge drEdge;
     private Edge midLine;
+    private Edge goalLine;
+    private Edge anotherGoalLine;
 
     private Vector3 touchPoint;
 
@@ -72,6 +78,10 @@ public class GameStage extends Stage implements ContactListener{
     private Box2DDebugRenderer renderer;
     private int scorePlayer;
     private int scoreOpponent;
+    private Vector2 old_pos;
+
+    private Vector2 puck_vel;
+    private boolean gameOver;
 
     public GameStage() {
 
@@ -94,8 +104,8 @@ public class GameStage extends Stage implements ContactListener{
     private void setUpHandles() {
         handle = new Handle(WorldUtils.createHandle(new Vector2(HANDLE_X, HANDLE_Y), world, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
         addActor(handle);
-
-        bot = new Handle(WorldUtils.createHandle(new Vector2(10, 14), world, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
+        old_pos = handle.getBody().getPosition();
+        bot = new Handle(WorldUtils.createHandle(new Vector2(BOT_X, BOT_Y), world, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
         addActor(bot);
     }
 
@@ -107,6 +117,9 @@ public class GameStage extends Stage implements ContactListener{
         dlEdge = new Edge(WorldUtils.createLine(world, DOWNL_GL_X, DOWN_GL_Y, GL_WIDTH, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY)));
         drEdge = new Edge(WorldUtils.createLine(world, DOWNR_GL_X, DOWN_GL_Y, GL_WIDTH, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY)));
         midLine = new Edge(WorldUtils.createLine(world, MID_X, MID_Y, MID_WIDTH, MID_HEIGHT, LINE_BODY, (short)(HANDLE_BODY)));
+        goalLine = new Edge(WorldUtils.createLine(world, MID_X, UP_GL_Y, MID_WIDTH, MID_HEIGHT, LINE_BODY, (short)(HANDLE_BODY)));
+        anotherGoalLine = new Edge(WorldUtils.createLine(world, MID_X, DOWN_GL_Y, MID_WIDTH, MID_HEIGHT, LINE_BODY, (short)(HANDLE_BODY)));
+
         addActor(lEdge);
         addActor(rEdge);
         addActor(ulEdge);
@@ -114,6 +127,8 @@ public class GameStage extends Stage implements ContactListener{
         addActor(dlEdge);
         addActor(drEdge);
         addActor(midLine);
+        addActor(goalLine);
+        addActor(anotherGoalLine);
     }
 
     private void setUpPuck() {
@@ -147,15 +162,16 @@ public class GameStage extends Stage implements ContactListener{
 
         return true;
     }
-
-   /* @Override
+/*
+    @Override
     public boolean touchDragged(int screenX, int screenY, int pointer)
     {
         camera.unproject(touchPoint.set(screenX, screenY, 0));
         handle.getBody().setTransform(touchPoint.x, touchPoint.y, 0);
-        return true;
-    }*/
 
+        return true;
+    }
+*/
     @Override
     public void act(float delta) {
         super.act(delta);
@@ -169,6 +185,17 @@ public class GameStage extends Stage implements ContactListener{
         }
 
         bot.getBody().setTransform(puck.getBody().getPosition().x, bot.getBody().getPosition().y, 0);
+        if(puck.getBody().getPosition().y > Constants.MID_Y && puck.getBody().getLinearVelocity().len() < 20)
+        {
+            Vector2 direction = puck.getBody().getPosition();
+            direction.sub(bot.getBody().getPosition());
+            direction.nor();
+
+            float speed = 10;
+            bot.getBody().setLinearVelocity(direction.scl(speed));
+        }
+        puck_vel = new Vector2(handle.getBody().getPosition().x - old_pos.x, handle.getBody().getPosition().y - old_pos.y);
+        old_pos = handle.getBody().getPosition();
 
         if(puck.getBody().getPosition().y < 0)
         {
@@ -179,13 +206,19 @@ public class GameStage extends Stage implements ContactListener{
             resetActors();
         }
 
+        if((scoreOpponent >= 5 || scorePlayer >= 5) && abs(scorePlayer - scoreOpponent) >= 2)
+        {
+            gameOver = true;
+        }
+
         //TODO: Implement interpolation
 
     }
 
     private void resetActors() {
-        handle.reset();
+        handle.reset(Constants.HANDLE_X,Constants.HANDLE_Y);
         puck.reset();
+        bot.reset(BOT_X, BOT_Y);
     }
 
     public String getScore()
@@ -205,7 +238,6 @@ public class GameStage extends Stage implements ContactListener{
 
     @Override
     public void beginContact(Contact contact) {
-
     }
 
     @Override
@@ -221,5 +253,18 @@ public class GameStage extends Stage implements ContactListener{
     @Override
     public void postSolve(Contact contact, ContactImpulse impulse) {
 
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
+    }
+
+    public void reset() {
+        scoreOpponent = 0;
+        scorePlayer = 0;
+        bot.reset(BOT_X, BOT_Y);
+        handle.reset(HANDLE_X, HANDLE_Y);
+        puck.reset();
+        gameOver = false;
     }
 }

@@ -10,9 +10,9 @@ public class Handle extends GameActor {
         super(body);
     }
 
-    public void reset()
+    public void reset(float x, float y)
     {
-        body.setTransform(Constants.HANDLE_X, Constants.HANDLE_Y, 0);
+        body.setTransform(x, y, 0);
         body.setLinearVelocity(0,0);
     }
 }

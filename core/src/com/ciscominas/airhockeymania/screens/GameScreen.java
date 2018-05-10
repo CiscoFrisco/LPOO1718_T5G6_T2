@@ -42,6 +42,12 @@ public class GameScreen extends ScreenAdapter {
         stage.draw();
         stage.act(delta);
 
+        if(stage.isGameOver())
+        {
+            myGame.changeScreen(0);
+            stage.reset();
+        }
+
         myGame.batch.begin();
         myGame.font.draw(myGame.batch, stage.getScore(), 100, 150);
         myGame.batch.end();

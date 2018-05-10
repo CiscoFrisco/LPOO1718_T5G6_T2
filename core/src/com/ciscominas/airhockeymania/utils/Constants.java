@@ -24,6 +24,10 @@ public class Constants {
     public static final float HANDLE_X = 10f;
     public static final float HANDLE_Y = 1f;
 
+    public static final float BOT_X = 10f;
+    public static final float BOT_Y = 14f;
+
+
     public static final String HANDLE_IMAGE_PATH = "handle.png";
     public static final String PUCK_IMAGE_PATH = "puck.png";
     public static final String LOGO_IMAGE_PATH = "air_hockey_mania.png";
