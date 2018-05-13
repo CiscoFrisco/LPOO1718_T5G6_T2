@@ -17,6 +17,7 @@ import com.ciscominas.airhockeymania.actors.Edge;
 import com.ciscominas.airhockeymania.actors.Handle;
 import com.ciscominas.airhockeymania.actors.PowerUp;
 import com.ciscominas.airhockeymania.actors.Puck;
+import com.ciscominas.airhockeymania.box2d.PowerUpUserData;
 import com.ciscominas.airhockeymania.utils.WorldUtils;
 import com.ciscominas.airhockeymania.utils.BodyUtils;
 
@@ -162,7 +163,7 @@ public class GameStage extends Stage implements ContactListener{
     public boolean touchDown(int screenX, int screenY, int point, int button)
     {
         camera.unproject(touchPoint.set(screenX, screenY, 0));
-        // calculte the normalized direction from the body to the touch position
+        // calculate the normalized direction from the body to the touch position
         Vector2 direction = new Vector2(touchPoint.x, touchPoint.y);
         direction.sub(handle.getBody().getPosition());
         direction.nor();
@@ -248,6 +249,12 @@ public class GameStage extends Stage implements ContactListener{
 
     @Override
     public void beginContact(Contact contact) {
+        Body b1 = contact.getFixtureA().getBody();
+        Body b2 = contact.getFixtureB().getBody();
+
+        Gdx.app.log("beginContact",b1.getUserData().getClass().toString());
+        Gdx.app.log("beginContact", b2.getUserData().getClass().toString());
+
     }
 
     @Override
@@ -277,4 +284,19 @@ public class GameStage extends Stage implements ContactListener{
         puck.reset();
         gameOver = false;
     }
+
+    public void checkDeadPowerUp() {
+
+        Body body = currPowerUp.getBody();
+
+        if (body != null) {
+            PowerUpUserData data = (PowerUpUserData) body.getUserData();
+            if (data.isFlaggedForRemoval()) {
+                world.destroyBody(body);
+                body.setUserData(null);
+                body = null;
+            }
+        }
+    }
+
 }

@@ -1,5 +1,6 @@
 package com.ciscominas.airhockeymania;
 
+import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
@@ -28,6 +29,7 @@ public class AirHockeyMania extends Game {
 
 	@Override
 	public void create () {
+		Gdx.app.setLogLevel(Application.LOG_DEBUG);
 		preferences = new AppPreferences();
 		gameScreen = new GameScreen(this);
 		assetManager = new GameAssetManager();

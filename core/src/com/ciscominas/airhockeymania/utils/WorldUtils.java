@@ -8,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ciscominas.airhockeymania.box2d.PowerUpUserData;
 
 import static com.ciscominas.airhockeymania.utils.Constants.PUCK_DENSITY;
 
@@ -96,6 +97,9 @@ public class WorldUtils {
         body.createFixture(fixture);
         body.resetMassData();
         shape.dispose();
+
+        body.setUserData(new PowerUpUserData());
+
         return body;
     }
 }
