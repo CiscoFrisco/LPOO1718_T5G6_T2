@@ -15,6 +15,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.ciscominas.airhockeymania.actors.Edge;
 import com.ciscominas.airhockeymania.actors.Handle;
+import com.ciscominas.airhockeymania.actors.PowerUp;
 import com.ciscominas.airhockeymania.actors.Puck;
 import com.ciscominas.airhockeymania.utils.WorldUtils;
 import com.ciscominas.airhockeymania.utils.BodyUtils;
@@ -42,6 +43,7 @@ import static com.ciscominas.airhockeymania.utils.Constants.MID_HEIGHT;
 import static com.ciscominas.airhockeymania.utils.Constants.MID_WIDTH;
 import static com.ciscominas.airhockeymania.utils.Constants.MID_X;
 import static com.ciscominas.airhockeymania.utils.Constants.MID_Y;
+import static com.ciscominas.airhockeymania.utils.Constants.POWERUP_BODY;
 import static com.ciscominas.airhockeymania.utils.Constants.PUCK_BODY;
 import static com.ciscominas.airhockeymania.utils.Constants.PUCK_X;
 import static com.ciscominas.airhockeymania.utils.Constants.R_EDGE_X;
@@ -68,6 +70,7 @@ public class GameStage extends Stage implements ContactListener{
     private Edge midLine;
     private Edge goalLine;
     private Edge anotherGoalLine;
+    private PowerUp currPowerUp;
 
     private Vector3 touchPoint;
 
@@ -99,6 +102,7 @@ public class GameStage extends Stage implements ContactListener{
         setUpPuck();
         setUpEdges();
         setUpHandles();
+        setUpPowerUp();
     }
 
     private void setUpHandles() {
@@ -146,6 +150,12 @@ public class GameStage extends Stage implements ContactListener{
     {
         touchPoint = new Vector3();
         Gdx.input.setInputProcessor(this);
+    }
+
+    private void setUpPowerUp()
+    {
+        currPowerUp = new PowerUp(WorldUtils.createPowerUp(BodyUtils.randPosition(2, 2,15,15),world, POWERUP_BODY, (short) PUCK_BODY));
+        addActor(currPowerUp);
     }
 
     @Override

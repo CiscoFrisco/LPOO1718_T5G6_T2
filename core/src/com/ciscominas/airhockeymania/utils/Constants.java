@@ -55,6 +55,8 @@ public class Constants {
     public final static short PUCK_BODY = 0x0001;
     public final static short HANDLE_BODY = 0x0002;
     public final static short LINE_BODY = 0x0004;
+    public final static short POWERUP_BODY = 0x0008;
+
 
 
 }
