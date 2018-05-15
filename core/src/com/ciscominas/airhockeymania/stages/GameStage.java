@@ -25,6 +25,10 @@ import org.omg.CORBA.CODESET_INCOMPATIBLE;
 
 import com.ciscominas.airhockeymania.utils.Constants;
 
+import java.time.Duration;
+import java.time.Instant;
+import java.util.Date;
+
 import static com.ciscominas.airhockeymania.utils.Constants.BOT_X;
 import static com.ciscominas.airhockeymania.utils.Constants.BOT_Y;
 import static com.ciscominas.airhockeymania.utils.Constants.DOWNL_GL_X;
@@ -57,6 +61,7 @@ public class GameStage extends Stage implements ContactListener{
     // This will be our viewport measurements while working with the debug renderer
     private static final int VIEWPORT_WIDTH = 20;
     private static final int VIEWPORT_HEIGHT = 15;
+    private Date init;
 
     private Puck puck;
     private Handle handle;
@@ -96,14 +101,17 @@ public class GameStage extends Stage implements ContactListener{
 
         scorePlayer = 0;
         scoreOpponent = 0;
+
+        init = new Date();
     }
 
     private void setUpWorld() {
         world = WorldUtils.createWorld();
+        world.setContactListener(this);
         setUpPuck();
         setUpEdges();
         setUpHandles();
-        setUpPowerUp();
+        //setUpPowerUp();
     }
 
     private void setUpHandles() {
@@ -137,7 +145,7 @@ public class GameStage extends Stage implements ContactListener{
     }
 
     private void setUpPuck() {
-        puck = new Puck(WorldUtils.createPuck(world, PUCK_BODY, (short) (LINE_BODY | HANDLE_BODY)));
+        puck = new Puck(WorldUtils.createPuck(world, PUCK_BODY, (short) (LINE_BODY | HANDLE_BODY | POWERUP_BODY)));
         addActor(puck);
     }
 
@@ -155,7 +163,7 @@ public class GameStage extends Stage implements ContactListener{
 
     private void setUpPowerUp()
     {
-        currPowerUp = new PowerUp(WorldUtils.createPowerUp(BodyUtils.randPosition(2, 2,15,15),world, POWERUP_BODY, (short) PUCK_BODY));
+        currPowerUp = new PowerUp(WorldUtils.createPowerUp(BodyUtils.randPosition(2, 2,15,15),world, POWERUP_BODY, PUCK_BODY));
         addActor(currPowerUp);
     }
 
@@ -194,6 +202,13 @@ public class GameStage extends Stage implements ContactListener{
             world.step(TIME_STEP, 6, 2);
             accumulator -= TIME_STEP;
         }
+
+        Date now = new Date();
+        long timeElapsed = now.getTime() - init.getTime();
+        if(currPowerUp == null && Math.abs(timeElapsed/1000-5)<=1)
+            setUpPowerUp();
+
+        checkDeadPowerUp();
 
         bot.getBody().setTransform(puck.getBody().getPosition().x, bot.getBody().getPosition().y, 0);
         if(puck.getBody().getPosition().y > Constants.MID_Y && puck.getBody().getLinearVelocity().len() < 20)
@@ -240,6 +255,7 @@ public class GameStage extends Stage implements ContactListener{
     @Override
     public void draw() {
         super.draw();
+
         renderer.render(world, camera.combined);
     }
 
@@ -252,8 +268,12 @@ public class GameStage extends Stage implements ContactListener{
         Body b1 = contact.getFixtureA().getBody();
         Body b2 = contact.getFixtureB().getBody();
 
-        Gdx.app.log("beginContact",b1.getUserData().getClass().toString());
-        Gdx.app.log("beginContact", b2.getUserData().getClass().toString());
+
+        if(currPowerUp != null && (b1.equals(puck.getBody()) && b2.equals(currPowerUp.getBody())
+                || b1.equals(currPowerUp.getBody()) && b2.equals(puck.getBody())))
+        {
+            currPowerUp.getUserData().setFlaggedForRemoval(true);
+        }
 
     }
 
@@ -287,14 +307,18 @@ public class GameStage extends Stage implements ContactListener{
 
     public void checkDeadPowerUp() {
 
-        Body body = currPowerUp.getBody();
+        Body body = null;
+
+        if(currPowerUp != null)
+            body = currPowerUp.getBody();
 
         if (body != null) {
-            PowerUpUserData data = (PowerUpUserData) body.getUserData();
+            PowerUpUserData data = currPowerUp.getUserData();
             if (data.isFlaggedForRemoval()) {
+                init = new Date();
                 world.destroyBody(body);
                 body.setUserData(null);
-                body = null;
+                currPowerUp = null;
             }
         }
     }

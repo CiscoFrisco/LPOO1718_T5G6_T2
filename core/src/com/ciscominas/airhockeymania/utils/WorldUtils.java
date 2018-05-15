@@ -84,21 +84,18 @@ public class WorldUtils {
     public static Body createPowerUp(Vector2 position, World world, short category, short mask)
     {
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.KinematicBody;
+        bodyDef.type = BodyDef.BodyType.StaticBody;
         bodyDef.position.set(position);
         CircleShape shape = new CircleShape();
         shape.setRadius(Constants.HANDLE_RADIUS);
         Body body = world.createBody(bodyDef);
         FixtureDef fixture = new FixtureDef();
-        fixture.density = 200000f;
         fixture.shape = shape;
         fixture.filter.categoryBits = category;
         fixture.filter.maskBits = mask;
         body.createFixture(fixture);
         body.resetMassData();
         shape.dispose();
-
-        body.setUserData(new PowerUpUserData());
 
         return body;
     }
