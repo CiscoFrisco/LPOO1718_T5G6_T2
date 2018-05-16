@@ -15,6 +15,12 @@ public class BodyUtils {
         return userData != null && userData.getUserDataType() == UserDataType.PUCK;
     }
 
+    public static boolean bodyIsPowerUp(Body body) {
+        UserData userData = (UserData) body.getUserData();
+
+        return userData != null && userData.getUserDataType() == UserDataType.POWERUP;
+    }
+
     public static boolean bodyIsHandle(Body body) {
         UserData userData = (UserData) body.getUserData();
 

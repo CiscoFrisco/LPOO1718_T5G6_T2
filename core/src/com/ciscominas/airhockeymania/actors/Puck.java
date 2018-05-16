@@ -18,4 +18,8 @@ public class Puck extends GameActor {
         body.setTransform(Constants.PUCK_X, Constants.PUCK_Y, 0);
         body.setLinearVelocity(0,0);
     }
+
+    public void deleteBody() {
+        body = null;
+    }
 }

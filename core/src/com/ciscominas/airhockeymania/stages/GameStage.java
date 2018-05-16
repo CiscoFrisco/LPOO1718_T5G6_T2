@@ -13,6 +13,7 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.ciscominas.airhockeymania.actors.DuplicatePucks;
 import com.ciscominas.airhockeymania.actors.Edge;
 import com.ciscominas.airhockeymania.actors.Handle;
 import com.ciscominas.airhockeymania.actors.PowerUp;
@@ -85,8 +86,8 @@ public class GameStage extends Stage implements ContactListener{
 
     private OrthographicCamera camera;
     private Box2DDebugRenderer renderer;
-    private int scorePlayer;
-    private int scoreOpponent;
+    public int scorePlayer;
+    public int scoreOpponent;
     private Vector2 old_pos;
 
     private Vector2 puck_vel;
@@ -145,7 +146,7 @@ public class GameStage extends Stage implements ContactListener{
     }
 
     private void setUpPuck() {
-        puck = new Puck(WorldUtils.createPuck(world, PUCK_BODY, (short) (LINE_BODY | HANDLE_BODY | POWERUP_BODY)));
+        puck = new Puck(WorldUtils.createPuck(world, PUCK_BODY, (short) (LINE_BODY | HANDLE_BODY )));
         addActor(puck);
     }
 
@@ -163,7 +164,7 @@ public class GameStage extends Stage implements ContactListener{
 
     private void setUpPowerUp()
     {
-        currPowerUp = new PowerUp(WorldUtils.createPowerUp(BodyUtils.randPosition(2, 2,15,15),world, POWERUP_BODY, PUCK_BODY));
+        currPowerUp = new DuplicatePucks(WorldUtils.createPowerUp(BodyUtils.randPosition(2, 2,15,10),world, POWERUP_BODY, POWERUP_BODY));
         addActor(currPowerUp);
     }
 
@@ -207,8 +208,26 @@ public class GameStage extends Stage implements ContactListener{
         long timeElapsed = now.getTime() - init.getTime();
         if(currPowerUp == null && Math.abs(timeElapsed/1000-5)<=1)
             setUpPowerUp();
+        else if(currPowerUp != null && Math.abs(timeElapsed/1000-5)<=1 && currPowerUp.isActive())
+            currPowerUp.reset(this);
 
-        checkDeadPowerUp();
+
+        if(currPowerUp != null && currPowerUp.getBody() != null)
+        {
+            Vector2 powerUp = currPowerUp.getBody().getPosition();
+            Vector2 puckPos = puck.getBody().getPosition();
+
+            if(Math.abs(powerUp.x - puckPos.x)<=0.5 && Math.abs(powerUp.y - puckPos.y)<=0.5)
+            {
+                currPowerUp.effect(this);
+                init = new Date();
+                currPowerUp.getUserData().setFlaggedForRemoval(true);
+            }
+
+            checkDeadPowerUp();
+        }
+
+
 
         bot.getBody().setTransform(puck.getBody().getPosition().x, bot.getBody().getPosition().y, 0);
         if(puck.getBody().getPosition().y > Constants.MID_Y && puck.getBody().getLinearVelocity().len() < 20)
@@ -223,6 +242,7 @@ public class GameStage extends Stage implements ContactListener{
         puck_vel = new Vector2(handle.getBody().getPosition().x - old_pos.x, handle.getBody().getPosition().y - old_pos.y);
         old_pos = handle.getBody().getPosition();
 
+
         if(puck.getBody().getPosition().y < 0)
         {
             scorePlayer++;
@@ -231,6 +251,9 @@ public class GameStage extends Stage implements ContactListener{
             scoreOpponent++;
             resetActors();
         }
+
+        if(currPowerUp!= null)
+            currPowerUp.checkScore(this);
 
         if((scoreOpponent >= 5 || scorePlayer >= 5) && abs(scorePlayer - scoreOpponent) >= 2)
         {
@@ -241,7 +264,7 @@ public class GameStage extends Stage implements ContactListener{
 
     }
 
-    private void resetActors() {
+    public void resetActors() {
         handle.reset(Constants.HANDLE_X,Constants.HANDLE_Y);
         puck.reset();
         bot.reset(BOT_X, BOT_Y);
@@ -268,11 +291,17 @@ public class GameStage extends Stage implements ContactListener{
         Body b1 = contact.getFixtureA().getBody();
         Body b2 = contact.getFixtureB().getBody();
 
-
-        if(currPowerUp != null && (b1.equals(puck.getBody()) && b2.equals(currPowerUp.getBody())
-                || b1.equals(currPowerUp.getBody()) && b2.equals(puck.getBody())))
+        if(currPowerUp != null && (b1.equals(puck.getBody()) && b2.equals(currPowerUp.getBody())))
         {
+            b1.setLinearVelocity(b1.getLinearVelocity());
+
             currPowerUp.getUserData().setFlaggedForRemoval(true);
+        }
+        else if(currPowerUp != null &&  (b1.equals(currPowerUp.getBody()) && b2.equals(puck.getBody())))
+        {
+                b2.setLinearVelocity(b2.getLinearVelocity());
+
+                currPowerUp.getUserData().setFlaggedForRemoval(true);
         }
 
     }
@@ -303,6 +332,14 @@ public class GameStage extends Stage implements ContactListener{
         handle.reset(HANDLE_X, HANDLE_Y);
         puck.reset();
         gameOver = false;
+        init = new Date();
+
+        if(currPowerUp != null)
+        {
+            world.destroyBody(currPowerUp.getBody());
+            currPowerUp.getBody().setUserData(null);
+            currPowerUp = null;
+        }
     }
 
     public void checkDeadPowerUp() {
@@ -318,9 +355,12 @@ public class GameStage extends Stage implements ContactListener{
                 init = new Date();
                 world.destroyBody(body);
                 body.setUserData(null);
-                currPowerUp = null;
+                currPowerUp.deleteBody();
             }
         }
     }
 
+    public World getWorld() {
+        return world;
+    }
 }
