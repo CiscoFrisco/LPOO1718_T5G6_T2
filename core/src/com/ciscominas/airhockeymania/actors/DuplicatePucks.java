@@ -18,8 +18,8 @@ public class DuplicatePucks extends PowerUp {
 
     private Puck puck;
 
-    public DuplicatePucks() {
-        super();
+    public DuplicatePucks(Body body) {
+        super(body);
     }
 
     @Override
@@ -37,9 +37,9 @@ public class DuplicatePucks extends PowerUp {
         puck.getBody().setUserData(null);
         puck.deleteBody();
         active = false;
+        game.resetInit();
     }
 
-    @Override
     public boolean checkScore(GameStage game) {
         if(puck != null && puck.getBody() != null)
         {
@@ -64,7 +64,12 @@ public class DuplicatePucks extends PowerUp {
     @Override
     public boolean check(GameStage game) {
 
-        long timeElapsed;
+        checkContact(game);
+
+        if(checkScore(game))
+            return true;
+
+        /*long timeElapsed;
         long diff = 2;
 
         if(body != null && active) {
@@ -74,7 +79,7 @@ public class DuplicatePucks extends PowerUp {
         }
 
         if(body == null && !active)
-            setBody(WorldUtils.createPowerUp(BodyUtils.randPosition(2, 2, 10, 10), game.getWorld(), POWERUP_BODY, POWERUP_BODY));
+            setBody());
         else {
             if (diff <= 1 && active) {
                 reset(game);
@@ -93,6 +98,8 @@ public class DuplicatePucks extends PowerUp {
                 }
             }
         }
+
+        return false;*/
 
         return false;
     }

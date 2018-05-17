@@ -243,9 +243,6 @@ public class GameStage extends Stage implements ContactListener{
             }
         }
 
-        if(currPowerUp != null && currPowerUp.checkScore(this))
-                init = new Date();
-
         if((scoreOpponent >= 5 || scorePlayer >= 5) && abs(scorePlayer - scoreOpponent) >= 2)
             gameOver = true;
     }
@@ -330,5 +327,9 @@ public class GameStage extends Stage implements ContactListener{
 
     public Puck getPuck() {
         return puck;
+    }
+
+    public void resetInit() {
+        init = new Date();
     }
 }

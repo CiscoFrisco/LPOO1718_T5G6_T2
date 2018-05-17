@@ -112,19 +112,20 @@ public class WorldUtils {
         int number = random.nextInt(4);
         PowerUp powerUp = null;
         Vector2 pos = BodyUtils.randPosition(2, 2,15,10);
+        Body body = WorldUtils.createPowerUp(pos, world, POWERUP_BODY, POWERUP_BODY);
         switch(number)
         {
             case 0:
-                powerUp = new DuplicatePucks();
+                powerUp = new DuplicatePucks(body);
                 break;
             case 1:
-                powerUp = new DuplicatePucks();
+                powerUp = new DuplicatePucks(body);
                 break;
             case 2:
-                powerUp = new DuplicatePucks();
+                powerUp = new DuplicatePucks(body);
                 break;
             case 3:
-                powerUp = new DuplicatePucks();
+                powerUp = new DuplicatePucks(body);
                 break;
         }
 

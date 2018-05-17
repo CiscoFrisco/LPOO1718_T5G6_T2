@@ -1,5 +1,6 @@
 package com.ciscominas.airhockeymania.actors;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.ciscominas.airhockeymania.box2d.PowerUpUserData;
@@ -8,16 +9,14 @@ import com.ciscominas.airhockeymania.stages.GameStage;
 
 import java.util.Date;
 
-public abstract class PowerUp  extends Actor{
+public abstract class PowerUp  extends GameActor{
 
-    protected Body body;
     protected PowerUpUserData userData;
     protected boolean active;
-    protected Date init;
-    protected Date now;
 
-    public PowerUp()
+    public PowerUp(Body body)
     {
+        super(body);
         userData = new PowerUpUserData();
         active = false;
     }
@@ -31,35 +30,32 @@ public abstract class PowerUp  extends Actor{
         body = null;
     }
 
-    public abstract void effect(GameStage game);
-
-    public abstract void reset(GameStage game);
-
     public boolean isActive() {
         return active;
     }
 
-    public abstract boolean checkScore(GameStage game);
+    public abstract void effect(GameStage game);
+
+    public abstract void reset(GameStage game);
 
     public abstract boolean check(GameStage game);
 
-    public Body getBody()
+    public void checkContact(GameStage game)
     {
-        return body;
-    }
+        Vector2 powerUp = body.getPosition();
+        Vector2 puckPos = game.getPuck().getBody().getPosition();
 
-    public void setBody(Body body) {
-        this.body = body;
-    }
-
-    public void checkDead(GameStage game) {
-
-        if (body != null) {
-            PowerUpUserData data = getUserData();
-            if (data.isFlaggedForRemoval()) {
-                init = new Date();
-
-            }
+        if (Math.abs(powerUp.x - puckPos.x) <= 0.5 && Math.abs(powerUp.y - puckPos.y) <= 0.5 && !active)
+        {
+            effect(game);
+            destroyBody(game);
         }
+    }
+
+    public void destroyBody(GameStage game)
+    {
+        game.getWorld().destroyBody(body);
+        body.setUserData(null);
+        body = null;
     }
 }
