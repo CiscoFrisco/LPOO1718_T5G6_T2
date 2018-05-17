@@ -11,6 +11,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ciscominas.airhockeymania.actors.Bot;
 import com.ciscominas.airhockeymania.actors.DuplicatePucks;
 import com.ciscominas.airhockeymania.actors.PowerUp;
+import com.ciscominas.airhockeymania.actors.SuperHandle;
 import com.ciscominas.airhockeymania.box2d.PowerUpUserData;
 
 import java.util.Random;
@@ -66,13 +67,13 @@ public class WorldUtils {
         return body;
     }
 
-    public static Body createHandle(Vector2 position, World world, short category, short mask)
+    public static Body createHandle(Vector2 position, World world, float radius, short category, short mask)
     {
         BodyDef bodyDef = new BodyDef();
         bodyDef.type = BodyDef.BodyType.DynamicBody;
         bodyDef.position.set(position);
         CircleShape shape = new CircleShape();
-        shape.setRadius(Constants.HANDLE_RADIUS);
+        shape.setRadius(radius);
         Body body = world.createBody(bodyDef);
         FixtureDef fixture = new FixtureDef();
         fixture.density = 200000f;
@@ -116,16 +117,16 @@ public class WorldUtils {
         switch(number)
         {
             case 0:
-                powerUp = new DuplicatePucks(body);
+                powerUp = new SuperHandle(body);
                 break;
             case 1:
-                powerUp = new DuplicatePucks(body);
+                powerUp = new SuperHandle(body);
                 break;
             case 2:
-                powerUp = new DuplicatePucks(body);
+                powerUp = new SuperHandle(body);
                 break;
             case 3:
-                powerUp = new DuplicatePucks(body);
+                powerUp = new SuperHandle(body);
                 break;
         }
 

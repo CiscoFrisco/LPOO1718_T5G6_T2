@@ -49,7 +49,7 @@ public class DuplicatePucks extends PowerUp {
                 game.resetActors();
                 reset(game);
                 return true;
-            } else if (puck.getBody().getPosition().y > 20) {
+            } else if (puck.getBody().getPosition().y > 16) {
                 game.scoreOpponent++;
                 game.resetActors();
                 reset(game);
@@ -64,42 +64,14 @@ public class DuplicatePucks extends PowerUp {
     @Override
     public boolean check(GameStage game) {
 
-        checkContact(game);
+        if(!active && body != null)
+        {
+            checkContact(game);
+            return false;
+        }
 
         if(checkScore(game))
             return true;
-
-        /*long timeElapsed;
-        long diff = 2;
-
-        if(body != null && active) {
-            now = new Date();
-            timeElapsed = (now.getTime() - init.getTime()) / 1000;
-            diff = Math.abs(timeElapsed - 5);
-        }
-
-        if(body == null && !active)
-            setBody());
-        else {
-            if (diff <= 1 && active) {
-                reset(game);
-                return true;
-            } else if (body != null) {
-                Vector2 powerUp = body.getPosition();
-                Vector2 puckPos = game.getPuck().getBody().getPosition();
-
-                if (Math.abs(powerUp.x - puckPos.x) <= 0.5 && Math.abs(powerUp.y - puckPos.y) <= 0.5 && !active) {
-                    effect(game);
-                    init = new Date();
-                    getUserData().setFlaggedForRemoval(true);
-                    game.getWorld().destroyBody(body);
-                    body.setUserData(null);
-                    body = null;
-                }
-            }
-        }
-
-        return false;*/
 
         return false;
     }

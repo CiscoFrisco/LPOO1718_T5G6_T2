@@ -6,8 +6,7 @@ import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.ciscominas.airhockeymania.box2d.PowerUpUserData;
 import com.ciscominas.airhockeymania.box2d.UserData;
 import com.ciscominas.airhockeymania.stages.GameStage;
-
-import java.util.Date;
+import com.ciscominas.airhockeymania.utils.BodyUtils;
 
 public abstract class PowerUp  extends GameActor{
 
@@ -42,20 +41,11 @@ public abstract class PowerUp  extends GameActor{
 
     public void checkContact(GameStage game)
     {
-        Vector2 powerUp = body.getPosition();
-        Vector2 puckPos = game.getPuck().getBody().getPosition();
-
-        if (Math.abs(powerUp.x - puckPos.x) <= 0.5 && Math.abs(powerUp.y - puckPos.y) <= 0.5 && !active)
+        if (BodyUtils.checkIntersection(body, game.getPuck().getBody(),0.5))
         {
             effect(game);
             destroyBody(game);
         }
-    }
 
-    public void destroyBody(GameStage game)
-    {
-        game.getWorld().destroyBody(body);
-        body.setUserData(null);
-        body = null;
     }
 }

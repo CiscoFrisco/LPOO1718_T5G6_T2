@@ -92,6 +92,7 @@ public class GameStage extends Stage implements ContactListener{
     public int scoreOpponent;
 
     private boolean gameOver;
+    private String lastTouch;
 
     public GameStage() {
 
@@ -115,9 +116,9 @@ public class GameStage extends Stage implements ContactListener{
     }
 
     private void setUpHandles() {
-        handle = new Handle(WorldUtils.createHandle(new Vector2(HANDLE_X, HANDLE_Y), world, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
+        handle = new Handle(WorldUtils.createHandle(new Vector2(HANDLE_X, HANDLE_Y), world, Constants.HANDLE_RADIUS, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
         addActor(handle);
-        bot = new HardBot(WorldUtils.createHandle(new Vector2(BOT_X, BOT_Y), world, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
+        bot = new HardBot(WorldUtils.createHandle(new Vector2(BOT_X, BOT_Y), world, Constants.HANDLE_RADIUS, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
         addActor(bot);
     }
 
@@ -205,7 +206,7 @@ public class GameStage extends Stage implements ContactListener{
         now = new Date();
         long timeElapsed = (now.getTime() - init.getTime())/1000;
 
-        if(timeElapsed >= 5 && currPowerUp == null)
+        if(timeElapsed >= Constants.POWERUP_FREQUENCY && currPowerUp == null)
             setUpPowerUp();
 
         if(currPowerUp != null)
@@ -231,6 +232,7 @@ public class GameStage extends Stage implements ContactListener{
             if(currPowerUp!=null && currPowerUp.isActive())
             {
                 currPowerUp.reset(this);
+                currPowerUp = null;
                 init = new Date();
             }
         } else if (puck.getBody().getPosition().y > 16) {
@@ -239,11 +241,12 @@ public class GameStage extends Stage implements ContactListener{
             if(currPowerUp!=null && currPowerUp.isActive())
             {
                 currPowerUp.reset(this);
+                currPowerUp = null;
                 init = new Date();
             }
         }
 
-        if((scoreOpponent >= 5 || scorePlayer >= 5) && abs(scorePlayer - scoreOpponent) >= 2)
+        if((scoreOpponent >= Constants.WIN_SCORE || scorePlayer >= Constants.WIN_SCORE) && abs(scorePlayer - scoreOpponent) >= 2)
             gameOver = true;
     }
 
@@ -267,21 +270,21 @@ public class GameStage extends Stage implements ContactListener{
 
     @Override
     public void beginContact(Contact contact) {
+
         Body b1 = contact.getFixtureA().getBody();
         Body b2 = contact.getFixtureB().getBody();
 
-        if(currPowerUp != null && (b1.equals(puck.getBody()) && b2.equals(currPowerUp.getBody())))
+        if(b1.equals(puck.getBody()) && b2.equals(handle.getBody()) ||
+                b1.equals(handle.getBody()) && b2.equals(puck.getBody()))
         {
-            b1.setLinearVelocity(b1.getLinearVelocity());
-
-            currPowerUp.getUserData().setFlaggedForRemoval(true);
+            lastTouch = "PLAYER";
         }
-        else if(currPowerUp != null &&  (b1.equals(currPowerUp.getBody()) && b2.equals(puck.getBody())))
+        else if(b1.equals(puck.getBody()) && b2.equals(bot.getBody()) ||
+                b1.equals(bot.getBody()) && b2.equals(puck.getBody()))
         {
-                b2.setLinearVelocity(b2.getLinearVelocity());
-
-                currPowerUp.getUserData().setFlaggedForRemoval(true);
+            lastTouch = "BOT";
         }
+
 
     }
 
@@ -331,5 +334,25 @@ public class GameStage extends Stage implements ContactListener{
 
     public void resetInit() {
         init = new Date();
+    }
+
+    public Handle getHandle() {
+        return handle;
+    }
+
+    public void setHandle(Body handle) {
+        this.handle.setBody(handle);
+    }
+
+    public String getLastTouch() {
+        return lastTouch;
+    }
+
+    public HardBot getBot() {
+        return bot;
+    }
+
+    public void setBot(Body bot) {
+        this.bot.setBody(bot);
     }
 }

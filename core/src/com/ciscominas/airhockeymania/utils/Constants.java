@@ -57,6 +57,10 @@ public class Constants {
     public final static short LINE_BODY = 0x0004;
     public final static short POWERUP_BODY = 0x0008;
 
+    public static final int POWERUP_FREQUENCY = 5;
+
+    public static final int WIN_SCORE = 5;
+
 
 
 }

@@ -41,4 +41,12 @@ public class BodyUtils {
 
         return new Vector2(x,y);
     }
+
+    public static boolean checkIntersection(Body b1, Body b2, double limit)
+    {
+        Vector2 pos1 = b1.getPosition();
+        Vector2 pos2 = b2.getPosition();
+
+        return Math.abs(pos1.x - pos2.x) <= limit && Math.abs(pos1.y - pos2.y) <= limit;
+    }
 }
