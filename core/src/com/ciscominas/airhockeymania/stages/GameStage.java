@@ -16,6 +16,7 @@ import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.ciscominas.airhockeymania.actors.DuplicatePucks;
 import com.ciscominas.airhockeymania.actors.Edge;
 import com.ciscominas.airhockeymania.actors.Handle;
+import com.ciscominas.airhockeymania.actors.HardBot;
 import com.ciscominas.airhockeymania.actors.PowerUp;
 import com.ciscominas.airhockeymania.actors.Puck;
 import com.ciscominas.airhockeymania.box2d.PowerUpUserData;
@@ -63,10 +64,11 @@ public class GameStage extends Stage implements ContactListener{
     private static final int VIEWPORT_WIDTH = 20;
     private static final int VIEWPORT_HEIGHT = 15;
     private Date init;
+    private Date now;
 
     private Puck puck;
     private Handle handle;
-    private Handle bot;
+    private HardBot bot;
     private World world;
     private Edge lEdge;
     private Edge rEdge;
@@ -88,9 +90,7 @@ public class GameStage extends Stage implements ContactListener{
     private Box2DDebugRenderer renderer;
     public int scorePlayer;
     public int scoreOpponent;
-    private Vector2 old_pos;
 
-    private Vector2 puck_vel;
     private boolean gameOver;
 
     public GameStage() {
@@ -112,14 +112,12 @@ public class GameStage extends Stage implements ContactListener{
         setUpPuck();
         setUpEdges();
         setUpHandles();
-        //setUpPowerUp();
     }
 
     private void setUpHandles() {
         handle = new Handle(WorldUtils.createHandle(new Vector2(HANDLE_X, HANDLE_Y), world, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
         addActor(handle);
-        old_pos = handle.getBody().getPosition();
-        bot = new Handle(WorldUtils.createHandle(new Vector2(BOT_X, BOT_Y), world, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
+        bot = new HardBot(WorldUtils.createHandle(new Vector2(BOT_X, BOT_Y), world, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
         addActor(bot);
     }
 
@@ -146,7 +144,7 @@ public class GameStage extends Stage implements ContactListener{
     }
 
     private void setUpPuck() {
-        puck = new Puck(WorldUtils.createPuck(world, PUCK_BODY, (short) (LINE_BODY | HANDLE_BODY )));
+        puck = new Puck(WorldUtils.createPuck(world, PUCK_BODY, (short) (LINE_BODY | HANDLE_BODY | PUCK_BODY)));
         addActor(puck);
     }
 
@@ -164,7 +162,7 @@ public class GameStage extends Stage implements ContactListener{
 
     private void setUpPowerUp()
     {
-        currPowerUp = new DuplicatePucks(WorldUtils.createPowerUp(BodyUtils.randPosition(2, 2,15,10),world, POWERUP_BODY, POWERUP_BODY));
+        currPowerUp = WorldUtils.randPowerUp(world);
         addActor(currPowerUp);
     }
 
@@ -204,64 +202,52 @@ public class GameStage extends Stage implements ContactListener{
             accumulator -= TIME_STEP;
         }
 
-        Date now = new Date();
-        long timeElapsed = now.getTime() - init.getTime();
-        if(currPowerUp == null && Math.abs(timeElapsed/1000-5)<=1)
+        now = new Date();
+        long timeElapsed = (now.getTime() - init.getTime())/1000;
+
+        if(timeElapsed >= 5 && currPowerUp == null)
             setUpPowerUp();
-        else if(currPowerUp != null && Math.abs(timeElapsed/1000-5)<=1 && currPowerUp.isActive())
-            currPowerUp.reset(this);
 
-
-        if(currPowerUp != null && currPowerUp.getBody() != null)
-        {
-            Vector2 powerUp = currPowerUp.getBody().getPosition();
-            Vector2 puckPos = puck.getBody().getPosition();
-
-            if(Math.abs(powerUp.x - puckPos.x)<=0.5 && Math.abs(powerUp.y - puckPos.y)<=0.5)
-            {
-                currPowerUp.effect(this);
+        if(currPowerUp != null)
+            if(currPowerUp.check(this)) {
+                currPowerUp = null;
                 init = new Date();
-                currPowerUp.getUserData().setFlaggedForRemoval(true);
             }
 
-            checkDeadPowerUp();
-        }
+        bot.move(this);
 
+        checkScore();
 
+        //TODO: Implement interpolation
 
-        bot.getBody().setTransform(puck.getBody().getPosition().x, bot.getBody().getPosition().y, 0);
-        if(puck.getBody().getPosition().y > Constants.MID_Y && puck.getBody().getLinearVelocity().len() < 20)
-        {
-            Vector2 direction = puck.getBody().getPosition();
-            direction.sub(bot.getBody().getPosition());
-            direction.nor();
+    }
 
-            float speed = 10;
-            bot.getBody().setLinearVelocity(direction.scl(speed));
-        }
-        puck_vel = new Vector2(handle.getBody().getPosition().x - old_pos.x, handle.getBody().getPosition().y - old_pos.y);
-        old_pos = handle.getBody().getPosition();
-
-
+    private void checkScore()
+    {
         if(puck.getBody().getPosition().y < 0)
         {
             scorePlayer++;
             resetActors();
-        } else if (puck.getBody().getPosition().y > 20) {
+            if(currPowerUp!=null && currPowerUp.isActive())
+            {
+                currPowerUp.reset(this);
+                init = new Date();
+            }
+        } else if (puck.getBody().getPosition().y > 16) {
             scoreOpponent++;
             resetActors();
+            if(currPowerUp!=null && currPowerUp.isActive())
+            {
+                currPowerUp.reset(this);
+                init = new Date();
+            }
         }
 
-        if(currPowerUp!= null)
-            currPowerUp.checkScore(this);
+        if(currPowerUp != null && currPowerUp.checkScore(this))
+                init = new Date();
 
         if((scoreOpponent >= 5 || scorePlayer >= 5) && abs(scorePlayer - scoreOpponent) >= 2)
-        {
             gameOver = true;
-        }
-
-        //TODO: Implement interpolation
-
     }
 
     public void resetActors() {
@@ -280,10 +266,6 @@ public class GameStage extends Stage implements ContactListener{
         super.draw();
 
         renderer.render(world, camera.combined);
-    }
-
-    private void translateScreenToWorldCoordinates(int x, int y) {
-        getCamera().unproject(touchPoint.set(x,y,0));
     }
 
     @Override
@@ -334,7 +316,7 @@ public class GameStage extends Stage implements ContactListener{
         gameOver = false;
         init = new Date();
 
-        if(currPowerUp != null)
+        if(currPowerUp != null && currPowerUp.getBody()!=null)
         {
             world.destroyBody(currPowerUp.getBody());
             currPowerUp.getBody().setUserData(null);
@@ -342,25 +324,11 @@ public class GameStage extends Stage implements ContactListener{
         }
     }
 
-    public void checkDeadPowerUp() {
-
-        Body body = null;
-
-        if(currPowerUp != null)
-            body = currPowerUp.getBody();
-
-        if (body != null) {
-            PowerUpUserData data = currPowerUp.getUserData();
-            if (data.isFlaggedForRemoval()) {
-                init = new Date();
-                world.destroyBody(body);
-                body.setUserData(null);
-                currPowerUp.deleteBody();
-            }
-        }
-    }
-
     public World getWorld() {
         return world;
+    }
+
+    public Puck getPuck() {
+        return puck;
     }
 }

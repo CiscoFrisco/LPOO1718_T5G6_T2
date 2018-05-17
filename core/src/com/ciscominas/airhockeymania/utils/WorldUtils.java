@@ -8,8 +8,14 @@ import com.badlogic.gdx.physics.box2d.EdgeShape;
 import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ciscominas.airhockeymania.actors.Bot;
+import com.ciscominas.airhockeymania.actors.DuplicatePucks;
+import com.ciscominas.airhockeymania.actors.PowerUp;
 import com.ciscominas.airhockeymania.box2d.PowerUpUserData;
 
+import java.util.Random;
+
+import static com.ciscominas.airhockeymania.utils.Constants.POWERUP_BODY;
 import static com.ciscominas.airhockeymania.utils.Constants.PUCK_DENSITY;
 
 public class WorldUtils {
@@ -98,5 +104,30 @@ public class WorldUtils {
         shape.dispose();
 
         return body;
+    }
+
+    public static PowerUp randPowerUp(World world)
+    {
+        Random random = new Random();
+        int number = random.nextInt(4);
+        PowerUp powerUp = null;
+        Vector2 pos = BodyUtils.randPosition(2, 2,15,10);
+        switch(number)
+        {
+            case 0:
+                powerUp = new DuplicatePucks();
+                break;
+            case 1:
+                powerUp = new DuplicatePucks();
+                break;
+            case 2:
+                powerUp = new DuplicatePucks();
+                break;
+            case 3:
+                powerUp = new DuplicatePucks();
+                break;
+        }
+
+        return powerUp;
     }
 }
