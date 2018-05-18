@@ -12,6 +12,7 @@ import com.ciscominas.airhockeymania.actors.Bot;
 import com.ciscominas.airhockeymania.actors.DuplicatePucks;
 import com.ciscominas.airhockeymania.actors.FreezeHandle;
 import com.ciscominas.airhockeymania.actors.PowerUp;
+import com.ciscominas.airhockeymania.actors.SuperGoal;
 import com.ciscominas.airhockeymania.actors.SuperHandle;
 import com.ciscominas.airhockeymania.box2d.PowerUpUserData;
 
@@ -118,16 +119,16 @@ public class WorldUtils {
         switch(number)
         {
             case 0:
-                powerUp = new FreezeHandle(body);
+                powerUp = new SuperHandle(body);
                 break;
             case 1:
-                powerUp = new FreezeHandle(body);
+                powerUp = new DuplicatePucks(body);
                 break;
             case 2:
-                powerUp = new FreezeHandle(body);
+                powerUp = new FreezeHandle( body);
                 break;
             case 3:
-                powerUp = new FreezeHandle(body);
+                powerUp = new SuperGoal(body);
                 break;
         }
 

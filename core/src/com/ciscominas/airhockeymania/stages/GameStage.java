@@ -349,6 +349,37 @@ public class GameStage extends Stage implements ContactListener{
         this.handle.setBody(handle);
     }
 
+    public Edge getUlEdge()
+    {
+        return ulEdge;
+    }
+
+    public Edge getDlEdge()
+    {
+        return dlEdge;
+    }
+
+    public Edge getDrEdge()
+    {
+        return drEdge;
+    }
+    public Edge getUrEdge()
+    {
+        return urEdge;
+    }
+
+    public void setUpperLines(Body left, Body right)
+    {
+        this.ulEdge.setBody(left);
+        this.urEdge.setBody(right);
+    }
+
+    public void setLowerLines(Body left, Body right)
+    {
+        this.dlEdge.setBody(left);
+        this.drEdge.setBody(right);
+    }
+
     public String getLastTouch() {
         return lastTouch;
     }
