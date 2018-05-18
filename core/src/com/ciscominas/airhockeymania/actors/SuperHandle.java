@@ -6,6 +6,7 @@ import com.ciscominas.airhockeymania.stages.GameStage;
 import com.ciscominas.airhockeymania.utils.Constants;
 import com.ciscominas.airhockeymania.utils.WorldUtils;
 
+
 import static com.ciscominas.airhockeymania.utils.Constants.BOT_X;
 import static com.ciscominas.airhockeymania.utils.Constants.BOT_Y;
 import static com.ciscominas.airhockeymania.utils.Constants.HANDLE_BODY;
@@ -16,6 +17,7 @@ import static com.ciscominas.airhockeymania.utils.Constants.PUCK_BODY;
 
 public class SuperHandle extends PowerUp {
 
+    String lastTouch;
 
     public SuperHandle(Body body) {
         super(body);
@@ -24,7 +26,7 @@ public class SuperHandle extends PowerUp {
     @Override
     public void effect(GameStage game) {
 
-        String lastTouch = game.getLastTouch();
+        lastTouch = game.getLastTouch();
 
         if(lastTouch == "PLAYER")
         {
@@ -43,9 +45,20 @@ public class SuperHandle extends PowerUp {
 
     @Override
     public void reset(GameStage game) {
-        game.getHandle().destroyBody(game);
-        game.setHandle(WorldUtils.createHandle(new Vector2(HANDLE_X, HANDLE_Y), game.getWorld(), Constants.HANDLE_RADIUS, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
+
+        if(lastTouch == "PLAYER")
+        {
+            game.getHandle().destroyBody(game);
+            game.setHandle(WorldUtils.createHandle(new Vector2(HANDLE_X, HANDLE_Y), game.getWorld(), Constants.HANDLE_RADIUS, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
+        }
+        else
+        {
+            game.getBot().destroyBody(game);
+            game.setBot(WorldUtils.createHandle(new Vector2(BOT_X, BOT_Y), game.getWorld(), Constants.HANDLE_RADIUS, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
+        }
+
         active = false;
+
     }
 
     @Override

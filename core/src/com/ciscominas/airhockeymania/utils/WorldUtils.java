@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ciscominas.airhockeymania.actors.Bot;
 import com.ciscominas.airhockeymania.actors.DuplicatePucks;
+import com.ciscominas.airhockeymania.actors.FreezeHandle;
 import com.ciscominas.airhockeymania.actors.PowerUp;
 import com.ciscominas.airhockeymania.actors.SuperHandle;
 import com.ciscominas.airhockeymania.box2d.PowerUpUserData;
@@ -117,16 +118,16 @@ public class WorldUtils {
         switch(number)
         {
             case 0:
-                powerUp = new SuperHandle(body);
+                powerUp = new FreezeHandle(body);
                 break;
             case 1:
-                powerUp = new SuperHandle(body);
+                powerUp = new FreezeHandle(body);
                 break;
             case 2:
-                powerUp = new SuperHandle(body);
+                powerUp = new FreezeHandle(body);
                 break;
             case 3:
-                powerUp = new SuperHandle(body);
+                powerUp = new FreezeHandle(body);
                 break;
         }
 

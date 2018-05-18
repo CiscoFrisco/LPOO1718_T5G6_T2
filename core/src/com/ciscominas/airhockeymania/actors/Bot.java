@@ -4,8 +4,12 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.ciscominas.airhockeymania.stages.GameStage;
 
 public abstract class Bot extends GameActor{
+
+    protected boolean controlOn;
+
     public Bot(Body body) {
         super(body);
+        controlOn = true;
     }
 
     public void reset(float x, float y)
@@ -15,4 +19,14 @@ public abstract class Bot extends GameActor{
     }
 
     public abstract void move(GameStage game);
+
+    public boolean isControlOn()
+    {
+        return controlOn;
+    }
+
+    public void setControlOn(boolean control)
+    {
+        controlOn = control;
+    }
 }

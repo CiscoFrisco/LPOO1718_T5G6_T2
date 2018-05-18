@@ -13,17 +13,18 @@ public class HardBot extends Bot {
     @Override
     public void move(GameStage game) {
 
-        Body puck = game.getPuck().getBody();
+        if(controlOn) {
+            Body puck = game.getPuck().getBody();
 
-        //body.setTransform(puck.getPosition().x, body.getPosition().y, 0);
-        if(puck.getPosition().y > Constants.MID_Y && puck.getLinearVelocity().len() < 10 && puck.getPosition().y < body.getPosition().y)
-        {
-            Vector2 direction = puck.getPosition();
-            direction.sub(body.getPosition());
-            direction.nor();
+            //body.setTransform(puck.getPosition().x, body.getPosition().y, 0);
+            if (puck.getPosition().y > Constants.MID_Y && puck.getLinearVelocity().len() < 10 && puck.getPosition().y < body.getPosition().y) {
+                Vector2 direction = puck.getPosition();
+                direction.sub(body.getPosition());
+                direction.nor();
 
-            float speed = 10;
-            body.setLinearVelocity(direction.scl(speed));
+                float speed = 10;
+                body.setLinearVelocity(direction.scl(speed));
+            }
         }
     }
 }

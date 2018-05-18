@@ -93,6 +93,7 @@ public class GameStage extends Stage implements ContactListener{
 
     private boolean gameOver;
     private String lastTouch;
+    private boolean controlOn;
 
     public GameStage() {
 
@@ -105,6 +106,7 @@ public class GameStage extends Stage implements ContactListener{
         scoreOpponent = 0;
 
         init = new Date();
+        controlOn = true;
     }
 
     private void setUpWorld() {
@@ -170,14 +172,17 @@ public class GameStage extends Stage implements ContactListener{
     @Override
     public boolean touchDown(int screenX, int screenY, int point, int button)
     {
-        camera.unproject(touchPoint.set(screenX, screenY, 0));
-        // calculate the normalized direction from the body to the touch position
-        Vector2 direction = new Vector2(touchPoint.x, touchPoint.y);
-        direction.sub(handle.getBody().getPosition());
-        direction.nor();
+        if(controlOn)
+        {
+            camera.unproject(touchPoint.set(screenX, screenY, 0));
+            // calculate the normalized direction from the body to the touch position
+            Vector2 direction = new Vector2(touchPoint.x, touchPoint.y);
+            direction.sub(handle.getBody().getPosition());
+            direction.nor();
 
-        float speed = 10;
-        handle.getBody().setLinearVelocity(direction.scl(speed));
+            float speed = 10;
+            handle.getBody().setLinearVelocity(direction.scl(speed));
+        }
 
         return true;
     }
@@ -354,5 +359,10 @@ public class GameStage extends Stage implements ContactListener{
 
     public void setBot(Body bot) {
         this.bot.setBody(bot);
+    }
+
+    public void setControlOn(boolean control)
+    {
+        controlOn = control;
     }
 }
