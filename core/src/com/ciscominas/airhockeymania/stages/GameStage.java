@@ -13,6 +13,8 @@ import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.ciscominas.airhockeymania.AppPreferences;
+import com.ciscominas.airhockeymania.actors.Bot;
 import com.ciscominas.airhockeymania.actors.DuplicatePucks;
 import com.ciscominas.airhockeymania.actors.Edge;
 import com.ciscominas.airhockeymania.actors.Handle;
@@ -68,7 +70,7 @@ public class GameStage extends Stage implements ContactListener{
 
     private Puck puck;
     private Handle handle;
-    private HardBot bot;
+    private Bot bot;
     private World world;
     private Edge lEdge;
     private Edge rEdge;
@@ -94,8 +96,9 @@ public class GameStage extends Stage implements ContactListener{
     private boolean gameOver;
     private String lastTouch;
     private boolean controlOn;
+    private String difficulty;
 
-    public GameStage() {
+    public GameStage(String difficulty) {
 
         setUpWorld();
         setupCamera();
@@ -107,6 +110,7 @@ public class GameStage extends Stage implements ContactListener{
 
         init = new Date();
         controlOn = true;
+        this.difficulty = difficulty;
     }
 
     private void setUpWorld() {
@@ -120,8 +124,17 @@ public class GameStage extends Stage implements ContactListener{
     private void setUpHandles() {
         handle = new Handle(WorldUtils.createHandle(new Vector2(HANDLE_X, HANDLE_Y), world, Constants.HANDLE_RADIUS, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
         addActor(handle);
-        bot = new HardBot(WorldUtils.createHandle(new Vector2(BOT_X, BOT_Y), world, Constants.HANDLE_RADIUS, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
+        bot = setUpBot(difficulty);
         addActor(bot);
+    }
+
+    private Bot setUpBot(String difficulty) {
+        if(difficulty == "EASY")
+            return new HardBot(WorldUtils.createHandle(new Vector2(BOT_X, BOT_Y), world, Constants.HANDLE_RADIUS, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
+        else if(difficulty == "MEDIUM")
+            return new HardBot(WorldUtils.createHandle(new Vector2(BOT_X, BOT_Y), world, Constants.HANDLE_RADIUS, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
+        else
+            return new HardBot(WorldUtils.createHandle(new Vector2(BOT_X, BOT_Y), world, Constants.HANDLE_RADIUS, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
     }
 
     private void setUpEdges() {
@@ -384,7 +397,7 @@ public class GameStage extends Stage implements ContactListener{
         return lastTouch;
     }
 
-    public HardBot getBot() {
+    public Bot getBot() {
         return bot;
     }
 
@@ -395,5 +408,9 @@ public class GameStage extends Stage implements ContactListener{
     public void setControlOn(boolean control)
     {
         controlOn = control;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
     }
 }

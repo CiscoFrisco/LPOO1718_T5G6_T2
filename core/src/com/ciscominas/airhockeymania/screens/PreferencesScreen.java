@@ -9,6 +9,7 @@ import com.badlogic.gdx.scenes.scene2d.EventListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
+import com.badlogic.gdx.scenes.scene2d.ui.SelectBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
@@ -23,6 +24,7 @@ public class PreferencesScreen extends ScreenAdapter
         private AirHockeyMania myGame;
         private Stage stage;
 
+        private Label difficultyLabel;
         private Label titleLabel;
         private Label volumeMusicLabel;
         private Label volumeSoundLabel;
@@ -55,11 +57,26 @@ public class PreferencesScreen extends ScreenAdapter
 
             Skin skin = new Skin(Gdx.files.internal("skin/glassy-ui.json"));
 
+            difficultyLabel = new Label("SP Difficulty", skin);
             titleLabel = new Label("Preferences", skin);
             volumeMusicLabel = new Label("Music Volume", skin);
             volumeSoundLabel = new Label("Sound Volume", skin);
             musicOnOffLabel = new Label("Music", skin);
             soundOnOffLabel = new Label("Sound Effect", skin);
+
+            final SelectBox<String> difficultySelect = new SelectBox<String>(skin);
+            String options[] = {"Easy","Medium", "Hard"};
+            difficultySelect.setItems(options);
+            difficultySelect.setSelected(options[2]);
+            difficultySelect.addListener(new EventListener() {
+                                             @Override
+                                             public boolean handle(Event event) {
+                                                 myGame.getPreferences().setDifficulty(difficultySelect.getSelected());
+                                                 return true;
+                                             }
+                                         }
+
+            );
 
             //volume
             final Slider volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
@@ -118,6 +135,9 @@ public class PreferencesScreen extends ScreenAdapter
             });
 
             table.add(titleLabel).colspan(2);
+            table.row().pad(10, 0, 0, 10);
+            table.add(difficultyLabel).left();
+            table.add(difficultySelect);
             table.row().pad(10, 0, 0, 10);
             table.add(volumeMusicLabel).left();
             table.add(volumeMusicSlider);

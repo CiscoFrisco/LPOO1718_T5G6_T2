@@ -31,7 +31,6 @@ public class AirHockeyMania extends Game {
 	public void create () {
 		Gdx.app.setLogLevel(Application.LOG_INFO);
 		preferences = new AppPreferences();
-		gameScreen = new GameScreen(this);
 		assetManager = new GameAssetManager();
 		mainMenu = new MainMenu(this);
 		batch = new SpriteBatch();
