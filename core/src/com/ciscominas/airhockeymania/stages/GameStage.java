@@ -182,8 +182,8 @@ public class GameStage extends Stage implements ContactListener{
         addActor(currPowerUp);
     }
 
-    @Override
-    public boolean touchDown(int screenX, int screenY, int point, int button)
+    /*@Override
+   public boolean touchDown(int screenX, int screenY, int point, int button)
     {
         if(controlOn)
         {
@@ -196,19 +196,26 @@ public class GameStage extends Stage implements ContactListener{
             float speed = 10;
             handle.getBody().setLinearVelocity(direction.scl(speed));
         }
+        camera.unproject(touchPoint.set(screenX, screenY, 0));
+
+        handle.move(touchPoint.x,touchPoint.y);
 
         return true;
-    }
-/*
+    }*/
+
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer)
     {
         camera.unproject(touchPoint.set(screenX, screenY, 0));
-        handle.getBody().setTransform(touchPoint.x, touchPoint.y, 0);
+
+        //if(handle.isTouched(touchPoint.x, touchPoint.y))
+             handle.move(touchPoint.x, touchPoint.y);
+
+        //handle.setVel(new Vector2(0,0));
 
         return true;
     }
-*/
+
     @Override
     public void act(float delta) {
         super.act(delta);
@@ -295,6 +302,7 @@ public class GameStage extends Stage implements ContactListener{
         if(b1.equals(puck.getBody()) && b2.equals(handle.getBody()) ||
                 b1.equals(handle.getBody()) && b2.equals(puck.getBody()))
         {
+            puck.getBody().setLinearVelocity(handle.getVel().add(puck.getBody().getLinearVelocity()));
             lastTouch = "PLAYER";
         }
         else if(b1.equals(puck.getBody()) && b2.equals(bot.getBody()) ||
