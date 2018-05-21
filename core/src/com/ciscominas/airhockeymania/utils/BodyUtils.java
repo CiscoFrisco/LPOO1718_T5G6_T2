@@ -42,6 +42,12 @@ public class BodyUtils {
         return new Vector2(x,y);
     }
 
+    public static float randNumber(float low, float high)
+    {
+        Random random = new Random();
+        return low + random.nextFloat() * (high - low);
+    }
+
     public static boolean checkIntersection(Body b1, Body b2, double limit)
     {
         Vector2 pos1 = b1.getPosition();

@@ -29,4 +29,7 @@ public abstract class Bot extends GameActor{
     {
         controlOn = control;
     }
+
+    public abstract void attack(Body puck);
+    public abstract void defend(Body puck);
 }

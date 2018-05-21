@@ -15,6 +15,7 @@ import com.ciscominas.airhockeymania.actors.PowerUp;
 import com.ciscominas.airhockeymania.actors.SuperGoal;
 import com.ciscominas.airhockeymania.actors.SuperHandle;
 import com.ciscominas.airhockeymania.box2d.PowerUpUserData;
+import com.ciscominas.airhockeymania.box2d.PuckUserData;
 
 import java.util.Random;
 
@@ -63,6 +64,7 @@ public class WorldUtils {
         fixture.filter.categoryBits = category;
         fixture.filter.maskBits = mask;
         body.createFixture(fixture);
+        body.setUserData(new PuckUserData());
 
         body.resetMassData();
         shape.dispose();

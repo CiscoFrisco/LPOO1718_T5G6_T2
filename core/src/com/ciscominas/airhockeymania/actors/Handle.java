@@ -27,13 +27,7 @@ public class Handle extends GameActor {
         this.lastPos = this.currentPos;
         this.getBody().setTransform(new Vector2(x,y),0);
         this.currentPos = new Vector2(x,y);
-        this.vel = new Vector2(this.currentPos.x - this.lastPos.x, this.currentPos.y - this.lastPos.y);
-        System.out.println("vx: " + this.vel.x);
-        System.out.println("vy: " + this.vel.y);
-        System.out.println("currentx: " + this.currentPos.x);
-        System.out.println("currenty: " + this.currentPos.y);
-        System.out.println("lastx: " + this.lastPos.x);
-        System.out.println("lasty: " + this.lastPos.y);
+        this.vel = new Vector2((this.currentPos.x - this.lastPos.x) *10, (this.currentPos.y - this.lastPos.y)*10);
     }
 
     public Vector2 getVel(){

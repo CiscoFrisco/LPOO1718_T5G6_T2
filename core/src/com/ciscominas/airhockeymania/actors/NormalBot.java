@@ -12,4 +12,14 @@ public class NormalBot extends Bot {
     public void move(GameStage game) {
 
     }
+
+    @Override
+    public void attack(Body puck) {
+
+    }
+
+    @Override
+    public void defend(Body puck) {
+
+    }
 }

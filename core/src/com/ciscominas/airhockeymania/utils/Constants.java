@@ -24,8 +24,17 @@ public class Constants {
     public static final float HANDLE_X = 10f;
     public static final float HANDLE_Y = 1f;
 
+
     public static final float BOT_X = 10f;
     public static final float BOT_Y = 14f;
+    public static final float HARD_BOT_SENS = 5f;
+    public static final float NORMAL_BOT_SENS = 3f;
+    public static final float EASY_BOT_SENS = 1f;
+    public static final float HARD_BOT_MAX_OFF = 0.5f;
+    public static final float NORMAL_BOT_MAX_OFFSET = 1.0f;
+    public static final float EASY_BOT_MAX_OFFSET = 2.0f;
+
+
 
 
     public static final String HANDLE_IMAGE_PATH = "handle.png";

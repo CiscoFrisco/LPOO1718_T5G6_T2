@@ -8,9 +8,12 @@ import com.ciscominas.airhockeymania.utils.Constants;
 
 public class Puck extends GameActor {
 
+    private int wallBounce;
+
     public Puck(Body body)
     {
         super(body);
+        wallBounce = 0;
     }
 
     public void reset()

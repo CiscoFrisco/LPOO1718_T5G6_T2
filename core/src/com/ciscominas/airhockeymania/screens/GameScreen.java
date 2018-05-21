@@ -2,6 +2,8 @@ package com.ciscominas.airhockeymania.screens;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -21,10 +23,12 @@ public class GameScreen extends ScreenAdapter {
 
     private GameStage stage;
     private AirHockeyMania myGame;
+    private Music ingame_bkg_music;
 
     @Override
     public void show() {
         stage.setDifficulty(myGame.getPreferences().getDifficulty());
+        ingame_bkg_music.play();
         Gdx.input.setInputProcessor(stage);
     }
 
@@ -32,6 +36,15 @@ public class GameScreen extends ScreenAdapter {
     {
         stage = new GameStage(game.getPreferences().getDifficulty());
         myGame = game;
+        setUpBkgMusic();
+    }
+
+
+    public void setUpBkgMusic()
+    {
+        ingame_bkg_music = Gdx.audio.newMusic(Gdx.files.internal("star_wars.mp3"));
+        ingame_bkg_music.setLooping(true);
+        ingame_bkg_music.setVolume(myGame.getPreferences().getMusicVolume());
     }
 
     @Override
@@ -46,6 +59,7 @@ public class GameScreen extends ScreenAdapter {
         if(stage.isGameOver())
         {
             myGame.changeScreen(0);
+            ingame_bkg_music.stop();
             stage.reset();
         }
 

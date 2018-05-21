@@ -1,6 +1,7 @@
 package com.ciscominas.airhockeymania.stages;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
@@ -22,6 +23,7 @@ import com.ciscominas.airhockeymania.actors.HardBot;
 import com.ciscominas.airhockeymania.actors.PowerUp;
 import com.ciscominas.airhockeymania.actors.Puck;
 import com.ciscominas.airhockeymania.box2d.PowerUpUserData;
+import com.ciscominas.airhockeymania.box2d.PuckUserData;
 import com.ciscominas.airhockeymania.utils.WorldUtils;
 import com.ciscominas.airhockeymania.utils.BodyUtils;
 
@@ -121,6 +123,7 @@ public class GameStage extends Stage implements ContactListener{
         setUpHandles();
     }
 
+
     private void setUpHandles() {
         handle = new Handle(WorldUtils.createHandle(new Vector2(HANDLE_X, HANDLE_Y), world, Constants.HANDLE_RADIUS, HANDLE_BODY, (short) (PUCK_BODY | LINE_BODY)));
         addActor(handle);
@@ -206,12 +209,15 @@ public class GameStage extends Stage implements ContactListener{
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer)
     {
-        camera.unproject(touchPoint.set(screenX, screenY, 0));
+        if(controlOn)
+        {
+            camera.unproject(touchPoint.set(screenX, screenY, 0));
 
-        //if(handle.isTouched(touchPoint.x, touchPoint.y))
-             handle.move(touchPoint.x, touchPoint.y);
+            //if(handle.isTouched(touchPoint.x, touchPoint.y))
+            handle.move(touchPoint.x, touchPoint.y);
 
-        //handle.setVel(new Vector2(0,0));
+            //handle.setVel(new Vector2(0,0));
+        }
 
         return true;
     }
@@ -299,16 +305,36 @@ public class GameStage extends Stage implements ContactListener{
         Body b1 = contact.getFixtureA().getBody();
         Body b2 = contact.getFixtureB().getBody();
 
-        if(b1.equals(puck.getBody()) && b2.equals(handle.getBody()) ||
-                b1.equals(handle.getBody()) && b2.equals(puck.getBody()))
+        if(BodyUtils.bodyIsPuck(b1)&& b2.equals(handle.getBody()))
         {
-            puck.getBody().setLinearVelocity(handle.getVel().add(puck.getBody().getLinearVelocity()));
+            b1.setLinearVelocity(handle.getVel().add(b1.getLinearVelocity()));
             lastTouch = "PLAYER";
+            ((PuckUserData) b1.getUserData()).resetWallBounce();
         }
-        else if(b1.equals(puck.getBody()) && b2.equals(bot.getBody()) ||
-                b1.equals(bot.getBody()) && b2.equals(puck.getBody()))
+        else if (BodyUtils.bodyIsPuck(b2) && b1.equals(handle.getBody()))
+        {
+            b2.setLinearVelocity(handle.getVel().add(b2.getLinearVelocity()));
+            lastTouch = "PLAYER";
+            ((PuckUserData) b2.getUserData()).resetWallBounce();
+
+        }
+        else if(BodyUtils.bodyIsPuck(b1)&& b2.equals(bot.getBody()))
         {
             lastTouch = "BOT";
+            ((PuckUserData) b1.getUserData()).resetWallBounce();
+        }
+        else if (BodyUtils.bodyIsPuck(b2) && b1.equals(bot.getBody())) {
+            lastTouch = "BOT";
+            ((PuckUserData) b2.getUserData()).resetWallBounce();
+
+        }
+        else if(BodyUtils.bodyIsPuck(b1) && (b2.equals(lEdge.getBody()) || b2.equals(rEdge.getBody())))
+        {
+            ((PuckUserData) b1.getUserData()).incWallBounce();
+        }
+        else if(BodyUtils.bodyIsPuck(b2) && (b1.equals(lEdge.getBody()) || b1.equals(rEdge.getBody())))
+        {
+            ((PuckUserData) b2.getUserData()).incWallBounce();
         }
 
 
