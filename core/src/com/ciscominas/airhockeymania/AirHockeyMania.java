@@ -29,7 +29,6 @@ public class AirHockeyMania extends Game {
 
 	@Override
 	public void create () {
-		Gdx.app.setLogLevel(Application.LOG_INFO);
 		preferences = new AppPreferences();
 		assetManager = new GameAssetManager();
 		mainMenu = new MainMenu(this);

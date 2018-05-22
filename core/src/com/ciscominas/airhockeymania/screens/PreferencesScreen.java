@@ -91,11 +91,11 @@ public class PreferencesScreen extends ScreenAdapter
 
             //volume
             final Slider soundMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
-            soundMusicSlider.setValue(myGame.getPreferences().getMusicVolume());
+            soundMusicSlider.setValue(myGame.getPreferences().getSoundVolume());
             soundMusicSlider.addListener(new EventListener() {
                 @Override
                 public boolean handle(Event event) {
-                    myGame.getPreferences().setMusicVolume(soundMusicSlider.getValue());
+                    myGame.getPreferences().setSoundVolume(soundMusicSlider.getValue());
                     return false;
                 }
             });
@@ -115,12 +115,12 @@ public class PreferencesScreen extends ScreenAdapter
 
             //music
             final CheckBox soundEffectsCheckbox = new CheckBox(null, skin);
-            soundEffectsCheckbox.setChecked(myGame.getPreferences().isMusicEnabled());
+            soundEffectsCheckbox.setChecked(myGame.getPreferences().isSoundEffectsEnabled());
             soundEffectsCheckbox.addListener(new EventListener() {
                 @Override
                 public boolean handle(Event event) {
                     boolean enabled = soundEffectsCheckbox.isChecked();
-                    myGame.getPreferences().setMusicEnabled(enabled);
+                    myGame.getPreferences().setSoundEffectsEnabled(enabled);
                     return false;
                 }
             });

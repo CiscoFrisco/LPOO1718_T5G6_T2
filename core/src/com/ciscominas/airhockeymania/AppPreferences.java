@@ -9,7 +9,7 @@ public class AppPreferences {
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
     private static final String PREF_SOUND_VOL = "sound";
-    private static final String PREFS_NAME = "b2dtut";
+    private static final String PREFS_NAME = "AirHockeyMania";
     private static final String PREF_DIFFICULTY = "difficulty";
 
     protected Preferences getPrefs() {
@@ -53,7 +53,7 @@ public class AppPreferences {
     }
 
     public void setDifficulty(String difficulty) {
-        getPrefs().putString(PREF_SOUND_VOL, difficulty);
+        getPrefs().putString(PREF_DIFFICULTY, difficulty);
         getPrefs().flush();
     }
 

@@ -28,7 +28,8 @@ public class GameScreen extends ScreenAdapter {
     @Override
     public void show() {
         stage.setDifficulty(myGame.getPreferences().getDifficulty());
-        //ingame_bkg_music.play();
+        if(myGame.getPreferences().isMusicEnabled())
+            ingame_bkg_music.play();
         Gdx.input.setInputProcessor(stage);
     }
 
