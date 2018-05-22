@@ -10,6 +10,7 @@ import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
+import com.badlogic.gdx.physics.box2d.Fixture;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
@@ -24,6 +25,7 @@ import com.ciscominas.airhockeymania.actors.PowerUp;
 import com.ciscominas.airhockeymania.actors.Puck;
 import com.ciscominas.airhockeymania.box2d.PowerUpUserData;
 import com.ciscominas.airhockeymania.box2d.PuckUserData;
+import com.ciscominas.airhockeymania.utils.ContactHandler;
 import com.ciscominas.airhockeymania.utils.WorldUtils;
 import com.ciscominas.airhockeymania.utils.BodyUtils;
 
@@ -34,6 +36,8 @@ import com.ciscominas.airhockeymania.utils.Constants;
 import java.time.Duration;
 import java.time.Instant;
 import java.util.Date;
+import java.util.Map;
+import java.util.TreeMap;
 
 import static com.ciscominas.airhockeymania.utils.Constants.BOT_X;
 import static com.ciscominas.airhockeymania.utils.Constants.BOT_Y;
@@ -63,7 +67,7 @@ import static com.ciscominas.airhockeymania.utils.Constants.UPR_GL_X;
 import static com.ciscominas.airhockeymania.utils.Constants.UP_GL_Y;
 import static java.lang.Math.abs;
 
-public class GameStage extends Stage implements ContactListener{
+public class GameStage extends Stage {
     // This will be our viewport measurements while working with the debug renderer
     private static final int VIEWPORT_WIDTH = 20;
     private static final int VIEWPORT_HEIGHT = 15;
@@ -74,15 +78,7 @@ public class GameStage extends Stage implements ContactListener{
     private Handle handle;
     private Bot bot;
     private World world;
-    private Edge lEdge;
-    private Edge rEdge;
-    private Edge ulEdge;
-    private Edge urEdge;
-    private Edge dlEdge;
-    private Edge drEdge;
-    private Edge midLine;
-    private Edge goalLine;
-    private Edge anotherGoalLine;
+    private TreeMap<String, Edge> edges;
     private PowerUp currPowerUp;
 
     private Vector3 touchPoint;
@@ -117,7 +113,7 @@ public class GameStage extends Stage implements ContactListener{
 
     private void setUpWorld() {
         world = WorldUtils.createWorld();
-        world.setContactListener(this);
+        world.setContactListener(new ContactHandler(this));
         setUpPuck();
         setUpEdges();
         setUpHandles();
@@ -141,25 +137,19 @@ public class GameStage extends Stage implements ContactListener{
     }
 
     private void setUpEdges() {
-        lEdge = new Edge(WorldUtils.createLine(world, L_EDGE_X, EDGE_Y, EDGE_WIDTH, EDGE_HEIGHT, LINE_BODY,(short)(PUCK_BODY | HANDLE_BODY)));
-        rEdge = new Edge(WorldUtils.createLine(world, R_EDGE_X, EDGE_Y, EDGE_WIDTH, EDGE_HEIGHT, LINE_BODY,(short)(PUCK_BODY | HANDLE_BODY)));
-        ulEdge = new Edge(WorldUtils.createLine(world, UPL_GL_X, UP_GL_Y, GL_WIDTH, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY)));
-        urEdge = new Edge(WorldUtils.createLine(world, UPR_GL_X, UP_GL_Y, GL_WIDTH, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY)));
-        dlEdge = new Edge(WorldUtils.createLine(world, DOWNL_GL_X, DOWN_GL_Y, GL_WIDTH, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY)));
-        drEdge = new Edge(WorldUtils.createLine(world, DOWNR_GL_X, DOWN_GL_Y, GL_WIDTH, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY)));
-        midLine = new Edge(WorldUtils.createLine(world, MID_X, MID_Y, MID_WIDTH, MID_HEIGHT, LINE_BODY, (short)(HANDLE_BODY)));
-        goalLine = new Edge(WorldUtils.createLine(world, MID_X, UP_GL_Y, MID_WIDTH, MID_HEIGHT, LINE_BODY, (short)(HANDLE_BODY)));
-        anotherGoalLine = new Edge(WorldUtils.createLine(world, MID_X, DOWN_GL_Y, MID_WIDTH, MID_HEIGHT, LINE_BODY, (short)(HANDLE_BODY)));
+        edges = new TreeMap<String, Edge>();
+        edges.put("Left", new Edge(WorldUtils.createLine(world, L_EDGE_X, EDGE_Y, EDGE_WIDTH, EDGE_HEIGHT, LINE_BODY,(short)(PUCK_BODY | HANDLE_BODY))));
+        edges.put("Right", new Edge(WorldUtils.createLine(world, R_EDGE_X, EDGE_Y, EDGE_WIDTH, EDGE_HEIGHT, LINE_BODY,(short)(PUCK_BODY | HANDLE_BODY))));
+        edges.put("UpperLeft", new Edge(WorldUtils.createLine(world, UPL_GL_X, UP_GL_Y, GL_WIDTH, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY))));
+        edges.put("UpperRight", new Edge(WorldUtils.createLine(world, UPR_GL_X, UP_GL_Y, GL_WIDTH, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY))));
+        edges.put("LowerLeft", new Edge(WorldUtils.createLine(world, DOWNL_GL_X, DOWN_GL_Y, GL_WIDTH, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY))));
+        edges.put("LowerRight",new Edge(WorldUtils.createLine(world, DOWNR_GL_X, DOWN_GL_Y, GL_WIDTH, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY))));
+        edges.put("MidLine", new Edge(WorldUtils.createLine(world, MID_X, MID_Y, MID_WIDTH, MID_HEIGHT, LINE_BODY, (short)(HANDLE_BODY))));
+        edges.put("GoalLine", new Edge(WorldUtils.createLine(world, MID_X, UP_GL_Y, MID_WIDTH, MID_HEIGHT, LINE_BODY, (short)(HANDLE_BODY))));
+        edges.put("OtherGoalLine", new Edge(WorldUtils.createLine(world, MID_X, DOWN_GL_Y, MID_WIDTH, MID_HEIGHT, LINE_BODY, (short)(HANDLE_BODY))));
 
-        addActor(lEdge);
-        addActor(rEdge);
-        addActor(ulEdge);
-        addActor(urEdge);
-        addActor(dlEdge);
-        addActor(drEdge);
-        addActor(midLine);
-        addActor(goalLine);
-        addActor(anotherGoalLine);
+        for(Map.Entry<String,Edge> entry : edges.entrySet())
+            addActor(entry.getValue());
     }
 
     private void setUpPuck() {
@@ -299,62 +289,6 @@ public class GameStage extends Stage implements ContactListener{
         renderer.render(world, camera.combined);
     }
 
-    @Override
-    public void beginContact(Contact contact) {
-
-        Body b1 = contact.getFixtureA().getBody();
-        Body b2 = contact.getFixtureB().getBody();
-
-        if(BodyUtils.bodyIsPuck(b1)&& b2.equals(handle.getBody()))
-        {
-            b1.setLinearVelocity(handle.getVel().add(b1.getLinearVelocity()));
-            lastTouch = "PLAYER";
-            ((PuckUserData) b1.getUserData()).resetWallBounce();
-        }
-        else if (BodyUtils.bodyIsPuck(b2) && b1.equals(handle.getBody()))
-        {
-            b2.setLinearVelocity(handle.getVel().add(b2.getLinearVelocity()));
-            lastTouch = "PLAYER";
-            ((PuckUserData) b2.getUserData()).resetWallBounce();
-
-        }
-        else if(BodyUtils.bodyIsPuck(b1)&& b2.equals(bot.getBody()))
-        {
-            lastTouch = "BOT";
-            ((PuckUserData) b1.getUserData()).resetWallBounce();
-        }
-        else if (BodyUtils.bodyIsPuck(b2) && b1.equals(bot.getBody())) {
-            lastTouch = "BOT";
-            ((PuckUserData) b2.getUserData()).resetWallBounce();
-
-        }
-        else if(BodyUtils.bodyIsPuck(b1) && (b2.equals(lEdge.getBody()) || b2.equals(rEdge.getBody())))
-        {
-            ((PuckUserData) b1.getUserData()).incWallBounce();
-        }
-        else if(BodyUtils.bodyIsPuck(b2) && (b1.equals(lEdge.getBody()) || b1.equals(rEdge.getBody())))
-        {
-            ((PuckUserData) b2.getUserData()).incWallBounce();
-        }
-
-
-    }
-
-    @Override
-    public void endContact(Contact contact) {
-
-    }
-
-    @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-
-    }
-
-    @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-
-    }
-
     public boolean isGameOver() {
         return gameOver;
     }
@@ -396,35 +330,21 @@ public class GameStage extends Stage implements ContactListener{
         this.handle.setBody(handle);
     }
 
-    public Edge getUlEdge()
+    public Edge getEdge(String id)
     {
-        return ulEdge;
-    }
-
-    public Edge getDlEdge()
-    {
-        return dlEdge;
-    }
-
-    public Edge getDrEdge()
-    {
-        return drEdge;
-    }
-    public Edge getUrEdge()
-    {
-        return urEdge;
+        return edges.get(id);
     }
 
     public void setUpperLines(Body left, Body right)
     {
-        this.ulEdge.setBody(left);
-        this.urEdge.setBody(right);
+        edges.get("UpperLeft").setBody(left);
+        edges.get("UpperRight").setBody(right);
     }
 
     public void setLowerLines(Body left, Body right)
     {
-        this.dlEdge.setBody(left);
-        this.drEdge.setBody(right);
+        edges.get("LowerLeft").setBody(left);
+        edges.get("LowerRight").setBody(right);
     }
 
     public String getLastTouch() {
@@ -446,5 +366,9 @@ public class GameStage extends Stage implements ContactListener{
 
     public void setDifficulty(String difficulty) {
         this.difficulty = difficulty;
+    }
+
+    public void setLastTouch(String lastTouch) {
+        this.lastTouch = lastTouch;
     }
 }

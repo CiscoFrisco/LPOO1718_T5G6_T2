@@ -15,10 +15,15 @@ public class FreezeHandle extends PowerUp {
 
         lastTouch = game.getLastTouch();
 
-        if(lastTouch == "PLAYER")
+        if(lastTouch == "PLAYER") {
             game.getBot().setControlOn(false);
+            game.getBot().getBody().setLinearVelocity(0,0);
+        }
         else
+        {
             game.setControlOn(false);
+            game.getHandle().getBody().setLinearVelocity(0, 0);
+        }
 
 
         active = true;

@@ -33,16 +33,16 @@ public class SuperGoal extends PowerUp {
         if(lastTouch == "PLAYER")
         {
           //destruir linhas
-            game.getUlEdge().destroyBody(game);
-            game.getUrEdge().destroyBody(game);
+            game.getEdge("UpperLeft").destroyBody(game);
+            game.getEdge("UpperRight").destroyBody(game);
             game.setUpperLines(WorldUtils.createLine(game.getWorld(), UPL_GL_X, UP_GL_Y, GL_WIDTH-2, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY)),
                     WorldUtils.createLine(game.getWorld(), UPR_GL_X+2, UP_GL_Y, GL_WIDTH-2, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY)));
         }
         else
         {
             //destuir linhas
-            game.getDlEdge().destroyBody(game);
-            game.getDrEdge().destroyBody(game);
+            game.getEdge("LowerLeft").destroyBody(game);
+            game.getEdge("LowerRight").destroyBody(game);
             game.setLowerLines(WorldUtils.createLine(game.getWorld(), DOWNL_GL_X, DOWN_GL_Y, GL_WIDTH-2, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY)),
                     WorldUtils.createLine(game.getWorld(), DOWNR_GL_X+2, DOWN_GL_Y, GL_WIDTH-2, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY)));
         }
@@ -54,15 +54,15 @@ public class SuperGoal extends PowerUp {
     public void reset(GameStage game) {
         if(lastTouch == "PLAYER")
         {
-            game.getUlEdge().destroyBody(game);
-            game.getUrEdge().destroyBody(game);
+            game.getEdge("UpperLeft").destroyBody(game);
+            game.getEdge("UpperRight").destroyBody(game);
             game.setUpperLines(WorldUtils.createLine(game.getWorld(), UPL_GL_X, UP_GL_Y, GL_WIDTH, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY)),
                     WorldUtils.createLine(game.getWorld(), UPR_GL_X, UP_GL_Y, GL_WIDTH, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY)));
         }
         else
         {
-            game.getDlEdge().destroyBody(game);
-            game.getDrEdge().destroyBody(game);
+            game.getEdge("LowerLeft").destroyBody(game);
+            game.getEdge("LowerRight").destroyBody(game);
             game.setUpperLines(WorldUtils.createLine(game.getWorld(), DOWNL_GL_X, DOWN_GL_Y, GL_WIDTH, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY)),
                     WorldUtils.createLine(game.getWorld(), DOWNR_GL_X, DOWN_GL_Y, GL_WIDTH, GL_HEIGHT, LINE_BODY, (short)(PUCK_BODY | HANDLE_BODY)));
         }

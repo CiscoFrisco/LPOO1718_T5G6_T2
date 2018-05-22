@@ -6,7 +6,6 @@ import com.ciscominas.airhockeymania.box2d.PuckUserData;
 import com.ciscominas.airhockeymania.stages.GameStage;
 import com.ciscominas.airhockeymania.utils.BodyUtils;
 import com.ciscominas.airhockeymania.utils.Constants;
-import com.ciscominas.airhockeymania.utils.WorldUtils;
 
 public class HardBot extends Bot {
     public HardBot(Body body) {
@@ -18,21 +17,28 @@ public class HardBot extends Bot {
 
         if(controlOn) {
             Body puck = game.getPuck().getBody();
-
-            body.setTransform(puck.getPosition().x, body.getPosition().y, 0);
-
+            Vector2 final_pos = puck.getPosition();
             float radius = Math.abs(puck.getPosition().sub(body.getPosition()).len());
 
             if ( radius < Constants.HARD_BOT_SENS && puck.getPosition().y > Constants.MID_Y )
             {
-                if(((PuckUserData)puck.getUserData()).getWallBounce() < 1)
-                    attack(puck);
+               /* if(puck.getLinearVelocity().y < 0)
+                    defended = true;
+                if(!calcTrajectory) {
+                    System.out.println("finalX:" + final_pos.x + "||" + "finalY:" + final_pos.y);
+                    calculateTrajectory(puck, final_pos);
+                    System.out.println("finalX:" + final_pos.x + "||" + "finalY:" + final_pos.y);
+                    calcTrajectory = true;
+                }
+                if(!defended)
+                    defend(puck, final_pos);
                 else
-                    if(radius < 1)
-                    defend(puck);
+                    resetPosition();*/
+
             }
         }
     }
+
 
     @Override
     public void attack(Body puck) {
@@ -45,9 +51,25 @@ public class HardBot extends Bot {
     }
 
     @Override
-    public void defend(Body puck) {
-        body.setTransform(puck.getPosition().x + BodyUtils.randNumber(-Constants.HARD_BOT_MAX_OFF,Constants.HARD_BOT_MAX_OFF), body.getPosition().y, 0);
+    public void defend(Body puck, Vector2 final_pos) {
+
+        if(body.getPosition().x > final_pos.x)
+            body.setLinearVelocity(-5,0);
+        else if(body.getPosition().x < final_pos.x)
+            body.setLinearVelocity(5,0);
+        else
+            body.setLinearVelocity(0,0);
+
     }
 
+    public void resetPosition()
+    {
+        Vector2 vel = new Vector2(Constants.BOT_X - body.getPosition().x, Constants.BOT_Y - body.getPosition().y);
+        body.setLinearVelocity(vel);
+
+        if(body.getPosition().x == Constants.BOT_X && body.getPosition().y == Constants.BOT_Y - 1)
+            body.setLinearVelocity(0,0);
+
+    }
 
 }

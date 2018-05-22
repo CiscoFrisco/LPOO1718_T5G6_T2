@@ -1,5 +1,6 @@
 package com.ciscominas.airhockeymania.actors;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.ciscominas.airhockeymania.stages.GameStage;
 
@@ -19,7 +20,7 @@ public class NormalBot extends Bot {
     }
 
     @Override
-    public void defend(Body puck) {
+    public void defend(Body puck, Vector2 final_pos) {
 
     }
 }
