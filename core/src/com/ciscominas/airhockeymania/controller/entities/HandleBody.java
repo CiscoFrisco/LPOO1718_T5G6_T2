@@ -1,17 +1,36 @@
 package com.ciscominas.airhockeymania.controller.entities;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.utils.Constants;
 
 public class HandleBody extends EntityBody {
-    public HandleBody(World world, EntityModel model) {
-        super(world, model);
 
-        float density = 1f, friction = 0.4f, restitution = 0.5f;
-        int width = 75, height = 75;
+    private Vector2 vel;
+    private Vector2 lastPos;
+    private Vector2 currentPos;
 
-        createFixture(body, createShape(Constants.HANDLE_RADIUS, CIRCLE, 0), density, friction, restitution, PUCK_BODY,
-                (short) (LINE_BODY | HANDLE_BODY | PUCK_BODY));
+    public HandleBody(World world, EntityModel model, BodyDef.BodyType type) {
+        super(world, model, type);
+
+        float density = 200000f, friction = 1f, restitution = 0.5f;
+        float radius = 0.5f;
+
+        createFixture(body, createShape(radius, CIRCLE, 0), density, friction, restitution, HANDLE_BODY,
+                (short) (LINE_BODY |PUCK_BODY));
+    }
+
+    public void move(float x, float y)
+    {
+        this.lastPos = this.currentPos;
+        setTransform(x, y,0);
+        this.currentPos = new Vector2(x,y);
+        this.vel = new Vector2((this.currentPos.x - this.lastPos.x) *10, (this.currentPos.y - this.lastPos.y)*10);
+    }
+
+    public Vector2 getVel() {
+        return vel;
     }
 }

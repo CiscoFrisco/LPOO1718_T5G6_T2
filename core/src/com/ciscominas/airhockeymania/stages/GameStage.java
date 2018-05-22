@@ -171,7 +171,7 @@ public class GameStage extends Stage {
 
     private void setUpPowerUp()
     {
-        currPowerUp = WorldUtils.randPowerUp(world);
+        //currPowerUp = WorldUtils.randPowerUp(world);
         addActor(currPowerUp);
     }
 

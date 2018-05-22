@@ -9,13 +9,14 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ciscominas.airhockeymania.actors.Bot;
-import com.ciscominas.airhockeymania.actors.DuplicatePucks;
-import com.ciscominas.airhockeymania.actors.FreezeHandle;
-import com.ciscominas.airhockeymania.actors.PowerUp;
-import com.ciscominas.airhockeymania.actors.SuperGoal;
-import com.ciscominas.airhockeymania.actors.SuperHandle;
 import com.ciscominas.airhockeymania.box2d.PowerUpUserData;
 import com.ciscominas.airhockeymania.box2d.PuckUserData;
+import com.ciscominas.airhockeymania.controller.entities.PowerUpBody;
+import com.ciscominas.airhockeymania.model.entities.PowerUpModel;
+import com.ciscominas.airhockeymania.model.powerups.DuplicatePucks;
+import com.ciscominas.airhockeymania.model.powerups.FreezeHandle;
+import com.ciscominas.airhockeymania.model.powerups.SuperGoal;
+import com.ciscominas.airhockeymania.model.powerups.SuperHandle;
 
 import java.util.Random;
 
@@ -111,26 +112,25 @@ public class WorldUtils {
         return body;
     }
 
-    public static PowerUp randPowerUp(World world)
+    public static PowerUpModel randPowerUp()
     {
         Random random = new Random();
         int number = random.nextInt(4);
-        PowerUp powerUp = null;
         Vector2 pos = BodyUtils.randPosition(2, 2,15,10);
-        Body body = WorldUtils.createPowerUp(pos, world, POWERUP_BODY, POWERUP_BODY);
+        PowerUpModel powerUp = new PowerUpModel(pos.x, pos.y);
         switch(number)
         {
             case 0:
-                powerUp = new SuperHandle(body);
+                powerUp.setType( new SuperHandle());
                 break;
             case 1:
-                powerUp = new DuplicatePucks(body);
+                powerUp.setType( new DuplicatePucks());
                 break;
             case 2:
-                powerUp = new FreezeHandle( body);
+                powerUp.setType( new FreezeHandle());
                 break;
             case 3:
-                powerUp = new SuperGoal(body);
+                powerUp.setType( new SuperGoal());
                 break;
         }
 

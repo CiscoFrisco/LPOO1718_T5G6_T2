@@ -12,19 +12,19 @@ import com.ciscominas.airhockeymania.utils.Constants;
 
 public abstract class EntityBody {
 
-    final static short PUCK_BODY = 0x0001;
-    final static short HANDLE_BODY = 0x0002;
-    final static short LINE_BODY = 0x0004;
-    final static short POWERUP_BODY = 0x0008;
+    public final static short PUCK_BODY = 0x0001;
+    public final static short HANDLE_BODY = 0x0002;
+    public final static short LINE_BODY = 0x0004;
+    public final static short POWERUP_BODY = 0x0008;
 
     final static int POLYGON = 0;
     final static int CIRCLE = 1;
 
     final Body body;
 
-    public EntityBody(World world, EntityModel model) {
+    public EntityBody(World world, EntityModel model, BodyDef.BodyType type) {
         BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.type = type;
         bodyDef.position.set(model.getX(), model.getY());
 
         body = world.createBody(bodyDef);

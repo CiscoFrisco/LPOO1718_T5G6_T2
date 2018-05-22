@@ -58,6 +58,6 @@ public class AppPreferences {
     }
 
     public String getDifficulty() {
-        return getPrefs().getString(PREF_DIFFICULTY, "HARD");
+        return getPrefs().getString(PREF_DIFFICULTY, "Hard");
     }
 }

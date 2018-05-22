@@ -64,8 +64,8 @@ public class GameScreen extends ScreenAdapter {
             stage.reset();
         }
 
-        myGame.batch.begin();
-        myGame.font.draw(myGame.batch, stage.getScore(), 100, 150);
-        myGame.batch.end();
+        myGame.getBatch().begin();
+        myGame.getFont().draw(myGame.getBatch(), stage.getScore(), 100, 150);
+        myGame.getBatch().end();
     }
 }

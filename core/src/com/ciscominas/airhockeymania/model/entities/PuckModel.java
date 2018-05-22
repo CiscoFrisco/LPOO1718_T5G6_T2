@@ -10,4 +10,10 @@ public class PuckModel extends EntityModel {
     public ModelType getType() {
         return null;
     }
+
+    public void resetWallBounce() {
+    }
+
+    public void incWallBounce() {
+    }
 }

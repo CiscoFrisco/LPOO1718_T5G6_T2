@@ -38,9 +38,9 @@ public class PreferencesScreen extends ScreenAdapter
             /// create stage and set it as input processor
             stage = new Stage(new ScreenViewport());
 
-            myGame.assetManager.queueAddSkin();  //new
+           /* myGame.assetManager.queueAddSkin();  //new
             myGame.assetManager.manager.finishLoading(); // new
-            skin = myGame.assetManager.manager.get("skin/glassy-ui.json"); // new
+            skin = myGame.assetManager.manager.get("skin/glassy-ui.json"); // new*/
         }
 
         @Override
