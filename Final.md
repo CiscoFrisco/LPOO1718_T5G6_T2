@@ -2,6 +2,10 @@
 
 ## Project Setup
 
+The project was developed with Android Studio.
+After cloning the repo, building with gradle should be sufficient to get everything to work.
+Just make sure not to update gradle even if the IDE asks for it!
+
 ## App Setup
 
 ## UML
@@ -13,8 +17,14 @@
 ## Design Patterns
 
 - Model-View-Controller
+    Following professor André Restivo's example, the game implemented this pattern, separating logic, info, and interface. The view package contains the screens, controller contains the bodies and powerups, and model contains the bodies' user data.
+
 - Singleton
+    GameController and GameModel are singletons, since there should be no more than one instance of them.
+
 - Strategy
+    The game has powerups like DuplicatePucks and FreezeHandle, so it was a good idea to implement
+    Strategy here. This way, the game can, at a defined rate, substitute the current power up with another random one, while not needing to change the methods it needs to call.
 
 ## Relevant Design Decisions
 
@@ -54,6 +64,7 @@ As explained above, we had to follow some external tutorials in order to complet
 
 - Menus and Preferences: [Menus](https://www.gamedevelopment.blog/full-libgdx-game-tutorial-project-setup/)
 - First setup: [First setup](http://williammora.com/a-running-game-with-libgdx-part-1)
-- Recurring questions: stack overflow and similar sites
+- Database: [Database](http://www.sqlitetutorial.net/sqlite-java/)
+- Recurring questions: libgdx wiki, stack overflow and similar sites
 
 ## User manual
