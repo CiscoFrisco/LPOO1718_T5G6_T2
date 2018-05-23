@@ -20,7 +20,7 @@ public class InputHandler extends InputAdapter {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         view.getCamera().unproject(touchPoint.set(screenX, screenY, 0));
 
-        GameController.getInstance().getHandle().move(touchPoint.x, touchPoint.y);
+        GameController.getInstance().getHandle().move(touchPoint.x*GameView.PIXEL_TO_METER, touchPoint.y*GameView.PIXEL_TO_METER);
 
         return true;
     }

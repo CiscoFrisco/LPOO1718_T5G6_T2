@@ -55,6 +55,7 @@ public class GameController implements ContactListener {
     private ArrayList<LineBody> edges;
     private int scorePlayer;
     private int scoreOpponent;
+    private boolean gameOver;
     private boolean controlOn;
 
     private GameController() {
@@ -69,6 +70,7 @@ public class GameController implements ContactListener {
         createEdges();
 
         world.setContactListener(this);
+        gameOver = false;
     }
 
     public void setHandleBody(HandleBody handle)
@@ -80,6 +82,7 @@ public class GameController implements ContactListener {
         ArrayList<LineModel> models = GameModel.getInstance().getEdges();
         edges = new ArrayList<LineBody>();
         short mask = EntityBody.PUCK_BODY | EntityBody.HANDLE_BODY;
+        short mask2 = EntityBody.HANDLE_BODY;
 
         //Criar linhas de golo
         float goalWidth = 0.15f, goalHeight = 0.1f;
@@ -95,12 +98,12 @@ public class GameController implements ContactListener {
 
         //Criar linha do meio
         float midWidth = 0.4f, midHeight = 0.1f;
-        edges.add(new LineBody(world, models.get(6), BodyDef.BodyType.StaticBody, mask));
+        edges.add(new LineBody(world, models.get(6), BodyDef.BodyType.StaticBody, mask2));
 
         //Criar linhas de baliza
         float limitWidth = 0.4f, limitHeight = 0.1f;
-        edges.add(new LineBody(world, models.get(7), BodyDef.BodyType.StaticBody, mask));
-        edges.add(new LineBody(world, models.get(8), BodyDef.BodyType.StaticBody, mask));
+        edges.add(new LineBody(world, models.get(7), BodyDef.BodyType.StaticBody, mask2));
+        edges.add(new LineBody(world, models.get(8), BodyDef.BodyType.StaticBody, mask2));
     }
 
     public void setLine(LineBody line, int which)
@@ -135,12 +138,53 @@ public class GameController implements ContactListener {
 
         }
 
+        checkScore();
+
         Array<Body> bodies = new Array<Body>();
         world.getBodies(bodies);
 
         for (Body body : bodies) {
             ((EntityModel) body.getUserData()).setPosition(body.getPosition().x, body.getPosition().y);
         }
+    }
+
+    public boolean checkScore()
+    {
+        boolean changed = false;
+
+        if(puckBody.getBody().getPosition().y < -2)
+        {
+            scorePlayer++;
+            resetBodies();
+            changed = true;
+            /*if(currPowerUp!=null && currPowerUp.isActive())
+            {
+                currPowerUp.reset(this);
+                currPowerUp = null;
+                init = new Date();
+            }*/
+        } else if (puckBody.getBody().getPosition().y > GameController.ARENA_HEIGHT + 2) {
+            scoreOpponent++;
+            resetBodies();
+            changed = true;
+           /* if(currPowerUp!=null && currPowerUp.isActive())
+            {
+                currPowerUp.reset(this);
+                currPowerUp = null;
+                init = new Date();
+            }*/
+        }
+
+        if((scoreOpponent >= Constants.WIN_SCORE || scorePlayer >= Constants.WIN_SCORE) && Math.abs(scorePlayer - scoreOpponent) >= 2) {
+            gameOver = true;
+            changed = true;
+        }
+
+        return changed;
+    }
+
+    public boolean isGameOver(){
+        return gameOver;
     }
 
     private void setUpPowerUp() {
@@ -238,9 +282,10 @@ public class GameController implements ContactListener {
     }
 
     public void resetBodies() {
+        System.out.println(GameModel.getInstance().getHandle().getY());
         handleBody.reset(Constants.HANDLE_X,Constants.HANDLE_Y);
         puckBody.reset();
-        botBody.reset(BOT_X, BOT_Y);
+        botBody.reset(Constants.BOT_X, Constants.BOT_Y);
     }
 
     public void incScoreOpponent() {

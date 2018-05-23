@@ -84,7 +84,9 @@ public class GameView extends ScreenAdapter {
     public void render(float delta) {
         GameController.getInstance().update(delta);
 
-        Gdx.gl.glClearColor( 103/255f, 69/255f, 117/255f, 1 );
+        checkGameOver();
+
+        Gdx.gl.glClearColor( 253/255f, 207/255f, 113/255f, 1 );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 
         game.getBatch().begin();
@@ -100,11 +102,22 @@ public class GameView extends ScreenAdapter {
 
     private void drawEntities()
     {
+        ArrayList<LineModel> lines = GameModel.getInstance().getEdges();
+        EntityView view;
+
+        for(LineModel line : lines)
+        {
+            view = ViewFactory.makeView(game, line);
+            view.resize(line);
+            view.update(line);
+            view.draw(game.getBatch());
+        }
+
         PuckModel puck = GameModel.getInstance().getPuck();
         BotModel bot = GameModel.getInstance().getBot();
         HandleModel handle = GameModel.getInstance().getHandle();
 
-        EntityView view = ViewFactory.makeView(game, puck);
+        view = ViewFactory.makeView(game, puck);
         view.update(puck);
         view.draw(game.getBatch());
 
@@ -116,14 +129,13 @@ public class GameView extends ScreenAdapter {
         view.update(handle);
         view.draw(game.getBatch());
 
-        ArrayList<LineModel> lines = GameModel.getInstance().getEdges();
 
-        for(LineModel line : lines)
-        {
-            view = ViewFactory.makeView(game, line);
-            view.update(line);
-            view.draw(game.getBatch());
-        }
+    }
+
+    public void checkGameOver()
+    {
+        if(GameController.getInstance().isGameOver())
+            game.changeScreen(0);
     }
 
     public OrthographicCamera getCamera() {

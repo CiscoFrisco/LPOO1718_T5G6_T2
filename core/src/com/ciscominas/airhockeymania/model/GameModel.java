@@ -37,11 +37,11 @@ public class GameModel {
         float height = GameController.ARENA_HEIGHT;
         float width = GameController.ARENA_WIDTH;
 
-        puck = new PuckModel(width/2, height/2, 0.5f, 0);
-        handle = new HandleModel(width/2, height/12, 0.5f, 0);
-        bot = new BotModel(width/2, 10*height/12, 0.5f, 0 );
+        puck = new PuckModel(width/2, height/2, 0.75f, 0);
+        handle = new HandleModel(width/2, height/12, 1f, 0);
+        bot = new BotModel(width/2, 11*height/12, 1f, 0 );
         Vector2 botPos = BodyUtils.randPosition(2,2,(int)(width) - 2,(int) (height) - 2);
-        powerUp = new PowerUpModel(botPos.x, botPos.y, 0.5f, 0);
+        powerUp = new PowerUpModel(botPos.x, botPos.y, 0.75f, 0);
 
         setUpEdges();
     }

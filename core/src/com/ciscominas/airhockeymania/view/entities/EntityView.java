@@ -3,7 +3,9 @@ package com.ciscominas.airhockeymania.view.entities;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ciscominas.airhockeymania.AirHockeyMania;
+import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
+import com.ciscominas.airhockeymania.view.GameView;
 
 import static com.ciscominas.airhockeymania.view.GameView.PIXEL_TO_METER;
 
@@ -22,5 +24,9 @@ public abstract class EntityView {
 
     public void update(EntityModel model) {
         sprite.setCenter(model.getX() / PIXEL_TO_METER, model.getY() / PIXEL_TO_METER);
+    }
+
+    public void resize(EntityModel model){
+        sprite.setScale(model.getWidth()*1.5f/ GameController.ARENA_WIDTH,model.getHeight()*2.5f/GameController.ARENA_HEIGHT);
     }
 }

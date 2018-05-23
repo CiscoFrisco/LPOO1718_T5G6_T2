@@ -5,6 +5,7 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.utils.Constants;
+import com.ciscominas.airhockeymania.view.GameView;
 
 public class HandleBody extends EntityBody {
 
@@ -29,7 +30,7 @@ public class HandleBody extends EntityBody {
         this.lastPos = this.currentPos;
         setTransform(x, y,0);
         this.currentPos = new Vector2(x,y);
-        this.vel = new Vector2((this.currentPos.x - this.lastPos.x) *10, (this.currentPos.y - this.lastPos.y)*10);
+        this.vel = new Vector2((this.currentPos.x - this.lastPos.x) *20, (this.currentPos.y - this.lastPos.y)*20);
     }
 
     public Vector2 getVel() {
@@ -40,4 +41,5 @@ public class HandleBody extends EntityBody {
         body.setTransform(handleX, handleY, 0);
         body.setLinearVelocity(0,0);
     }
+
 }

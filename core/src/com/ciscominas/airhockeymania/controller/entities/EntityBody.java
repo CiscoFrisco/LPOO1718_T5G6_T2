@@ -84,7 +84,7 @@ public abstract class EntityBody {
                 return polygon;
             case CIRCLE:
                 CircleShape circle = new CircleShape();
-                circle.setRadius(Constants.PUCK_RADIUS);
+                circle.setRadius(width);
                 return circle;
         }
 
