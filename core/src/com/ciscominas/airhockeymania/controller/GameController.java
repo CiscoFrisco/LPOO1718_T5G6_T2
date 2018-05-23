@@ -39,9 +39,9 @@ public class GameController implements ContactListener {
 
     private final World world;
 
-    public static final float ARENA_WIDTH = 400;//GameView.VIEWPORT_WIDTH;
+    public static final float ARENA_WIDTH = 16;//GameView.VIEWPORT_WIDTH;
 
-    public static float ARENA_HEIGHT = 600;//GameView.VIEWPORT_HEIGHT;
+    public static float ARENA_HEIGHT =  24;//GameView.VIEWPORT_HEIGHT;
 
     private final PuckBody puckBody;
     private HandleBody handleBody;
@@ -84,7 +84,7 @@ public class GameController implements ContactListener {
         //Criar linhas de golo
         float goalWidth = 0.15f, goalHeight = 0.1f;
         edges.add(new LineBody(world, models.get(0), BodyDef.BodyType.StaticBody, mask));
-        /*edges.add(new LineBody(world, models.get(1), BodyDef.BodyType.StaticBody, mask));
+        edges.add(new LineBody(world, models.get(1), BodyDef.BodyType.StaticBody, mask));
         edges.add(new LineBody(world, models.get(2), BodyDef.BodyType.StaticBody, mask));
         edges.add(new LineBody(world, models.get(3), BodyDef.BodyType.StaticBody, mask));
 
@@ -100,7 +100,7 @@ public class GameController implements ContactListener {
         //Criar linhas de baliza
         float limitWidth = 0.4f, limitHeight = 0.1f;
         edges.add(new LineBody(world, models.get(7), BodyDef.BodyType.StaticBody, mask));
-        edges.add(new LineBody(world, models.get(8), BodyDef.BodyType.StaticBody, mask));*/
+        edges.add(new LineBody(world, models.get(8), BodyDef.BodyType.StaticBody, mask));
     }
 
     public void setLine(LineBody line, int which)

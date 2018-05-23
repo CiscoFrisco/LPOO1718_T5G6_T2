@@ -27,7 +27,7 @@ public class GameView extends ScreenAdapter {
 
     public final static float PIXEL_TO_METER = 0.04f;
 
-    public static final float VIEWPORT_WIDTH = 10f;
+    public static final float VIEWPORT_WIDTH = GameController.ARENA_WIDTH;
 
     public static float VIEWPORT_HEIGHT;
 
@@ -50,7 +50,7 @@ public class GameView extends ScreenAdapter {
 
     private OrthographicCamera createCamera() {
 
-        VIEWPORT_HEIGHT = (VIEWPORT_WIDTH * ((float) Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
+        VIEWPORT_HEIGHT =/* GameController.ARENA_HEIGHT;//*/(VIEWPORT_WIDTH * ((float) Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
 
         OrthographicCamera camera = new OrthographicCamera(VIEWPORT_WIDTH / PIXEL_TO_METER, VIEWPORT_HEIGHT/PIXEL_TO_METER);
 

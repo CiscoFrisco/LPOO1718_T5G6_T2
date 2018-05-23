@@ -34,13 +34,13 @@ public class GameModel {
 
     private GameModel() {
 
-        float height = GameController.ARENA_HEIGHT*GameView.PIXEL_TO_METER;
-        float width = GameController.ARENA_WIDTH*GameView.PIXEL_TO_METER;
+        float height = GameController.ARENA_HEIGHT;
+        float width = GameController.ARENA_WIDTH;
 
         puck = new PuckModel(width/2, height/2, 0.5f, 0);
-        handle = new HandleModel(width/2, height/6, 0.5f, 0);
-        bot = new BotModel(width/2, 5*height/6, 0.5f, 0 );
-        Vector2 botPos = BodyUtils.randPosition(0,0,1,1);
+        handle = new HandleModel(width/2, height/12, 0.5f, 0);
+        bot = new BotModel(width/2, 10*height/12, 0.5f, 0 );
+        Vector2 botPos = BodyUtils.randPosition(2,2,(int)(width) - 2,(int) (height) - 2);
         powerUp = new PowerUpModel(botPos.x, botPos.y, 0.5f, 0);
 
         setUpEdges();
@@ -53,19 +53,19 @@ public class GameModel {
 
     private void setUpEdges()
     {
-        float height = GameController.ARENA_HEIGHT*GameView.PIXEL_TO_METER;
-        float width = GameController.ARENA_WIDTH*GameView.PIXEL_TO_METER;
+        float height = GameController.ARENA_HEIGHT;
+        float width = GameController.ARENA_WIDTH;
 
         edges = new ArrayList<LineModel>();
-        edges.add(new LineModel(width/2,height/2,  width - 5,height - 5,"")); //down left edge
-        /*edges.add(new LineModel(3*width/4,0, width/4,height/6,"")); //down right edge
-        edges.add(new LineModel(0,height,width/4 ,height/6,"")); //upper left edge
-        edges.add(new LineModel(3*width/4,height,width/4 ,height/6,"")); //upper right edge
-        edges.add(new LineModel(width,0, width/6,height, "lat")); //right edge
-        edges.add(new LineModel(0,0, width/6,height, "lat")); //left edge
-        edges.add(new LineModel(width/2,height/2, width, height/8,"")); //mid line
-        edges.add(new LineModel(width/3,0,width/4 ,height/8,"")); //down goal line
-        edges.add(new LineModel(width/3,height, width/4,height/8,"")); //upper goal line*/
+        edges.add(new LineModel(1.5f,0.5f,  width/4,height/24,"")); //down left edge
+        edges.add(new LineModel(14.5f,0.5f, width/4,height/24,"")); //down right edge
+        edges.add(new LineModel(1.5f,23.5f,width/4 ,height/24,"")); //upper left edge
+        edges.add(new LineModel(14.5f,23.5f,width/4,height/24, "")); //upper right edge
+        edges.add(new LineModel(15.5f,height/2, width/16,height, "lat")); //right edge
+        edges.add(new LineModel(0.5f,height/2, width/16,height, "lat")); //left edge
+        edges.add(new LineModel(width/2,height/2, width, height/96,"")); //mid line
+        edges.add(new LineModel(width/2,0,width/2 + 1 ,height/96,"")); //down goal line
+        edges.add(new LineModel(width/2,height, width/2 + 1,height/96,"")); //upper goal line
     }
 
     public PuckModel getPuck() {
