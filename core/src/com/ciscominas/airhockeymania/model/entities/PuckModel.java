@@ -8,7 +8,7 @@ public class PuckModel extends EntityModel {
 
     @Override
     public ModelType getType() {
-        return null;
+        return ModelType.PUCK;
     }
 
     public void resetWallBounce() {

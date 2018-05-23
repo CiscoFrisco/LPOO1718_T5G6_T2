@@ -1,4 +1,4 @@
-package com.ciscominas.airhockeymania.model.powerups;
+package com.ciscominas.airhockeymania.controller.entities.powerups;
 
 public class SuperHandle implements PowerUpType {
 

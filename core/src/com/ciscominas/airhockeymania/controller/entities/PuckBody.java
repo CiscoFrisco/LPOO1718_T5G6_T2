@@ -1,5 +1,6 @@
 package com.ciscominas.airhockeymania.controller.entities;
 
+import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
@@ -14,5 +15,13 @@ public class PuckBody extends EntityBody {
 
         createFixture(body, createShape(radius, CIRCLE, 0), density, friction, restitution, PUCK_BODY,
                 (short) (LINE_BODY | HANDLE_BODY | PUCK_BODY));
+    }
+
+    public void setUserData(Object userData) {
+        this.body.setUserData(userData);
+    }
+
+    public Body getBody() {
+        return body;
     }
 }

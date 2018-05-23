@@ -18,6 +18,9 @@ public class HandleBody extends EntityBody {
         float density = 200000f, friction = 1f, restitution = 0.5f;
         float radius = 0.5f;
 
+        this.currentPos = new Vector2(model.getX(), model.getY());
+        this.vel = new  Vector2(0,0);
+
         createFixture(body, createShape(radius, CIRCLE, 0), density, friction, restitution, HANDLE_BODY,
                 (short) (LINE_BODY |PUCK_BODY));
     }

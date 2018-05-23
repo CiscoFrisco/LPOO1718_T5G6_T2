@@ -1,5 +1,6 @@
 package com.ciscominas.airhockeymania.controller.entities;
 
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.CircleShape;
@@ -7,6 +8,7 @@ import com.badlogic.gdx.physics.box2d.FixtureDef;
 import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.physics.box2d.Shape;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.utils.Constants;
 
@@ -20,7 +22,7 @@ public abstract class EntityBody {
     final static int POLYGON = 0;
     final static int CIRCLE = 1;
 
-    final Body body;
+    Body body;
 
     public EntityBody(World world, EntityModel model, BodyDef.BodyType type) {
         BodyDef bodyDef = new BodyDef();
@@ -51,6 +53,16 @@ public abstract class EntityBody {
 
     public void setTransform(float x, float y, float angle) {
         body.setTransform(x, y, angle);
+    }
+
+    public void setLinearVelocity(float vx, float vy)
+    {
+        body.setLinearVelocity(vx,vy);
+    }
+
+    public Vector2 getLinearVelocity()
+    {
+        return body.getLinearVelocity();
     }
 
     public Object getUserData() {
@@ -88,5 +100,9 @@ public abstract class EntityBody {
         body.createFixture(fixtureDef);
 
         shape.dispose();
+    }
+
+    public void deleteBody() {
+        body = null;
     }
 }

@@ -9,10 +9,6 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.ciscominas.airhockeymania.actors.Bot;
-import com.ciscominas.airhockeymania.actors.Handle;
-import com.ciscominas.airhockeymania.actors.Puck;
-import com.ciscominas.airhockeymania.box2d.PuckUserData;
 import com.ciscominas.airhockeymania.controller.entities.BotBody;
 import com.ciscominas.airhockeymania.controller.entities.EntityBody;
 import com.ciscominas.airhockeymania.controller.entities.HandleBody;
@@ -24,9 +20,11 @@ import com.ciscominas.airhockeymania.model.entities.BotModel;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.model.entities.HandleModel;
 import com.ciscominas.airhockeymania.model.entities.LineModel;
+import com.ciscominas.airhockeymania.model.entities.PowerUpModel;
 import com.ciscominas.airhockeymania.model.entities.PuckModel;
 import com.ciscominas.airhockeymania.utils.BodyUtils;
 import com.ciscominas.airhockeymania.utils.Constants;
+import com.ciscominas.airhockeymania.view.GameView;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -39,9 +37,10 @@ public class GameController implements ContactListener {
 
     private final World world;
 
-    public static final int ARENA_WIDTH = 20;
+    public static final float ARENA_WIDTH = 0.8f;
 
-    public static final int ARENA_HEIGHT = 15;
+    public static float ARENA_HEIGHT = GameView.VIEWPORT_HEIGHT;
+
     private final PuckBody puckBody;
     private final HandleBody handleBody;
     private float accumulator;
@@ -72,23 +71,23 @@ public class GameController implements ContactListener {
         short mask = EntityBody.PUCK_BODY | EntityBody.HANDLE_BODY;
 
         //Criar linhas de golo
-        float goalWidth = 15, goalHeight = 1;
+        float goalWidth = 0.15f, goalHeight = 0.1f;
         new LineBody(world, edges.get(0), BodyDef.BodyType.StaticBody, goalWidth, goalHeight, mask);
         new LineBody(world, edges.get(1), BodyDef.BodyType.StaticBody, goalWidth, goalHeight, mask);
         new LineBody(world, edges.get(2), BodyDef.BodyType.StaticBody, goalWidth, goalHeight, mask);
         new LineBody(world, edges.get(3), BodyDef.BodyType.StaticBody, goalWidth, goalHeight, mask);
 
         //Criar laterais
-        float latWidth = 10, latHeight = 40;
+        float latWidth = 0.1f, latHeight = 0.4f;
         new LineBody(world, edges.get(4), BodyDef.BodyType.StaticBody, latWidth, latHeight, mask);
         new LineBody(world, edges.get(5), BodyDef.BodyType.StaticBody, latWidth, latHeight, mask);
 
         //Criar linha do meio
-        float midWidth = 40, midHeight = 0.1f;
+        float midWidth = 0.4f, midHeight = 0.1f;
         new LineBody(world, edges.get(6), BodyDef.BodyType.StaticBody, midWidth, midHeight, mask);
 
         //Criar linhas de baliza
-        float limitWidth = 40, limitHeight = 0.1f;
+        float limitWidth = 0.4f, limitHeight = 0.1f;
         new LineBody(world, edges.get(7), BodyDef.BodyType.StaticBody, limitWidth, limitHeight, mask);
         new LineBody(world, edges.get(8), BodyDef.BodyType.StaticBody, limitWidth, limitHeight, mask);
     }
@@ -129,7 +128,7 @@ public class GameController implements ContactListener {
     }
 
     private void setUpPowerUp() {
-        powerUpBody = new PowerUpBody(world, randPowerUp(), BodyDef.BodyType.StaticBody);
+        powerUpBody = new PowerUpBody(world, , BodyDef.BodyType.StaticBody);
     }
 
 
@@ -169,11 +168,11 @@ public class GameController implements ContactListener {
             ((PuckModel) b2.getUserData()).resetWallBounce();
 
         }
-        else if(b1.getUserData() instanceof PuckModel && ((LineModel) b2.getUserData()).getPos().equals("Lat"))
+        else if(b1.getUserData() instanceof PuckModel && b2.getUserData() instanceof LineModel && ((LineModel) b2.getUserData()).getPos().equals("Lat"))
         {
             ((PuckModel) b1.getUserData()).incWallBounce();
         }
-        else if(b2.getUserData() instanceof PuckModel && ((LineModel) b1.getUserData()).getPos().equals("Lat"))
+        else if(b2.getUserData() instanceof PuckModel && b1.getUserData() instanceof LineModel && ((LineModel) b1.getUserData()).getPos().equals("Lat"))
         {
             ((PuckModel) b2.getUserData()).incWallBounce();
         }
@@ -205,5 +204,14 @@ public class GameController implements ContactListener {
 
     public World getWorld() {
         return world;
+    }
+
+    public void setBegin()
+    {
+        begin = new Date();
+    }
+
+    public PuckBody getPuckBody() {
+        return puckBody;
     }
 }

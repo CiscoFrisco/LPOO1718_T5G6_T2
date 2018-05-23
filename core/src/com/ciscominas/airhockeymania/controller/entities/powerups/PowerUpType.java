@@ -1,10 +1,8 @@
-package com.ciscominas.airhockeymania.model.powerups;
+package com.ciscominas.airhockeymania.controller.entities.powerups;
 
 public interface PowerUpType {
 
     void effect();
 
     void reset();
-
-    void check();
 }

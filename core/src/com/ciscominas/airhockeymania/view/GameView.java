@@ -27,9 +27,9 @@ public class GameView extends ScreenAdapter {
 
     public final static float PIXEL_TO_METER = 0.04f;
 
-    private static final int VIEWPORT_WIDTH = 1;
+    private static final float VIEWPORT_WIDTH = 0.8f;
 
-    private static final int VIEWPORT_HEIGHT = 15;
+    public static float VIEWPORT_HEIGHT;
 
     private final AirHockeyMania game;
 
@@ -49,7 +49,10 @@ public class GameView extends ScreenAdapter {
     }
 
     private OrthographicCamera createCamera() {
-        OrthographicCamera camera = new OrthographicCamera(VIEWPORT_WIDTH / PIXEL_TO_METER, VIEWPORT_WIDTH / PIXEL_TO_METER * ((float) Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
+
+        VIEWPORT_HEIGHT = (VIEWPORT_WIDTH * ((float) Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
+
+        OrthographicCamera camera = new OrthographicCamera(VIEWPORT_WIDTH / PIXEL_TO_METER, VIEWPORT_HEIGHT/PIXEL_TO_METER);
 
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
         camera.update();
@@ -65,12 +68,16 @@ public class GameView extends ScreenAdapter {
 
 
     private void loadAssets() {
+        game.getAssetManager().load("puck.png", Texture.class);
+        game.getAssetManager().load("line.png", Texture.class);
 
+        game.getAssetManager().finishLoading();
     }
 
     @Override
     public void show() {
         super.show();
+        GameController.getInstance().setBegin();
         Gdx.input.setInputProcessor(new InputHandler(this));
     }
 
@@ -118,7 +125,6 @@ public class GameView extends ScreenAdapter {
             view.draw(game.getBatch());
         }
     }
-
 
     public OrthographicCamera getCamera() {
         return camera;

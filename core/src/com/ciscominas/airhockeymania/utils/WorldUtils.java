@@ -2,138 +2,46 @@ package com.ciscominas.airhockeymania.utils;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
-import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.CircleShape;
-import com.badlogic.gdx.physics.box2d.EdgeShape;
-import com.badlogic.gdx.physics.box2d.FixtureDef;
-import com.badlogic.gdx.physics.box2d.PolygonShape;
-import com.badlogic.gdx.physics.box2d.World;
-import com.ciscominas.airhockeymania.actors.Bot;
-import com.ciscominas.airhockeymania.box2d.PowerUpUserData;
-import com.ciscominas.airhockeymania.box2d.PuckUserData;
-import com.ciscominas.airhockeymania.controller.entities.PowerUpBody;
+import com.ciscominas.airhockeymania.controller.GameController;
+import com.ciscominas.airhockeymania.controller.entities.powerups.PowerUpType;
 import com.ciscominas.airhockeymania.model.entities.PowerUpModel;
-import com.ciscominas.airhockeymania.model.powerups.DuplicatePucks;
-import com.ciscominas.airhockeymania.model.powerups.FreezeHandle;
-import com.ciscominas.airhockeymania.model.powerups.SuperGoal;
-import com.ciscominas.airhockeymania.model.powerups.SuperHandle;
+import com.ciscominas.airhockeymania.controller.entities.powerups.DuplicatePucks;
+import com.ciscominas.airhockeymania.controller.entities.powerups.FreezeHandle;
+import com.ciscominas.airhockeymania.controller.entities.powerups.SuperGoal;
+import com.ciscominas.airhockeymania.controller.entities.powerups.SuperHandle;
 
 import java.util.Random;
 
-import static com.ciscominas.airhockeymania.utils.Constants.POWERUP_BODY;
-import static com.ciscominas.airhockeymania.utils.Constants.PUCK_DENSITY;
-
 public class WorldUtils {
-
-    public static World createWorld()
-    {
-        return new World(Constants.WORLD_GRAVITY, false);
-    }
-
-    public static Body createLine(World world, float x, float y, float width, float height, short category, short mask)
-    {
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(new Vector2(x, y));
-        Body body = world.createBody(bodyDef);
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(width/2,height/2 );
-        FixtureDef fixture = new FixtureDef();
-        fixture.shape = shape;
-        fixture.density = Constants.EDGE_DENSITY;
-        fixture.filter.categoryBits = category;
-        fixture.filter.maskBits = mask;
-        body.createFixture(fixture);
-        shape.dispose();
-
-        return body;
-    }
-
-    public static Body createPuck(World world, short category, short mask)
-    {
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.bullet=true;
-        bodyDef.position.set(new Vector2(Constants.PUCK_X, Constants.PUCK_Y));
-        CircleShape shape = new CircleShape();
-        shape.setRadius(Constants.PUCK_RADIUS);
-        Body body = world.createBody(bodyDef);
-        FixtureDef fixture = new FixtureDef();
-        fixture.density = PUCK_DENSITY;
-        fixture.shape = shape;
-        fixture.restitution = 0.5f;
-        fixture.friction = 0f;
-        fixture.filter.categoryBits = category;
-        fixture.filter.maskBits = mask;
-        body.createFixture(fixture);
-        body.setUserData(new PuckUserData());
-
-        body.resetMassData();
-        shape.dispose();
-        return body;
-    }
-
-    public static Body createHandle(Vector2 position, World world, float radius, short category, short mask)
-    {
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        bodyDef.position.set(position);
-        CircleShape shape = new CircleShape();
-        shape.setRadius(radius);
-        Body body = world.createBody(bodyDef);
-        FixtureDef fixture = new FixtureDef();
-        fixture.density = 200000f;
-        fixture.shape = shape;
-        fixture.restitution = 0.5f;
-        fixture.friction = 1f;
-        fixture.filter.categoryBits = category;
-        fixture.filter.maskBits = mask;
-        body.createFixture(fixture);
-        body.resetMassData();
-        shape.dispose();
-        return body;
-    }
-
-    public static Body createPowerUp(Vector2 position, World world, short category, short mask)
-    {
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-        bodyDef.position.set(position);
-        CircleShape shape = new CircleShape();
-        shape.setRadius(Constants.HANDLE_RADIUS);
-        Body body = world.createBody(bodyDef);
-        FixtureDef fixture = new FixtureDef();
-        fixture.shape = shape;
-        fixture.filter.categoryBits = category;
-        fixture.filter.maskBits = mask;
-        body.createFixture(fixture);
-        body.resetMassData();
-        shape.dispose();
-
-        return body;
-    }
-
-    public static PowerUpModel randPowerUp()
+    
+    public static PowerUpType randPowerUp()
     {
         Random random = new Random();
         int number = random.nextInt(4);
-        Vector2 pos = BodyUtils.randPosition(2, 2,15,10);
-        PowerUpModel powerUp = new PowerUpModel(pos.x, pos.y);
+        PowerUpType powerUp = null;
         switch(number)
         {
             case 0:
-                powerUp.setType( new SuperHandle());
+                powerUp = new SuperHandle();
                 break;
             case 1:
-                powerUp.setType( new DuplicatePucks());
+                powerUp = new DuplicatePucks();
                 break;
             case 2:
-                powerUp.setType( new FreezeHandle());
+                powerUp = new FreezeHandle();
                 break;
             case 3:
-                powerUp.setType( new SuperGoal());
+                powerUp = new SuperGoal();
                 break;
         }
 
         return powerUp;
+    }
+
+    public static void destroyBody(Body body)
+    {
+        GameController.getInstance().getWorld().destroyBody(body);
+        body.setUserData(null);
+        body = null;
     }
 }

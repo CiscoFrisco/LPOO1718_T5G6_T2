@@ -1,23 +1,14 @@
 package com.ciscominas.airhockeymania;
 
-import com.badlogic.gdx.Application;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.ciscominas.airhockeymania.screens.GameScreen;
-import com.ciscominas.airhockeymania.screens.PreferencesScreen;
-import com.ciscominas.airhockeymania.screens.MainMenu;
-import com.ciscominas.airhockeymania.screens.Splash;
-import com.ciscominas.airhockeymania.utils.GameAssetManager;
 import com.ciscominas.airhockeymania.view.GameView;
 import com.ciscominas.airhockeymania.view.MainView;
 import com.ciscominas.airhockeymania.view.PreferencesView;
-
-import java.util.ArrayList;
 
 public class AirHockeyMania extends Game {
 	private static final int MAIN_MENU = 0;
@@ -44,15 +35,6 @@ public class AirHockeyMania extends Game {
 		font = new BitmapFont();
 
 		changeScreen(MAIN_MENU);
-	}
-
-	@Override
-	public void render () {
-		Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.end();
-		super.render();
 	}
 
 	public void changeScreen(int screen){
