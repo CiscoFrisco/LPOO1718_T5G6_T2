@@ -135,7 +135,10 @@ public class GameView extends ScreenAdapter {
     public void checkGameOver()
     {
         if(GameController.getInstance().isGameOver())
+        {
             game.changeScreen(0);
+            GameController.getInstance().reset();
+        }
     }
 
     public OrthographicCamera getCamera() {

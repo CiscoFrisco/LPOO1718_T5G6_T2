@@ -304,4 +304,11 @@ public class GameController implements ContactListener {
     public void setBotBody(BotBody botBody) {
         this.botBody = botBody;
     }
+
+    public void reset() {
+        gameOver = false;
+        resetBodies();
+        scoreOpponent = 0;
+        scorePlayer = 0;
+    }
 }
