@@ -4,8 +4,8 @@ public class LineModel extends EntityModel {
 
     private String pos;
 
-    public LineModel(float x, float y, String pos) {
-        super(x, y);
+    public LineModel(float x, float y, float width, float height,  String pos) {
+        super(x, y, width, height);
         this.pos = pos;
     }
 

@@ -33,6 +33,11 @@ public abstract class EntityBody {
         body.setUserData(model);
     }
 
+    public Body getBody()
+    {
+        return body;
+    }
+
     /**
      * Wraps the getX method from the Box2D body class.
      *

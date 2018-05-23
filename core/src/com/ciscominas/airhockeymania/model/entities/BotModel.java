@@ -4,8 +4,8 @@ public class BotModel extends EntityModel{
     private boolean defended;
     private boolean trajectoryFlag;
 
-    public BotModel(float x, float y) {
-        super(x, y);
+    public BotModel(float x, float y, float width, float height) {
+        super(x, y, width, height);
         defended = false;
         trajectoryFlag = false;
     }

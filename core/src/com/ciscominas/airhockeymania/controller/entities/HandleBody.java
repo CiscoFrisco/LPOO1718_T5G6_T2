@@ -16,12 +16,11 @@ public class HandleBody extends EntityBody {
         super(world, model, type);
 
         float density = 200000f, friction = 1f, restitution = 0.5f;
-        float radius = 0.5f;
 
         this.currentPos = new Vector2(model.getX(), model.getY());
         this.vel = new  Vector2(0,0);
 
-        createFixture(body, createShape(radius, CIRCLE, 0), density, friction, restitution, HANDLE_BODY,
+        createFixture(body, createShape(model.getWidth(), CIRCLE, 0), density, friction, restitution, HANDLE_BODY,
                 (short) (LINE_BODY |PUCK_BODY));
     }
 
@@ -35,5 +34,10 @@ public class HandleBody extends EntityBody {
 
     public Vector2 getVel() {
         return vel;
+    }
+
+    public void reset(float handleX, float handleY) {
+        body.setTransform(handleX, handleY, 0);
+        body.setLinearVelocity(0,0);
     }
 }

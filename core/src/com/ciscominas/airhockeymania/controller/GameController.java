@@ -29,6 +29,8 @@ import com.ciscominas.airhockeymania.view.GameView;
 import java.util.ArrayList;
 import java.util.Date;
 
+import static com.ciscominas.airhockeymania.utils.Constants.BOT_X;
+import static com.ciscominas.airhockeymania.utils.Constants.BOT_Y;
 import static com.ciscominas.airhockeymania.utils.WorldUtils.randPowerUp;
 
 public class GameController implements ContactListener {
@@ -37,12 +39,12 @@ public class GameController implements ContactListener {
 
     private final World world;
 
-    public static final float ARENA_WIDTH = 0.8f;
+    public static final float ARENA_WIDTH = 400;//GameView.VIEWPORT_WIDTH;
 
-    public static float ARENA_HEIGHT = GameView.VIEWPORT_HEIGHT;
+    public static float ARENA_HEIGHT = 600;//GameView.VIEWPORT_HEIGHT;
 
     private final PuckBody puckBody;
-    private final HandleBody handleBody;
+    private HandleBody handleBody;
     private float accumulator;
     private String lastTouch;
     private BotBody botBody;
@@ -50,6 +52,10 @@ public class GameController implements ContactListener {
     private Date begin;
     private Date end;
     private PowerUpBody powerUpBody;
+    private ArrayList<LineBody> edges;
+    private int scorePlayer;
+    private int scoreOpponent;
+    private boolean controlOn;
 
     private GameController() {
         world = new World(new Vector2(0, 0), true);
@@ -65,31 +71,41 @@ public class GameController implements ContactListener {
         world.setContactListener(this);
     }
 
-    private void createEdges() {
-        ArrayList<LineModel> edges = GameModel.getInstance().getEdges();
+    public void setHandleBody(HandleBody handle)
+    {
+        this.handleBody = handle;
+    }
 
+    private void createEdges() {
+        ArrayList<LineModel> models = GameModel.getInstance().getEdges();
+        edges = new ArrayList<LineBody>();
         short mask = EntityBody.PUCK_BODY | EntityBody.HANDLE_BODY;
 
         //Criar linhas de golo
         float goalWidth = 0.15f, goalHeight = 0.1f;
-        new LineBody(world, edges.get(0), BodyDef.BodyType.StaticBody, goalWidth, goalHeight, mask);
-        new LineBody(world, edges.get(1), BodyDef.BodyType.StaticBody, goalWidth, goalHeight, mask);
-        new LineBody(world, edges.get(2), BodyDef.BodyType.StaticBody, goalWidth, goalHeight, mask);
-        new LineBody(world, edges.get(3), BodyDef.BodyType.StaticBody, goalWidth, goalHeight, mask);
+        edges.add(new LineBody(world, models.get(0), BodyDef.BodyType.StaticBody, mask));
+        /*edges.add(new LineBody(world, models.get(1), BodyDef.BodyType.StaticBody, mask));
+        edges.add(new LineBody(world, models.get(2), BodyDef.BodyType.StaticBody, mask));
+        edges.add(new LineBody(world, models.get(3), BodyDef.BodyType.StaticBody, mask));
 
         //Criar laterais
         float latWidth = 0.1f, latHeight = 0.4f;
-        new LineBody(world, edges.get(4), BodyDef.BodyType.StaticBody, latWidth, latHeight, mask);
-        new LineBody(world, edges.get(5), BodyDef.BodyType.StaticBody, latWidth, latHeight, mask);
+        edges.add(new LineBody(world, models.get(4), BodyDef.BodyType.StaticBody, mask));
+        edges.add(new LineBody(world, models.get(5), BodyDef.BodyType.StaticBody, mask));
 
         //Criar linha do meio
         float midWidth = 0.4f, midHeight = 0.1f;
-        new LineBody(world, edges.get(6), BodyDef.BodyType.StaticBody, midWidth, midHeight, mask);
+        edges.add(new LineBody(world, models.get(6), BodyDef.BodyType.StaticBody, mask));
 
         //Criar linhas de baliza
         float limitWidth = 0.4f, limitHeight = 0.1f;
-        new LineBody(world, edges.get(7), BodyDef.BodyType.StaticBody, limitWidth, limitHeight, mask);
-        new LineBody(world, edges.get(8), BodyDef.BodyType.StaticBody, limitWidth, limitHeight, mask);
+        edges.add(new LineBody(world, models.get(7), BodyDef.BodyType.StaticBody, mask));
+        edges.add(new LineBody(world, models.get(8), BodyDef.BodyType.StaticBody, mask));*/
+    }
+
+    public void setLine(LineBody line, int which)
+    {
+        edges.set(which, line);
     }
 
     public static GameController getInstance() {
@@ -128,7 +144,7 @@ public class GameController implements ContactListener {
     }
 
     private void setUpPowerUp() {
-        powerUpBody = new PowerUpBody(world, , BodyDef.BodyType.StaticBody);
+        powerUpBody = new PowerUpBody(world, GameModel.getInstance().getPowerUp() , BodyDef.BodyType.StaticBody);
     }
 
 
@@ -206,6 +222,8 @@ public class GameController implements ContactListener {
         return world;
     }
 
+    public ArrayList<LineBody> getEdges() { return edges;};
+
     public void setBegin()
     {
         begin = new Date();
@@ -213,5 +231,32 @@ public class GameController implements ContactListener {
 
     public PuckBody getPuckBody() {
         return puckBody;
+    }
+
+    public void incScorePlayer() {
+        this.scorePlayer++;
+    }
+
+    public void resetBodies() {
+        handleBody.reset(Constants.HANDLE_X,Constants.HANDLE_Y);
+        puckBody.reset();
+        botBody.reset(BOT_X, BOT_Y);
+    }
+
+    public void incScoreOpponent() {
+        this.scoreOpponent++;
+    }
+
+    public void setControlOn(boolean controlOn) {
+        this.controlOn = controlOn;
+    }
+
+    public BotBody getBot()
+    {
+        return botBody;
+    }
+
+    public void setBotBody(BotBody botBody) {
+        this.botBody = botBody;
     }
 }

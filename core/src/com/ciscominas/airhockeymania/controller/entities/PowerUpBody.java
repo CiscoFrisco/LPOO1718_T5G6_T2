@@ -17,29 +17,28 @@ public class PowerUpBody extends EntityBody {
         super(world, model, type);
 
         float density = 1f, friction = 0.4f, restitution = 0.5f;
-        float radius = 0.5f;
 
-        createFixture(body, createShape(radius, CIRCLE, 0), density, friction, restitution, POWERUP_BODY,
+        createFixture(body, createShape(model.getWidth(), CIRCLE, 0), density, friction, restitution, POWERUP_BODY,
                 (short) (LINE_BODY | HANDLE_BODY | PUCK_BODY));
     }
 
 
-    void setType(PowerUpType type)
+    public void setType(PowerUpType type)
     {
         this.type = type;
     }
 
-    void effect()
+    public void effect()
     {
         type.effect();
     }
 
-    void reset()
+    public void reset()
     {
         type.reset();
     }
 
-    boolean check()
+    public boolean check()
     {
         if(!active && body != null)
         {
@@ -47,7 +46,7 @@ public class PowerUpBody extends EntityBody {
             return false;
         }
 
-        return false;
+        return type.check();
     }
 
     public void checkContact() {

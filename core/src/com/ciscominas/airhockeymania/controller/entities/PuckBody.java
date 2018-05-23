@@ -11,9 +11,8 @@ public class PuckBody extends EntityBody {
         super(world, model, type);
 
         float density = 100f, friction = 0f, restitution = 0.5f;
-        float radius = 0.5f;
 
-        createFixture(body, createShape(radius, CIRCLE, 0), density, friction, restitution, PUCK_BODY,
+        createFixture(body, createShape(model.getWidth(), CIRCLE, 0), density, friction, restitution, PUCK_BODY,
                 (short) (LINE_BODY | HANDLE_BODY | PUCK_BODY));
     }
 
@@ -23,5 +22,10 @@ public class PuckBody extends EntityBody {
 
     public Body getBody() {
         return body;
+    }
+
+    public void reset() {
+        body.setTransform(Constants.PUCK_X, Constants.PUCK_Y, 0);
+        body.setLinearVelocity(0,0);
     }
 }

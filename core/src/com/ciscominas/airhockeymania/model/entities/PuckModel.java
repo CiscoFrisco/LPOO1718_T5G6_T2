@@ -2,8 +2,8 @@ package com.ciscominas.airhockeymania.model.entities;
 
 public class PuckModel extends EntityModel {
 
-    public PuckModel(float x, float y) {
-        super(x, y);
+    public PuckModel(float x, float y, float width, float height) {
+        super(x, y, width, height);
     }
 
     @Override

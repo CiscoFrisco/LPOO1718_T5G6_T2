@@ -27,13 +27,13 @@ public class GameView extends ScreenAdapter {
 
     public final static float PIXEL_TO_METER = 0.04f;
 
-    private static final float VIEWPORT_WIDTH = 0.8f;
+    public static final float VIEWPORT_WIDTH = 10f;
 
     public static float VIEWPORT_HEIGHT;
 
     private final AirHockeyMania game;
 
-    private final OrthographicCamera camera;
+    public final OrthographicCamera camera;
 
     private Box2DDebugRenderer debugRenderer;
 

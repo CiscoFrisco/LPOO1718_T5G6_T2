@@ -5,8 +5,8 @@ public class PowerUpModel extends EntityModel {
 
     private boolean active;
 
-    public PowerUpModel(float x, float y) {
-        super(x, y);
+    public PowerUpModel(float x, float y, float width, float height) {
+        super(x, y, width, height);
         active = false;
     }
 

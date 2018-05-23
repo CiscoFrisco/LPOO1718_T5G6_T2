@@ -33,14 +33,14 @@ public class DuplicatePucks implements PowerUpType {
         {
             if(puck.getBody().getPosition().y < 0)
             {
-                GameController.getInstance().scorePlayer++;
-                game.resetActors();
-                reset(game);
+                GameController.getInstance().incScorePlayer();
+                GameController.getInstance().resetBodies();
+                reset();
                 return true;
             } else if (puck.getBody().getPosition().y > 16) {
-                game.scoreOpponent++;
-                game.resetActors();
-                reset(game);
+                GameController.getInstance().incScoreOpponent();
+                GameController.getInstance().resetBodies();
+                reset();
                 return true;
             }
         }
@@ -49,13 +49,8 @@ public class DuplicatePucks implements PowerUpType {
 
     }
 
-    public void check() {
+    public boolean check() {
 
-        if(checkScore())
-            return true;
-
-        return false;
+         return checkScore();
     }
-    }
-
 }

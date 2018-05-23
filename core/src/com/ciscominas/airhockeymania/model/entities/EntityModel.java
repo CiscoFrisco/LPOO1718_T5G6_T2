@@ -2,9 +2,15 @@ package com.ciscominas.airhockeymania.model.entities;
 
 public abstract class EntityModel {
 
-    public enum ModelType {PUCK, HANDLE, LINE, BOT, POWERUP}
+    public float getWidth() {
+        return width;
+    }
 
-    ;
+    public float getHeight() {
+        return height;
+    }
+
+    public enum ModelType {PUCK, HANDLE, LINE, BOT, POWERUP}
 
     /**
      * The x-coordinate of this model in meters.
@@ -16,10 +22,16 @@ public abstract class EntityModel {
      */
     private float y;
 
+    private float width;
 
-    public EntityModel(float x, float y) {
+    private float height;
+
+
+    public EntityModel(float x, float y, float width, float height) {
         this.x = x;
         this.y = y;
+        this.width = width;
+        this.height = height;
     }
 
     public float getX() {
