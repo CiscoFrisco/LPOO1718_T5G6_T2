@@ -15,6 +15,7 @@ import com.ciscominas.airhockeymania.controller.entities.HandleBody;
 import com.ciscominas.airhockeymania.controller.entities.LineBody;
 import com.ciscominas.airhockeymania.controller.entities.PowerUpBody;
 import com.ciscominas.airhockeymania.controller.entities.PuckBody;
+import com.ciscominas.airhockeymania.database.GameResult;
 import com.ciscominas.airhockeymania.model.GameModel;
 import com.ciscominas.airhockeymania.model.entities.BotModel;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
@@ -310,5 +311,9 @@ public class GameController implements ContactListener {
         resetBodies();
         scoreOpponent = 0;
         scorePlayer = 0;
+    }
+
+    public GameResult getResult() {
+        return new GameResult(scorePlayer, scoreOpponent, new java.sql.Date(System.currentTimeMillis()));
     }
 }

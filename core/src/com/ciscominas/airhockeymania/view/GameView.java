@@ -137,6 +137,7 @@ public class GameView extends ScreenAdapter {
         if(GameController.getInstance().isGameOver())
         {
             game.changeScreen(0);
+            game.getDatabase().insert(GameController.getInstance().getResult());
             GameController.getInstance().reset();
         }
     }

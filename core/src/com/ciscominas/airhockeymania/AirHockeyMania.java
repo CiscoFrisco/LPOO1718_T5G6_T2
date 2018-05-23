@@ -6,6 +6,7 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.ciscominas.airhockeymania.database.Database;
 import com.ciscominas.airhockeymania.view.GameView;
 import com.ciscominas.airhockeymania.view.MainView;
 import com.ciscominas.airhockeymania.view.PreferencesView;
@@ -15,7 +16,7 @@ public class AirHockeyMania extends Game {
 	private static final int PREFERENCES_MENU = 1;
 	private static final int GAME_SCREEN = 2;
 
-
+	private Database database;
 	private SpriteBatch batch;
 	private BitmapFont font;
 	private AssetManager assetManager;
@@ -33,6 +34,7 @@ public class AirHockeyMania extends Game {
 		mainMenu = new MainView(this);
 		batch = new SpriteBatch();
 		font = new BitmapFont();
+		database = new Database();
 
 		changeScreen(MAIN_MENU);
 	}
@@ -49,6 +51,7 @@ public class AirHockeyMania extends Game {
 				break;
 			case GAME_SCREEN:
 				if(gameScreen == null) gameScreen = new GameView(this);
+				database.showResults(database.selectAll());
 				this.setScreen(gameScreen);
 				break;
 		}
@@ -75,5 +78,9 @@ public class AirHockeyMania extends Game {
 
 	public BitmapFont getFont() {
 		return font;
+	}
+
+	public Database getDatabase() {
+		return database;
 	}
 }
