@@ -43,11 +43,14 @@ public class MainView extends ScreenAdapter {
 
         TextButton newGame = new TextButton("New Game", skin);
         TextButton preferences = new TextButton("Preferences", skin);
+        TextButton results = new TextButton("Results", skin);
         TextButton exit = new TextButton("Exit", skin);
 
         table.add(newGame).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(preferences).fillX().uniformX();
+        table.row().pad(10, 0, 10, 0);
+        table.add(results).fillX().uniformX();
         table.row();
         table.add(exit).fillX().uniformX();
 
@@ -61,7 +64,7 @@ public class MainView extends ScreenAdapter {
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(2);
+                game.changeScreen(3);
             }
         });
 
@@ -69,6 +72,13 @@ public class MainView extends ScreenAdapter {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 game.changeScreen(1);
+            }
+        });
+
+        results.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen(2);
             }
         });
     }

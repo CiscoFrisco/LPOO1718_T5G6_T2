@@ -6,14 +6,17 @@ import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.ciscominas.airhockeymania.database.Database;
 import com.ciscominas.airhockeymania.view.GameView;
 import com.ciscominas.airhockeymania.view.MainView;
 import com.ciscominas.airhockeymania.view.PreferencesView;
+import com.ciscominas.airhockeymania.view.ResultsView;
 
 public class AirHockeyMania extends Game {
 	private static final int MAIN_MENU = 0;
 	private static final int PREFERENCES_MENU = 1;
-	private static final int GAME_SCREEN = 2;
+	private static final int RESULTS_SCREEN = 2;
+	private static final int GAME_SCREEN = 3;
 
 
 	private SpriteBatch batch;
@@ -25,6 +28,9 @@ public class AirHockeyMania extends Game {
 	private PreferencesView preferencesScreen;
 
 	private AppPreferences preferences;
+	private ResultsView resultsScreen;
+
+	private Database database;
 
 	@Override
 	public void create () {
@@ -33,6 +39,7 @@ public class AirHockeyMania extends Game {
 		mainMenu = new MainView(this);
 		batch = new SpriteBatch();
 		font = new BitmapFont();
+		database = new Database();
 
 		changeScreen(MAIN_MENU);
 	}
@@ -46,6 +53,10 @@ public class AirHockeyMania extends Game {
 			case PREFERENCES_MENU:
 				if(preferencesScreen == null) preferencesScreen = new PreferencesView(this);
 				this.setScreen(preferencesScreen);
+				break;
+			case RESULTS_SCREEN:
+				if(resultsScreen == null) resultsScreen = new ResultsView(this);
+				this.setScreen(resultsScreen);
 				break;
 			case GAME_SCREEN:
 				if(gameScreen == null) gameScreen = new GameView(this);
@@ -75,5 +86,9 @@ public class AirHockeyMania extends Game {
 
 	public BitmapFont getFont() {
 		return font;
+	}
+
+	public Database getDatabase() {
+		return database;
 	}
 }
