@@ -5,10 +5,14 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.ciscominas.airhockeymania.controller.GameController;
 
+import static com.ciscominas.airhockeymania.view.GameView.PIXEL_TO_METER;
+
 public class InputHandler extends InputAdapter {
 
     private final GameView view;
     private Vector3 touchPoint;
+    private float x;
+    private float y;
 
     public InputHandler(GameView view)
     {
@@ -18,10 +22,8 @@ public class InputHandler extends InputAdapter {
 
     @Override
     public boolean touchDragged(int screenX, int screenY, int pointer) {
-        view.getCamera().unproject(touchPoint.set(screenX, screenY, 0));
 
-        float x = touchPoint.x*GameView.PIXEL_TO_METER;
-        float y = touchPoint.y*GameView.PIXEL_TO_METER;
+        convertCoordinates(screenX, screenY);
 
         if(checkLimits(x,y))
             GameController.getInstance().getHandle().move(x, y);
@@ -29,12 +31,32 @@ public class InputHandler extends InputAdapter {
         return true;
     }
 
+    private void convertCoordinates(int screenX, int screenY)
+    {
+        view.getCamera().unproject(touchPoint.set(screenX, screenY, 0));
+
+        x = touchPoint.x* PIXEL_TO_METER;
+        y = touchPoint.y* PIXEL_TO_METER;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        convertCoordinates(screenX, screenY);
+
+        if(checkPause(x,y))
+            view.pauseGame();
+
+        return true;
+
+    }
+
+    private boolean checkPause(float x, float y) {
+        return x/PIXEL_TO_METER>=view.PAUSE_X && y/PIXEL_TO_METER>=view.PAUSE_Y;
+    }
+
     public boolean checkLimits(float x, float y)
     {
-        if(x <14.25f && x > 1.75f && y > 1.75f && y < GameController.ARENA_HEIGHT/2 - 0.75f)
-            return true;
-
-        return false;
+        return x <14.25f && x > 1.75f && y > 1.75f && y < GameController.ARENA_HEIGHT/2 - 0.75f;
     }
 
 }

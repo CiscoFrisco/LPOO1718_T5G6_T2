@@ -346,4 +346,12 @@ public class GameController implements ContactListener {
     public void setSounds(AssetManager sounds) {
         hit = sounds.get("hit.mp3");
     }
+
+    public int getPlayerScore() {
+        return scorePlayer;
+    }
+
+    public int getScoreOpponent() {
+        return scoreOpponent;
+    }
 }

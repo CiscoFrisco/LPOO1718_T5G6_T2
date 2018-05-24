@@ -10,12 +10,16 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ciscominas.airhockeymania.database.Database;
 import com.ciscominas.airhockeymania.view.GameView;
 import com.ciscominas.airhockeymania.view.MainView;
+import com.ciscominas.airhockeymania.view.PauseView;
 import com.ciscominas.airhockeymania.view.PreferencesView;
+import com.ciscominas.airhockeymania.view.ResultsView;
 
 public class AirHockeyMania extends Game {
-	private static final int MAIN_MENU = 0;
-	private static final int PREFERENCES_MENU = 1;
-	private static final int GAME_SCREEN = 2;
+	public static final int MAIN_MENU = 0;
+	public static final int PREFERENCES_MENU = 1;
+	public static final int RESULTS_SCREEN = 2;
+	public static final int GAME_SCREEN = 3;
+	public static final int PAUSE_SCREEN = 4;
 
 	private Database database;
 	private SpriteBatch batch;
@@ -25,6 +29,8 @@ public class AirHockeyMania extends Game {
 	private MainView mainMenu;
 	private GameView gameScreen;
 	private PreferencesView preferencesScreen;
+	private PauseView pauseScreen;
+	private ResultsView resultsScreen;
 
 	private Music menu_music;
 
@@ -64,11 +70,18 @@ public class AirHockeyMania extends Game {
 				if(preferencesScreen == null) preferencesScreen = new PreferencesView(this);
 				this.setScreen(preferencesScreen);
 				break;
+			case RESULTS_SCREEN:
+				if(resultsScreen == null) resultsScreen = new ResultsView(this);
+				this.setScreen(resultsScreen);
+				break;
 			case GAME_SCREEN:
 				if(gameScreen == null) gameScreen = new GameView(this);
-				database.showResults(database.selectAll());
 				this.setScreen(gameScreen);
 				menu_music.stop();
+				break;
+			case PAUSE_SCREEN:
+				if(pauseScreen == null) pauseScreen = new PauseView(this);
+				this.setScreen(pauseScreen);
 				break;
 		}
 	}

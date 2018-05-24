@@ -13,6 +13,7 @@ public class Database {
 
     static final String database = "results.db";
     static final String table = "results";
+    static final int limit = 10;
 
     public Database()
     {
@@ -68,7 +69,7 @@ public class Database {
 
         ArrayList<GameResult> results = new ArrayList<GameResult>();
 
-        String sql = "SELECT score1, score2, date FROM results";
+        String sql = "SELECT score1, score2, date FROM results ORDER BY date DESC LIMIT " + limit;
 
         try {
             Connection conn = connect();

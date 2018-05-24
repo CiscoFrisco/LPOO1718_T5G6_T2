@@ -8,6 +8,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.ciscominas.airhockeymania.AirHockeyMania;
@@ -46,6 +47,13 @@ public class GameView extends ScreenAdapter {
 
     private Music bkg_music;
 
+    private Texture pause;
+
+    private final float PAUSE_WIDTH = 50;
+    protected final float PAUSE_X = VIEWPORT_WIDTH/PIXEL_TO_METER - PAUSE_WIDTH;
+    protected float PAUSE_Y;
+
+    private BitmapFont score;
 
     public GameView(AirHockeyMania game) {
         this.game = game;
@@ -53,17 +61,18 @@ public class GameView extends ScreenAdapter {
         loadAssets();
         GameController.getInstance().setSounds(game.getAssetManager());
 
-
         bkg_music = game.getAssetManager().get("bkg_music1.mp3");
         bkg_music.setLooping(true);
 
+        pause = game.getAssetManager().get("pause.png");
+        score =new BitmapFont();
         camera = createCamera();
     }
 
     private OrthographicCamera createCamera() {
 
         VIEWPORT_HEIGHT =/* GameController.ARENA_HEIGHT;//*/(VIEWPORT_WIDTH * ((float) Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
-
+        PAUSE_Y = VIEWPORT_HEIGHT/PIXEL_TO_METER - PAUSE_WIDTH;
         OrthographicCamera camera = new OrthographicCamera(VIEWPORT_WIDTH / PIXEL_TO_METER, VIEWPORT_HEIGHT/PIXEL_TO_METER);
 
         camera.position.set(camera.viewportWidth / 2f, camera.viewportHeight / 2f, 0);
@@ -84,7 +93,7 @@ public class GameView extends ScreenAdapter {
         game.getAssetManager().load("line.png", Texture.class);
         game.getAssetManager().load( "hit.mp3", Sound.class);
         game.getAssetManager().load( "bkg_music1.mp3", Music.class);
-
+        game.getAssetManager().load("pause.png", Texture.class);
         game.getAssetManager().finishLoading();
     }
 
@@ -107,6 +116,11 @@ public class GameView extends ScreenAdapter {
 
         game.getBatch().begin();
         drawEntities();
+
+        game.getBatch().draw(pause, PAUSE_X,PAUSE_Y, PAUSE_WIDTH,PAUSE_WIDTH);
+        score.draw(game.getBatch(), Integer.toString(GameController.getInstance().getPlayerScore()),50, camera.viewportHeight/2f+20);
+        score.draw(game.getBatch(), Integer.toString(GameController.getInstance().getScoreOpponent()),50, camera.viewportHeight/2f-20);
+
 
         if(GameController.getInstance().getPowerUp()!=null)
             if(GameController.getInstance().getPowerUp().getBody() != null)
@@ -184,5 +198,9 @@ public class GameView extends ScreenAdapter {
 
     public OrthographicCamera getCamera() {
         return camera;
+    }
+
+    public void pauseGame() {
+        game.changeScreen(AirHockeyMania.PAUSE_SCREEN);
     }
 }
