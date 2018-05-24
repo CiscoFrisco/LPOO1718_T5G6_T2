@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ciscominas.airhockeymania.database.Database;
 import com.ciscominas.airhockeymania.view.GameView;
 import com.ciscominas.airhockeymania.view.MainView;
+import com.ciscominas.airhockeymania.view.PauseView;
 import com.ciscominas.airhockeymania.view.PreferencesView;
 import com.ciscominas.airhockeymania.view.ResultsView;
 
@@ -17,6 +18,7 @@ public class AirHockeyMania extends Game {
 	private static final int PREFERENCES_MENU = 1;
 	private static final int RESULTS_SCREEN = 2;
 	private static final int GAME_SCREEN = 3;
+	private static final int PAUSE_SCREEN = 4;
 
 
 	private SpriteBatch batch;
@@ -26,9 +28,10 @@ public class AirHockeyMania extends Game {
 	private MainView mainMenu;
 	private GameView gameScreen;
 	private PreferencesView preferencesScreen;
+	private ResultsView resultsScreen;
+	private PauseView pauseScreen;
 
 	private AppPreferences preferences;
-	private ResultsView resultsScreen;
 
 	private Database database;
 
@@ -60,6 +63,9 @@ public class AirHockeyMania extends Game {
 				break;
 			case GAME_SCREEN:
 				if(gameScreen == null) gameScreen = new GameView(this);
+				this.setScreen(gameScreen);
+			case PAUSE_SCREEN:
+				if(pauseScreen == null) pauseScreen = new PauseView(this);
 				this.setScreen(gameScreen);
 				break;
 		}
