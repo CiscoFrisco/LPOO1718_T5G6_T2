@@ -17,16 +17,16 @@ public class Constants {
     public static final float EDGE_WIDTH = 1f;
     public static final float EDGE_HEIGHT = 40f;
 
-    public static final float PUCK_X = 10f;
-    public static final float PUCK_Y = 7.5f;
+    public static final float PUCK_X = 8f;
+    public static final float PUCK_Y = 12f;
     public static final float PUCK_RADIUS = 0.5f;
     public static final float HANDLE_RADIUS = 0.5f;
-    public static final float HANDLE_X = 10f;
-    public static final float HANDLE_Y = 1f;
+    public static final float HANDLE_X = 8f;
+    public static final float HANDLE_Y = 2f;
 
 
-    public static final float BOT_X = 10f;
-    public static final float BOT_Y = 14f;
+    public static final float BOT_X = 8f;
+    public static final float BOT_Y = 22f;
     public static final float HARD_BOT_SENS = 5f;
     public static final float NORMAL_BOT_SENS = 3f;
     public static final float EASY_BOT_SENS = 1f;
