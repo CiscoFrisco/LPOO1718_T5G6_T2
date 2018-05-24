@@ -49,7 +49,7 @@ public class GameView extends ScreenAdapter {
 
     private Texture pause;
 
-    private final float PAUSE_WIDTH = 50;
+    private final float PAUSE_WIDTH = Gdx.graphics.getWidth()/8;
     protected final float PAUSE_X = VIEWPORT_WIDTH/PIXEL_TO_METER - PAUSE_WIDTH;
     protected float PAUSE_Y;
 
@@ -71,7 +71,7 @@ public class GameView extends ScreenAdapter {
 
     private OrthographicCamera createCamera() {
 
-        VIEWPORT_HEIGHT =/* GameController.ARENA_HEIGHT;//*/(VIEWPORT_WIDTH * ((float) Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth()));
+        VIEWPORT_HEIGHT = GameController.ARENA_HEIGHT;  //VIEWPORT_WIDTH * ((float) Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth());
         PAUSE_Y = VIEWPORT_HEIGHT/PIXEL_TO_METER - PAUSE_WIDTH;
         OrthographicCamera camera = new OrthographicCamera(VIEWPORT_WIDTH / PIXEL_TO_METER, VIEWPORT_HEIGHT/PIXEL_TO_METER);
 
@@ -118,10 +118,11 @@ public class GameView extends ScreenAdapter {
         drawEntities();
 
         game.getBatch().draw(pause, PAUSE_X,PAUSE_Y, PAUSE_WIDTH,PAUSE_WIDTH);
-        score.draw(game.getBatch(), Integer.toString(GameController.getInstance().getPlayerScore()),50, camera.viewportHeight/2f+20);
-        score.draw(game.getBatch(), Integer.toString(GameController.getInstance().getScoreOpponent()),50, camera.viewportHeight/2f-20);
+        score.getData().setScale(2,2);
+        score.draw(game.getBatch(), Integer.toString(GameController.getInstance().getPlayerScore()),(VIEWPORT_WIDTH - VIEWPORT_WIDTH/8)/PIXEL_TO_METER , (5*VIEWPORT_HEIGHT/12)/PIXEL_TO_METER);
+        score.draw(game.getBatch(), Integer.toString(GameController.getInstance().getScoreOpponent()),(VIEWPORT_WIDTH - VIEWPORT_WIDTH/8)/PIXEL_TO_METER, (7*VIEWPORT_HEIGHT/12)/PIXEL_TO_METER);
 
-
+ 
         if(GameController.getInstance().getPowerUp()!=null)
             if(GameController.getInstance().getPowerUp().getBody() != null)
                 drawPowerUp();
@@ -130,11 +131,11 @@ public class GameView extends ScreenAdapter {
 
         game.getBatch().end();
 
-        if (DEBUG_PHYSICS) {
+        /*if (DEBUG_PHYSICS) {
             debugCamera = camera.combined.cpy();
             debugCamera.scl(1 / PIXEL_TO_METER);
             debugRenderer.render(GameController.getInstance().getWorld(), debugCamera);
-        }
+        }*/
     }
 
     private void drawDuplicate() {
@@ -150,6 +151,7 @@ public class GameView extends ScreenAdapter {
         PowerUpModel powerUp = GameModel.getInstance().getPowerUp();
 
         EntityView view = ViewFactory.makeView(game, powerUp);
+        view.resize(powerUp);
         view.update(powerUp);
         view.draw(game.getBatch());
     }
@@ -172,10 +174,12 @@ public class GameView extends ScreenAdapter {
         HandleModel handle = GameModel.getInstance().getHandle();
 
         view = ViewFactory.makeView(game, puck);
+        view.resize(puck);
         view.update(puck);
         view.draw(game.getBatch());
 
         view = ViewFactory.makeView(game, bot);
+        view.resize(bot);
         view.update(bot);
         view.draw(game.getBatch());
 

@@ -4,6 +4,7 @@ import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.ciscominas.airhockeymania.controller.GameController;
+import com.ciscominas.airhockeymania.model.GameModel;
 
 import static com.ciscominas.airhockeymania.view.GameView.PIXEL_TO_METER;
 
@@ -56,7 +57,7 @@ public class InputHandler extends InputAdapter {
 
     public boolean checkLimits(float x, float y)
     {
-        return x <14.25f && x > 1.75f && y > 1.75f && y < GameController.ARENA_HEIGHT/2 - 0.75f;
+        return x <GameController.ARENA_WIDTH - GameModel.getInstance().getHandle().getWidth() && x > GameModel.getInstance().getHandle().getWidth() && y > GameModel.getInstance().getHandle().getWidth() && y < GameController.ARENA_HEIGHT/2 - GameModel.getInstance().getHandle().getWidth();
     }
 
 }

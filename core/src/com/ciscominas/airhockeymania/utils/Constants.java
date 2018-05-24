@@ -1,6 +1,9 @@
 package com.ciscominas.airhockeymania.utils;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Graphics;
 import com.badlogic.gdx.math.Vector2;
+import com.ciscominas.airhockeymania.controller.GameController;
 
 public class Constants {
 
@@ -17,16 +20,16 @@ public class Constants {
     public static final float EDGE_WIDTH = 1f;
     public static final float EDGE_HEIGHT = 40f;
 
-    public static final float PUCK_X = 8f;
-    public static final float PUCK_Y = 12f;
-    public static final float PUCK_RADIUS = 0.5f;
-    public static final float HANDLE_RADIUS = 0.5f;
-    public static final float HANDLE_X = 8f;
-    public static final float HANDLE_Y = 2f;
+    public static final float PUCK_X = GameController.ARENA_WIDTH/2;
+    public static final float PUCK_Y = GameController.ARENA_HEIGHT/2;
+    public static final float PUCK_RADIUS = GameController.ARENA_WIDTH/20;
+    public static final float HANDLE_RADIUS = GameController.ARENA_WIDTH/16;
+    public static final float HANDLE_X = GameController.ARENA_WIDTH/2;
+    public static final float HANDLE_Y = GameController.ARENA_HEIGHT/12;
 
 
-    public static final float BOT_X = 8f;
-    public static final float BOT_Y = 22f;
+    public static final float BOT_X = GameController.ARENA_WIDTH/2;
+    public static final float BOT_Y = 11*GameController.ARENA_HEIGHT/12;
     public static final float HARD_BOT_SENS = 5f;
     public static final float NORMAL_BOT_SENS = 3f;
     public static final float EASY_BOT_SENS = 1f;

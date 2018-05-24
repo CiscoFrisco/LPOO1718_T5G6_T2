@@ -1,5 +1,6 @@
 package com.ciscominas.airhockeymania.model;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.ciscominas.airhockeymania.controller.GameController;
@@ -11,6 +12,7 @@ import com.ciscominas.airhockeymania.model.entities.LineModel;
 import com.ciscominas.airhockeymania.model.entities.PowerUpModel;
 import com.ciscominas.airhockeymania.model.entities.PuckModel;
 import com.ciscominas.airhockeymania.utils.BodyUtils;
+import com.ciscominas.airhockeymania.utils.Constants;
 import com.ciscominas.airhockeymania.view.GameView;
 
 import java.util.ArrayList;
@@ -37,10 +39,9 @@ public class GameModel {
 
     private GameModel() {
 
-
-        puck = new PuckModel(WIDTH/2, HEIGHT/2, 0.75f, 0);
-        handle = new HandleModel(WIDTH/2, HEIGHT/12, 1f, 0);
-        bot = new BotModel(WIDTH/2, 11*HEIGHT/12, 1f, 0 );
+        puck = new PuckModel(Constants.PUCK_X, Constants.PUCK_Y, Constants.PUCK_RADIUS, 0);
+        handle = new HandleModel(Constants.HANDLE_X, Constants.HANDLE_Y, Constants.HANDLE_RADIUS, 0);
+        bot = new BotModel(Constants.BOT_X, Constants.BOT_Y, Constants.HANDLE_RADIUS, 0 );
         newPowerUp();
 
         setUpEdges();
@@ -53,13 +54,13 @@ public class GameModel {
 
     public void duplicatePuck()
     {
-        duplicate = new PuckModel(WIDTH/2, HEIGHT/2, 0.75f, 0);
+        duplicate = new PuckModel(WIDTH/2, HEIGHT/2, WIDTH/16f, 0);
     }
 
     public void newPowerUp()
     {
         Vector2 botPos = BodyUtils.randPosition(2,3,(int)(WIDTH) - 2,(int) (HEIGHT) - 3);
-        powerUp = new PowerUpModel(botPos.x, botPos.y, 0.75f, 0);
+        powerUp = new PowerUpModel(botPos.x, botPos.y, WIDTH/20, 0);
     }
 
     public void setEdge(float x, float width, int which)
@@ -74,12 +75,12 @@ public class GameModel {
     {
 
         edges = new ArrayList<LineModel>();
-        edges.add(new LineModel(1.5f,0.5f,  WIDTH/4,HEIGHT/24,"")); //down left edge
-        edges.add(new LineModel(14.5f,0.5f, WIDTH/4,HEIGHT/24,"")); //down right edge
-        edges.add(new LineModel(1.5f,23.5f,WIDTH/4 ,HEIGHT/24,"")); //upper left edge
-        edges.add(new LineModel(14.5f,23.5f,WIDTH/4,HEIGHT/24, "")); //upper right edge
-        edges.add(new LineModel(15.5f,HEIGHT/2, WIDTH/16,HEIGHT, "lat")); //right edge
-        edges.add(new LineModel(0.5f,HEIGHT/2, WIDTH/16,HEIGHT, "lat")); //left edge
+        edges.add(new LineModel(WIDTH/8,HEIGHT/48,  WIDTH/4,HEIGHT/24,"")); //down left edge
+        edges.add(new LineModel(WIDTH - WIDTH/8,HEIGHT/48, WIDTH/4,HEIGHT/24,"")); //down right edge
+        edges.add(new LineModel(WIDTH/8,47*HEIGHT/48,WIDTH/4 ,HEIGHT/24,"")); //upper left edge
+        edges.add(new LineModel(WIDTH - WIDTH/8,47*HEIGHT/48,WIDTH/4,HEIGHT/24, "")); //upper right edge
+        edges.add(new LineModel(WIDTH - WIDTH/32,HEIGHT/2, WIDTH/16,HEIGHT, "lat")); //right edge
+        edges.add(new LineModel(WIDTH/32,HEIGHT/2, WIDTH/16,HEIGHT, "lat")); //left edge
         edges.add(new LineModel(WIDTH/2,HEIGHT/2, WIDTH, HEIGHT/96,"")); //mid line
         edges.add(new LineModel(WIDTH/2,0,WIDTH/2 + 1 ,HEIGHT/96,"")); //down goal line
         edges.add(new LineModel(WIDTH/2,HEIGHT, WIDTH/2 + 1,HEIGHT/96,"")); //upper goal line

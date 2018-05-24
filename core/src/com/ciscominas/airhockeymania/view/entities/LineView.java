@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.ciscominas.airhockeymania.AirHockeyMania;
 import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
+import com.ciscominas.airhockeymania.view.GameView;
 
 public class LineView extends EntityView {
     public LineView(AirHockeyMania game) {
@@ -20,6 +21,6 @@ public class LineView extends EntityView {
 
     @Override
     public void resize(EntityModel model) {
-        sprite.setScale(model.getWidth()*1.5f/ GameController.ARENA_WIDTH,model.getHeight()*2.5f/GameController.ARENA_HEIGHT);
+        sprite.setScale(model.getWidth()/(sprite.getWidth()* GameView.PIXEL_TO_METER), model.getHeight()/(sprite.getHeight()*GameView.PIXEL_TO_METER));
     }
 }

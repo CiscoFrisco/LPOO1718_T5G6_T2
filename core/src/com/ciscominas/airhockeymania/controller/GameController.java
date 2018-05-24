@@ -1,5 +1,6 @@
 package com.ciscominas.airhockeymania.controller;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -45,9 +46,9 @@ public class GameController implements ContactListener {
 
     private final World world;
 
-    public static final float ARENA_WIDTH = 16;//GameView.VIEWPORT_WIDTH;
+    public static final float ARENA_WIDTH = Gdx.graphics.getWidth()*GameView.PIXEL_TO_METER;//GameView.VIEWPORT_WIDTH;
 
-    public static float ARENA_HEIGHT =  24;//GameView.VIEWPORT_HEIGHT;
+    public static float ARENA_HEIGHT =  Gdx.graphics.getHeight()*GameView.PIXEL_TO_METER;//GameView.VIEWPORT_HEIGHT;
 
     private final PuckBody puckBody;
     private HandleBody handleBody;
@@ -165,7 +166,7 @@ public class GameController implements ContactListener {
 
         if(puckBody.getBody().getPosition().y < -2)
         {
-            scorePlayer++;
+            scoreOpponent++;
             resetBodies();
             changed = true;
             if(powerUpBody!=null && powerUpBody.isActive())
@@ -175,7 +176,7 @@ public class GameController implements ContactListener {
                 begin = new Date();
             }
         } else if (puckBody.getBody().getPosition().y > GameController.ARENA_HEIGHT + 2) {
-            scoreOpponent++;
+            scorePlayer++;
             resetBodies();
             changed = true;
             if(powerUpBody!=null && powerUpBody.isActive())
@@ -298,7 +299,6 @@ public class GameController implements ContactListener {
     }
 
     public void resetBodies() {
-        System.out.println(GameModel.getInstance().getHandle().getY());
         handleBody.reset(Constants.HANDLE_X,Constants.HANDLE_Y);
         puckBody.reset();
         botBody.reset(Constants.BOT_X, Constants.BOT_Y);

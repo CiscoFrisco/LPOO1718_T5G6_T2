@@ -5,6 +5,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.ciscominas.airhockeymania.AirHockeyMania;
 import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
+import com.ciscominas.airhockeymania.view.GameView;
 
 public class HandleView extends EntityView {
     public HandleView(AirHockeyMania game) {
@@ -20,7 +21,6 @@ public class HandleView extends EntityView {
 
     @Override
     public void resize(EntityModel model) {
-        sprite.setScale(model.getWidth(), model.getWidth());
-
+        sprite.setScale(model.getWidth()/((sprite.getWidth()/2)* GameView.PIXEL_TO_METER), model.getWidth()/((sprite.getWidth()/2)* GameView.PIXEL_TO_METER));
     }
 }
