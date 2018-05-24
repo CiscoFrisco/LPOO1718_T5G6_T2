@@ -22,16 +22,16 @@ public class WorldUtils {
         switch(number)
         {
             case 0:
-                powerUp = new SuperGoal();
+                powerUp = new DuplicatePucks();
                 break;
             case 1:
-                powerUp = new SuperGoal();
+                powerUp = new FreezeHandle();
                 break;
             case 2:
                 powerUp = new SuperGoal();
                 break;
             case 3:
-                powerUp = new SuperGoal();
+                powerUp = new SuperHandle();
                 break;
         }
 
