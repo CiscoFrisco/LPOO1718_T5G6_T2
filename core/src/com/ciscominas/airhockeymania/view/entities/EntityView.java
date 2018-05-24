@@ -26,7 +26,5 @@ public abstract class EntityView {
         sprite.setCenter(model.getX() / PIXEL_TO_METER, model.getY() / PIXEL_TO_METER);
     }
 
-    public void resize(EntityModel model){
-        sprite.setScale(model.getWidth()*1.5f/ GameController.ARENA_WIDTH,model.getHeight()*2.5f/GameController.ARENA_HEIGHT);
-    }
+    public abstract void resize(EntityModel model);
 }

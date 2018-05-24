@@ -1,5 +1,8 @@
 package com.ciscominas.airhockeymania.controller;
 
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
@@ -9,6 +12,7 @@ import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
+import com.ciscominas.airhockeymania.AirHockeyMania;
 import com.ciscominas.airhockeymania.controller.entities.BotBody;
 import com.ciscominas.airhockeymania.controller.entities.EntityBody;
 import com.ciscominas.airhockeymania.controller.entities.HandleBody;
@@ -25,6 +29,7 @@ import com.ciscominas.airhockeymania.model.entities.PowerUpModel;
 import com.ciscominas.airhockeymania.model.entities.PuckModel;
 import com.ciscominas.airhockeymania.utils.BodyUtils;
 import com.ciscominas.airhockeymania.utils.Constants;
+import com.ciscominas.airhockeymania.utils.WorldUtils;
 import com.ciscominas.airhockeymania.view.GameView;
 
 import java.util.ArrayList;
@@ -58,8 +63,10 @@ public class GameController implements ContactListener {
     private int scoreOpponent;
     private boolean gameOver;
     private boolean controlOn;
+    private Sound hit;
 
     private GameController() {
+
         world = new World(new Vector2(0, 0), true);
 
         puckBody = new PuckBody(world, GameModel.getInstance().getPuck(), BodyDef.BodyType.DynamicBody);
@@ -136,7 +143,10 @@ public class GameController implements ContactListener {
 
         if(powerUpBody!=null)
         {
-
+            if(powerUpBody.check()){
+                powerUpBody = null;
+                begin = new Date();
+            }
         }
 
         checkScore();
@@ -158,22 +168,22 @@ public class GameController implements ContactListener {
             scorePlayer++;
             resetBodies();
             changed = true;
-            /*if(currPowerUp!=null && currPowerUp.isActive())
+            if(powerUpBody!=null && powerUpBody.isActive())
             {
-                currPowerUp.reset(this);
-                currPowerUp = null;
-                init = new Date();
-            }*/
+                powerUpBody.reset();
+                powerUpBody = null;
+                begin = new Date();
+            }
         } else if (puckBody.getBody().getPosition().y > GameController.ARENA_HEIGHT + 2) {
             scoreOpponent++;
             resetBodies();
             changed = true;
-           /* if(currPowerUp!=null && currPowerUp.isActive())
+            if(powerUpBody!=null && powerUpBody.isActive())
             {
-                currPowerUp.reset(this);
-                currPowerUp = null;
-                init = new Date();
-            }*/
+                powerUpBody.reset();
+                powerUpBody = null;
+                begin = new Date();
+            }
         }
 
         if((scoreOpponent >= Constants.WIN_SCORE || scorePlayer >= Constants.WIN_SCORE) && Math.abs(scorePlayer - scoreOpponent) >= 2) {
@@ -189,6 +199,7 @@ public class GameController implements ContactListener {
     }
 
     private void setUpPowerUp() {
+        GameModel.getInstance().newPowerUp();
         powerUpBody = new PowerUpBody(world, GameModel.getInstance().getPowerUp() , BodyDef.BodyType.StaticBody);
     }
 
@@ -202,6 +213,7 @@ public class GameController implements ContactListener {
         {
             b1.setLinearVelocity(handleBody.getVel().add(b1.getLinearVelocity()));
             lastTouch = "PLAYER";
+            hit.play();
             ((BotModel) botBody.getUserData()).setDefended(false);
             ((BotModel) botBody.getUserData()).setTrajectoryFlag(false);
 
@@ -211,6 +223,7 @@ public class GameController implements ContactListener {
         {
             b2.setLinearVelocity(handleBody.getVel().add(b2.getLinearVelocity()));
             lastTouch = "PLAYER";
+            hit.play();
             ((BotModel) botBody.getUserData()).setDefended(false);
             ((BotModel) botBody.getUserData()).setTrajectoryFlag(false);
 
@@ -220,11 +233,13 @@ public class GameController implements ContactListener {
         else if(b1.getUserData() instanceof PuckModel && b2.getUserData() instanceof BotBody)
         {
             lastTouch = "BOT";
+            hit.play();
             ((BotModel) botBody.getUserData()).setDefended(true);
             ((PuckModel) b1.getUserData()).resetWallBounce();
         }
         else if (b2.getUserData() instanceof PuckModel && b1.getUserData() instanceof BotBody) {
             lastTouch = "BOT";
+            hit.play();
             ((BotModel) botBody.getUserData()).setDefended(true);
             ((PuckModel) b2.getUserData()).resetWallBounce();
 
@@ -311,9 +326,24 @@ public class GameController implements ContactListener {
         resetBodies();
         scoreOpponent = 0;
         scorePlayer = 0;
+
+        if(powerUpBody != null && powerUpBody.getBody() != null)
+        {
+            WorldUtils.destroyBody(powerUpBody.getBody());
+            powerUpBody.getBody().setUserData(null);
+            powerUpBody = null;
+        }
     }
 
     public GameResult getResult() {
         return new GameResult(scorePlayer, scoreOpponent, new java.sql.Date(System.currentTimeMillis()));
+    }
+
+    public PowerUpBody getPowerUp() {
+        return powerUpBody;
+    }
+
+    public void setSounds(AssetManager sounds) {
+        hit = sounds.get("hit.mp3");
     }
 }

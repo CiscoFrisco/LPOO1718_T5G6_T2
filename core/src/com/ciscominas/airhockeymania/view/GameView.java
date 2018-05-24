@@ -3,6 +3,8 @@ package com.ciscominas.airhockeymania.view;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -10,10 +12,13 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.ciscominas.airhockeymania.AirHockeyMania;
 import com.ciscominas.airhockeymania.controller.GameController;
+import com.ciscominas.airhockeymania.controller.entities.EntityBody;
+import com.ciscominas.airhockeymania.controller.entities.powerups.DuplicatePucks;
 import com.ciscominas.airhockeymania.model.GameModel;
 import com.ciscominas.airhockeymania.model.entities.BotModel;
 import com.ciscominas.airhockeymania.model.entities.HandleModel;
 import com.ciscominas.airhockeymania.model.entities.LineModel;
+import com.ciscominas.airhockeymania.model.entities.PowerUpModel;
 import com.ciscominas.airhockeymania.model.entities.PuckModel;
 import com.ciscominas.airhockeymania.view.entities.EntityView;
 import com.ciscominas.airhockeymania.view.entities.PuckView;
@@ -39,11 +44,18 @@ public class GameView extends ScreenAdapter {
 
     private Matrix4 debugCamera;
 
+    private Music bkg_music;
+
 
     public GameView(AirHockeyMania game) {
         this.game = game;
 
         loadAssets();
+        GameController.getInstance().setSounds(game.getAssetManager());
+
+
+        bkg_music = game.getAssetManager().get("bkg_music1.mp3");
+        bkg_music.setLooping(true);
 
         camera = createCamera();
     }
@@ -70,6 +82,8 @@ public class GameView extends ScreenAdapter {
     private void loadAssets() {
         game.getAssetManager().load("puck.png", Texture.class);
         game.getAssetManager().load("line.png", Texture.class);
+        game.getAssetManager().load( "hit.mp3", Sound.class);
+        game.getAssetManager().load( "bkg_music1.mp3", Music.class);
 
         game.getAssetManager().finishLoading();
     }
@@ -79,6 +93,8 @@ public class GameView extends ScreenAdapter {
         super.show();
         GameController.getInstance().setBegin();
         Gdx.input.setInputProcessor(new InputHandler(this));
+        bkg_music.play();
+
     }
 
     public void render(float delta) {
@@ -91,6 +107,13 @@ public class GameView extends ScreenAdapter {
 
         game.getBatch().begin();
         drawEntities();
+
+        if(GameController.getInstance().getPowerUp()!=null)
+            if(GameController.getInstance().getPowerUp().getBody() != null)
+                drawPowerUp();
+            else if(GameController.getInstance().getPowerUp().getType() instanceof DuplicatePucks)
+                drawDuplicate();
+
         game.getBatch().end();
 
         if (DEBUG_PHYSICS) {
@@ -98,6 +121,23 @@ public class GameView extends ScreenAdapter {
             debugCamera.scl(1 / PIXEL_TO_METER);
             debugRenderer.render(GameController.getInstance().getWorld(), debugCamera);
         }
+    }
+
+    private void drawDuplicate() {
+        PuckModel duplicate = GameModel.getInstance().getDuplicate();
+
+        EntityView view = ViewFactory.makeView(game, duplicate);
+        view.update(duplicate);
+        view.draw(game.getBatch());
+    }
+
+    private void drawPowerUp() {
+
+        PowerUpModel powerUp = GameModel.getInstance().getPowerUp();
+
+        EntityView view = ViewFactory.makeView(game, powerUp);
+        view.update(powerUp);
+        view.draw(game.getBatch());
     }
 
     private void drawEntities()
@@ -126,10 +166,9 @@ public class GameView extends ScreenAdapter {
         view.draw(game.getBatch());
 
         view = ViewFactory.makeView(game, handle);
+        view.resize(handle);
         view.update(handle);
         view.draw(game.getBatch());
-
-
     }
 
     public void checkGameOver()
@@ -137,6 +176,7 @@ public class GameView extends ScreenAdapter {
         if(GameController.getInstance().isGameOver())
         {
             game.changeScreen(0);
+            bkg_music.stop();
             game.getDatabase().insert(GameController.getInstance().getResult());
             GameController.getInstance().reset();
         }

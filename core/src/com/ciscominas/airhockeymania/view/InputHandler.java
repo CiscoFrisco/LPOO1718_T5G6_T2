@@ -20,9 +20,21 @@ public class InputHandler extends InputAdapter {
     public boolean touchDragged(int screenX, int screenY, int pointer) {
         view.getCamera().unproject(touchPoint.set(screenX, screenY, 0));
 
-        GameController.getInstance().getHandle().move(touchPoint.x*GameView.PIXEL_TO_METER, touchPoint.y*GameView.PIXEL_TO_METER);
+        float x = touchPoint.x*GameView.PIXEL_TO_METER;
+        float y = touchPoint.y*GameView.PIXEL_TO_METER;
+
+        if(checkLimits(x,y))
+            GameController.getInstance().getHandle().move(x, y);
 
         return true;
+    }
+
+    public boolean checkLimits(float x, float y)
+    {
+        if(x <14.25f && x > 1.75f && y > 1.75f && y < GameController.ARENA_HEIGHT/2 - 0.75f)
+            return true;
+
+        return false;
     }
 
 }

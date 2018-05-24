@@ -3,6 +3,7 @@ package com.ciscominas.airhockeymania;
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -25,6 +26,8 @@ public class AirHockeyMania extends Game {
 	private GameView gameScreen;
 	private PreferencesView preferencesScreen;
 
+	private Music menu_music;
+
 	private AppPreferences preferences;
 
 	@Override
@@ -36,7 +39,18 @@ public class AirHockeyMania extends Game {
 		font = new BitmapFont();
 		database = new Database();
 
+		loadMusic();
+		menu_music = assetManager.get("menu.mp3");
+		menu_music.setLooping(true);
+
 		changeScreen(MAIN_MENU);
+
+	}
+
+	public void loadMusic()
+	{
+		assetManager.load("menu.mp3", Music.class);
+		assetManager.finishLoading();
 	}
 
 	public void changeScreen(int screen){
@@ -44,6 +58,7 @@ public class AirHockeyMania extends Game {
 			case MAIN_MENU:
 				if(mainMenu == null) mainMenu = new MainView(this);
 				this.setScreen(mainMenu);
+				menu_music.play();
 				break;
 			case PREFERENCES_MENU:
 				if(preferencesScreen == null) preferencesScreen = new PreferencesView(this);
@@ -53,6 +68,7 @@ public class AirHockeyMania extends Game {
 				if(gameScreen == null) gameScreen = new GameView(this);
 				database.showResults(database.selectAll());
 				this.setScreen(gameScreen);
+				menu_music.stop();
 				break;
 		}
 	}

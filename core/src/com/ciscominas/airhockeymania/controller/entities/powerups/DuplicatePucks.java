@@ -9,14 +9,13 @@ import com.ciscominas.airhockeymania.utils.BodyUtils;
 public class DuplicatePucks implements PowerUpType {
 
     private PuckBody puck;
-    private boolean active;
 
     @Override
     public void effect() {
-        puck = new PuckBody(GameController.getInstance().getWorld(), GameModel.getInstance().getPuck(), BodyDef.BodyType.DynamicBody);
+        GameModel.getInstance().duplicatePuck();
+        puck = new PuckBody(GameController.getInstance().getWorld(), GameModel.getInstance().getDuplicate(), BodyDef.BodyType.DynamicBody);
         puck.setTransform(GameController.getInstance().getPuckBody().getX(),GameController.getInstance().getPuckBody().getY(),0);
         puck.setLinearVelocity(-GameController.getInstance().getPuckBody().getLinearVelocity().x,GameController.getInstance().getPuckBody().getLinearVelocity().y);
-        active = true;
     }
 
     @Override
@@ -24,7 +23,6 @@ public class DuplicatePucks implements PowerUpType {
         GameController.getInstance().getWorld().destroyBody(puck.getBody());
         puck.setUserData(null);
         puck.deleteBody();
-        active = false;
         GameController.getInstance().setBegin();
     }
 
@@ -37,7 +35,7 @@ public class DuplicatePucks implements PowerUpType {
                 GameController.getInstance().resetBodies();
                 reset();
                 return true;
-            } else if (puck.getBody().getPosition().y > 16) {
+            } else if (puck.getBody().getPosition().y > GameController.ARENA_HEIGHT) {
                 GameController.getInstance().incScoreOpponent();
                 GameController.getInstance().resetBodies();
                 reset();

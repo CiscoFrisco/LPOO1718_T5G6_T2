@@ -10,21 +10,29 @@ public abstract class EntityModel {
         return height;
     }
 
+    public void setWidth(float width) {
+        this.width = width;
+    }
+
+    public void setX(float x) {
+        this.x = x;
+    }
+
     public enum ModelType {PUCK, HANDLE, LINE, BOT, POWERUP}
 
     /**
      * The x-coordinate of this model in meters.
      */
-    private float x;
+    protected float x;
 
     /**
      * The y-coordinate of this model in meters.
      */
-    private float y;
+    protected float y;
 
-    private float width;
+    protected float width;
 
-    private float height;
+    protected float height;
 
 
     public EntityModel(float x, float y, float width, float height) {

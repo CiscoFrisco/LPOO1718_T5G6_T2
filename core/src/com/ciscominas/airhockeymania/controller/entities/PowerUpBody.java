@@ -20,6 +20,8 @@ public class PowerUpBody extends EntityBody {
 
         createFixture(body, createShape(model.getWidth(), CIRCLE, 0), density, friction, restitution, POWERUP_BODY,
                 (short) (LINE_BODY | HANDLE_BODY | PUCK_BODY));
+
+        setType(WorldUtils.randPowerUp());
     }
 
 
@@ -31,11 +33,13 @@ public class PowerUpBody extends EntityBody {
     public void effect()
     {
         type.effect();
+        active = true;
     }
 
     public void reset()
     {
         type.reset();
+        active = false;
     }
 
     public boolean check()
@@ -54,9 +58,17 @@ public class PowerUpBody extends EntityBody {
         {
             effect();
             WorldUtils.destroyBody(body);
+            body = null;
         }
 
     }
 
 
+    public boolean isActive() {
+        return active;
+    }
+
+    public PowerUpType getType() {
+        return type;
+    }
 }

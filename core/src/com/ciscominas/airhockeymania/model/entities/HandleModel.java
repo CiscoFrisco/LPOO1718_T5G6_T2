@@ -10,4 +10,8 @@ public class HandleModel extends EntityModel {
     public ModelType getType() {
         return ModelType.HANDLE;
     }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
 }
