@@ -11,6 +11,16 @@ public class Constants {
     public static final int APP_HEIGHT = 600;
     public static final float WORLD_TO_SCREEN = 32;
 
+    public static final String DATABASE = "results.db";
+    public static final String RESULTS_TABLE = "results";
+
+    public static final String ID_COLUMN = "id";
+    public static final String SCORE1_COLUMN = "score1";
+    public static final String SCORE2_COLUMN = "score2";
+    public static final String DATE_COLUMN = "date";
+
+    public static final int LIMIT = 10;
+
 
     public static final Vector2 WORLD_GRAVITY = new Vector2(0, 0);
     public static final float L_EDGE_X = 0;

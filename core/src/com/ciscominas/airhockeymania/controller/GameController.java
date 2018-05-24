@@ -336,7 +336,7 @@ public class GameController implements ContactListener {
     }
 
     public GameResult getResult() {
-        return new GameResult(scorePlayer, scoreOpponent, new java.sql.Date(System.currentTimeMillis()));
+        return new GameResult(scorePlayer, scoreOpponent, System.currentTimeMillis());
     }
 
     public PowerUpBody getPowerUp() {

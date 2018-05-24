@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
 import com.ciscominas.airhockeymania.AirHockeyMania;
+import com.ciscominas.airhockeymania.database.DesktopDatabase;
 import com.ciscominas.airhockeymania.utils.Constants;
 
 public class DesktopLauncher {
@@ -13,6 +14,6 @@ public class DesktopLauncher {
 		config.width = Constants.APP_WIDTH;
 		config.height = Constants.APP_HEIGHT;
 		config.resizable = false;
-		new LwjglApplication(new AirHockeyMania(), config);
+		new LwjglApplication(new AirHockeyMania(new DesktopDatabase()), config);
 	}
 }

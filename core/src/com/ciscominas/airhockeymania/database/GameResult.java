@@ -6,12 +6,12 @@ public class GameResult {
 
     private int score1;
     private int score2;
-    private Date date;
+    private long dateMillis;
 
-    public GameResult(int score1, int score2, Date date) {
+    public GameResult(int score1, int score2, long date) {
         this.score1 = score1;
         this.score2 = score2;
-        this.date = date;
+        this.dateMillis = date;
     }
 
     public int getScore1() {
@@ -23,7 +23,11 @@ public class GameResult {
     }
 
     public Date getDate() {
-        return date;
+        return new Date(dateMillis);
+    }
+
+    public long getDateMillis(){
+        return dateMillis;
     }
 
 }

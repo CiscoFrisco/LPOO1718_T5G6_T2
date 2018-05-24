@@ -1,10 +1,8 @@
 package com.ciscominas.airhockeymania;
 
 import com.badlogic.gdx.Game;
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.ciscominas.airhockeymania.database.Database;
@@ -36,6 +34,11 @@ public class AirHockeyMania extends Game {
 
 	private AppPreferences preferences;
 
+	public AirHockeyMania(Database database)
+	{
+		this.database = database;
+	}
+
 	@Override
 	public void create () {
 		preferences = new AppPreferences();
@@ -43,7 +46,6 @@ public class AirHockeyMania extends Game {
 		mainMenu = new MainView(this);
 		batch = new SpriteBatch();
 		font = new BitmapFont();
-		database = new Database();
 
 		loadMusic();
 		menu_music = assetManager.get("menu.mp3");

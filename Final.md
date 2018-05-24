@@ -17,12 +17,15 @@ Just make sure not to update gradle even if the IDE asks for it!
 ## Design Patterns
 
 - Model-View-Controller
+
     Following professor André Restivo's example, the game implemented this pattern, separating logic, info, and interface. The view package contains the screens, controller contains the bodies and powerups, and model contains the bodies' user data.
 
 - Singleton
+
     GameController and GameModel are singletons, since there should be no more than one instance of them.
 
 - Strategy
+
     The game has powerups like DuplicatePucks and FreezeHandle, so it was a good idea to implement
     Strategy here. This way, the game can, at a defined rate, substitute the current power up with another random one, while not needing to change the methods it needs to call.
 
@@ -38,8 +41,8 @@ Then, we had to learn how to use Android Studio since we used Eclipse previously
 Finally, the big issue came with libgdx. In our opinion it wasn't easy learning it, and often times
 we had to rely on external tutorials to solve our problems.
 The major issues were learning how to use world and screen coordinates, how to use touchDragged
-in order to move the handles and impact the puck, and how to setup different difficulties for
-the bot, since we tried to make it as 'human' as possible.
+in order to move the handles and impact the puck, how to setup different difficulties for
+the bot, since we tried to make it as 'human' as possible, and also how to implement a database with SQLite. The problem came when we realised there was no easy solution to use the same methods for Desktop and Android, so after a few hours of searching, we decided to make two databases: one to be used on Android, and another to be used on Desktop. Both implement a common interface, so the core module is not affected.
 
 ## Lessons Learned
 
@@ -62,9 +65,10 @@ work together (at FEUP for example), and when we couldn't, we decided what each 
 
 As explained above, we had to follow some external tutorials in order to complete some tasks. They are the following:
 
-- Menus and Preferences: [Menus](https://www.gamedevelopment.blog/full-libgdx-game-tutorial-project-setup/)
-- First setup: [First setup](http://williammora.com/a-running-game-with-libgdx-part-1)
-- Database: [Database](http://www.sqlitetutorial.net/sqlite-java/)
+- [Menus and Preferences](https://www.gamedevelopment.blog/full-libgdx-game-tutorial-project-setup/)
+- [First setup](http://williammora.com/a-running-game-with-libgdx-part-1)
+- [Database on Desktop](http://www.sqlitetutorial.net/sqlite-java/)
+- [Database on Android](https://www.tutorialspoint.com/android/android_sqlite_database.htm)
 - Recurring questions: libgdx wiki, stack overflow and similar sites
 
 ## User manual
