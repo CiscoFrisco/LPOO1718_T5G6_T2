@@ -34,12 +34,12 @@ public class SuperHandle implements PowerUpType {
         if(lastTouch == "PLAYER")
         {
             WorldUtils.destroyBody(GameController.getInstance().getHandle().getBody());
-            GameModel.getInstance().setHandle(1f);
+            GameModel.getInstance().setHandle(0.5f);
             GameController.getInstance().setHandleBody(new HandleBody(GameController.getInstance().getWorld(), GameModel.getInstance().getHandle(), BodyDef.BodyType.DynamicBody));        }
         else
         {
             WorldUtils.destroyBody(GameController.getInstance().getBot().getBody());
-            GameModel.getInstance().setHandle(1f);
+            GameModel.getInstance().setHandle(0.5f);
             GameController.getInstance().setBotBody(new BotBody(GameController.getInstance().getWorld(), GameModel.getInstance().getBot(), BodyDef.BodyType.DynamicBody));
         }
 

@@ -59,7 +59,7 @@ public class GameModel {
 
     public void newPowerUp()
     {
-        Vector2 botPos = BodyUtils.randPosition(2,3,(int)(WIDTH) - 2,(int) (HEIGHT) - 3);
+        Vector2 botPos = BodyUtils.randPosition((int) WIDTH/4,(int)HEIGHT/4, (int) (3*WIDTH/4),(int) (3*HEIGHT/4));
         powerUp = new PowerUpModel(botPos.x, botPos.y, WIDTH/20, 0);
     }
 

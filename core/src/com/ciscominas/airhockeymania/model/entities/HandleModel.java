@@ -12,6 +12,6 @@ public class HandleModel extends EntityModel {
     }
 
     public void setWidth(float width) {
-        this.width = width;
+        this.width*= width;
     }
 }

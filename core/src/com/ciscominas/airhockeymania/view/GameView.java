@@ -100,10 +100,18 @@ public class GameView extends ScreenAdapter {
     @Override
     public void show() {
         super.show();
+        game.getMenuMusic().stop();
         GameController.getInstance().setBegin();
         Gdx.input.setInputProcessor(new InputHandler(this));
-        bkg_music.play();
+        if(game.getPreferences().isMusicEnabled())
+        {
+            bkg_music.setVolume(game.getPreferences().getMusicVolume());
+            bkg_music.play();
+        }
+        else
+            bkg_music.stop();
 
+        GameController.getInstance().setSound(game.getPreferences().getSoundVolume(), game.getPreferences().isSoundEffectsEnabled());
     }
 
     public void render(float delta) {
@@ -131,11 +139,11 @@ public class GameView extends ScreenAdapter {
 
         game.getBatch().end();
 
-        /*if (DEBUG_PHYSICS) {
+        if (DEBUG_PHYSICS) {
             debugCamera = camera.combined.cpy();
             debugCamera.scl(1 / PIXEL_TO_METER);
             debugRenderer.render(GameController.getInstance().getWorld(), debugCamera);
-        }*/
+        }
     }
 
     private void drawDuplicate() {
@@ -205,6 +213,7 @@ public class GameView extends ScreenAdapter {
     }
 
     public void pauseGame() {
+        bkg_music.stop();
         game.changeScreen(AirHockeyMania.PAUSE_SCREEN);
     }
 }

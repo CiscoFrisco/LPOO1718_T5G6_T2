@@ -46,7 +46,6 @@ public class ResultsView extends ScreenAdapter {
     {
         ArrayList<GameResult> results = myGame.getDatabase().selectAll();
 
-        stage.clear();
         Gdx.input.setInputProcessor(stage);
 
         Table table = new Table();
@@ -54,7 +53,7 @@ public class ResultsView extends ScreenAdapter {
         table.setDebug(true);
         stage.addActor(table);
 
-        table.add(titleLabel);
+        table.add(titleLabel).colspan(3);
         table.row();
         table.add(score1Label);
         table.add(score2Label);
@@ -82,7 +81,7 @@ public class ResultsView extends ScreenAdapter {
             table.row();
         }
 
-        table.add(backButton);
+        table.add(backButton).colspan(3);
     }
 
     @Override

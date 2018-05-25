@@ -32,6 +32,7 @@ public class MainView extends ScreenAdapter {
 
     @Override
     public void show() {
+
 // Create a table that fills the screen. Everything else will go inside this table.
         Gdx.input.setInputProcessor(stage);
 
@@ -49,9 +50,9 @@ public class MainView extends ScreenAdapter {
         table.add(newGame).fillX().uniformX();
         table.row().pad(10, 0, 10, 0);
         table.add(preferences).fillX().uniformX();
-        table.row().pad(10, 0, 10, 0);
+        table.row().pad(0, 0, 10, 0);
         table.add(results).fillX().uniformX();
-        table.row();
+        table.row().pad(0, 0, 0, 0);
         table.add(exit).fillX().uniformX();
 
         exit.addListener(new ChangeListener() {
@@ -85,6 +86,13 @@ public class MainView extends ScreenAdapter {
 
     @Override
     public void render(float delta) {
+        if(game.getPreferences().isMusicEnabled())
+        {
+            game.getMenuMusic().setVolume(game.getPreferences().getMusicVolume());
+            game.getMenuMusic().play();
+        }
+        else
+            game.getMenuMusic().stop();
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));

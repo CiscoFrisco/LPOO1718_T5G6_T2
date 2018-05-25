@@ -30,9 +30,8 @@ public class AirHockeyMania extends Game {
 	private PauseView pauseScreen;
 	private ResultsView resultsScreen;
 
-	private Music menu_music;
-
 	private AppPreferences preferences;
+	private Music menuMusic;
 
 	public AirHockeyMania(Database database)
 	{
@@ -48,8 +47,8 @@ public class AirHockeyMania extends Game {
 		font = new BitmapFont();
 
 		loadMusic();
-		menu_music = assetManager.get("menu.mp3");
-		menu_music.setLooping(true);
+		menuMusic = assetManager.get("menu.mp3");
+		menuMusic.setLooping(true);
 
 		changeScreen(MAIN_MENU);
 
@@ -66,7 +65,6 @@ public class AirHockeyMania extends Game {
 			case MAIN_MENU:
 				if(mainMenu == null) mainMenu = new MainView(this);
 				this.setScreen(mainMenu);
-				menu_music.play();
 				break;
 			case PREFERENCES_MENU:
 				if(preferencesScreen == null) preferencesScreen = new PreferencesView(this);
@@ -79,7 +77,6 @@ public class AirHockeyMania extends Game {
 			case GAME_SCREEN:
 				if(gameScreen == null) gameScreen = new GameView(this);
 				this.setScreen(gameScreen);
-				menu_music.stop();
 				break;
 			case PAUSE_SCREEN:
 				if(pauseScreen == null) pauseScreen = new PauseView(this);
@@ -113,5 +110,9 @@ public class AirHockeyMania extends Game {
 
 	public Database getDatabase() {
 		return database;
+	}
+
+	public Music getMenuMusic() {
+		return menuMusic;
 	}
 }

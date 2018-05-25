@@ -65,6 +65,8 @@ public class GameController implements ContactListener {
     private boolean gameOver;
     private boolean controlOn;
     private Sound hit;
+    private boolean soundEnabled;
+    private float volume;
 
     private GameController() {
 
@@ -201,7 +203,7 @@ public class GameController implements ContactListener {
 
     private void setUpPowerUp() {
         GameModel.getInstance().newPowerUp();
-        powerUpBody = new PowerUpBody(world, GameModel.getInstance().getPowerUp() , BodyDef.BodyType.StaticBody);
+        powerUpBody = new PowerUpBody(world, GameModel.getInstance().getPowerUp(), BodyDef.BodyType.StaticBody);
     }
 
 
@@ -214,7 +216,8 @@ public class GameController implements ContactListener {
         {
             b1.setLinearVelocity(handleBody.getVel().add(b1.getLinearVelocity()));
             lastTouch = "PLAYER";
-            hit.play();
+            if(soundEnabled)
+                hit.play(volume);
             ((BotModel) botBody.getUserData()).setDefended(false);
             ((BotModel) botBody.getUserData()).setTrajectoryFlag(false);
 
@@ -224,23 +227,26 @@ public class GameController implements ContactListener {
         {
             b2.setLinearVelocity(handleBody.getVel().add(b2.getLinearVelocity()));
             lastTouch = "PLAYER";
-            hit.play();
+            if(soundEnabled)
+                hit.play(volume);
             ((BotModel) botBody.getUserData()).setDefended(false);
             ((BotModel) botBody.getUserData()).setTrajectoryFlag(false);
 
             ((PuckModel) b2.getUserData()).resetWallBounce();
 
         }
-        else if(b1.getUserData() instanceof PuckModel && b2.getUserData() instanceof BotBody)
+        else if(b1.getUserData() instanceof PuckModel && b2.getUserData() instanceof BotModel)
         {
             lastTouch = "BOT";
-            hit.play();
+            if(soundEnabled)
+                hit.play(volume);
             ((BotModel) botBody.getUserData()).setDefended(true);
             ((PuckModel) b1.getUserData()).resetWallBounce();
         }
-        else if (b2.getUserData() instanceof PuckModel && b1.getUserData() instanceof BotBody) {
+        else if (b2.getUserData() instanceof PuckModel && b1.getUserData() instanceof BotModel) {
             lastTouch = "BOT";
-            hit.play();
+            if(soundEnabled)
+                hit.play(volume);
             ((BotModel) botBody.getUserData()).setDefended(true);
             ((PuckModel) b2.getUserData()).resetWallBounce();
 
@@ -353,5 +359,10 @@ public class GameController implements ContactListener {
 
     public int getScoreOpponent() {
         return scoreOpponent;
+    }
+
+    public void setSound(float volume, boolean soundEffectsEnabled) {
+        soundEnabled = soundEffectsEnabled;
+        this.volume = volume;
     }
 }

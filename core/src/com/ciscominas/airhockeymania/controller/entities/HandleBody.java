@@ -12,6 +12,7 @@ public class HandleBody extends EntityBody {
     private Vector2 vel;
     private Vector2 lastPos;
     private Vector2 currentPos;
+    private boolean controlOn;
 
     public HandleBody(World world, EntityModel model, BodyDef.BodyType type) {
         super(world, model, type);
@@ -27,10 +28,13 @@ public class HandleBody extends EntityBody {
 
     public void move(float x, float y)
     {
-        this.lastPos = this.currentPos;
-        setTransform(x, y,0);
-        this.currentPos = new Vector2(x,y);
-        this.vel = new Vector2((this.currentPos.x - this.lastPos.x) *20, (this.currentPos.y - this.lastPos.y)*20);
+        if(controlOn)
+        {
+            this.lastPos = this.currentPos;
+            setTransform(x, y,0);
+            this.currentPos = new Vector2(x,y);
+            this.vel = new Vector2((this.currentPos.x - this.lastPos.x) *20, (this.currentPos.y - this.lastPos.y)*20);
+        }
     }
 
     public Vector2 getVel() {
@@ -42,4 +46,7 @@ public class HandleBody extends EntityBody {
         body.setLinearVelocity(0,0);
     }
 
+    public void setControlOn(boolean controlOn) {
+        this.controlOn = controlOn;
+    }
 }
