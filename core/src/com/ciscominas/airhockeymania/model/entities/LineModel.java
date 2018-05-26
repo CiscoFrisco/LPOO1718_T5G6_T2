@@ -17,4 +17,8 @@ public class LineModel extends EntityModel {
     public String getPos() {
         return pos;
     }
+
+    public void multWidth(float ratio) {
+        this.width*=ratio;
+    }
 }

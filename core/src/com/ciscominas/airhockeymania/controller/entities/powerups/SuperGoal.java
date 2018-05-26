@@ -13,102 +13,42 @@ import java.util.ArrayList;
 
 public class SuperGoal implements PowerUpType {
     private String lastTouch;
-    private boolean active;
+    private static final float EFFECT_RATIO = 0.5f;
+    private static final float RESET_RATIO = 2f;
+    private static final short mask = EntityBody.PUCK_BODY | EntityBody.HANDLE_BODY;
+
 
     @Override
     public void effect() {
         lastTouch = GameController.getInstance().getLastTouch();
-        float goalWidth,xCoord1,xCoord2;
 
-        //aumentar baliza do bot
        if(lastTouch == "PLAYER")
-        {
-            //destuir linhas
-            WorldUtils.destroyBody(GameController.getInstance().getEdges().get(2).getBody());
-            WorldUtils.destroyBody(GameController.getInstance().getEdges().get(3).getBody());
-
-            goalWidth = GameModel.getInstance().getEdges().get(2).getWidth()/2;
-            xCoord1 = GameModel.getInstance().getEdges().get(2).getX();
-            xCoord2 = GameModel.getInstance().getEdges().get(3).getX();
-            short mask = EntityBody.PUCK_BODY | EntityBody.HANDLE_BODY;
-
-            GameModel.getInstance().setEdge(xCoord1, goalWidth, 2);
-            GameModel.getInstance().setEdge(xCoord2, goalWidth, 3);
-
-            ArrayList<LineModel> models =  GameModel.getInstance().getEdges();
-            World world = GameController.getInstance().getWorld();
-            GameController.getInstance().setLine(new LineBody(world, models.get(2), BodyDef.BodyType.StaticBody, mask), 2);
-            GameController.getInstance().setLine(new LineBody(world, models.get(3), BodyDef.BodyType.StaticBody, mask), 3);
-
-        }
+            effectEdges(2,3, EFFECT_RATIO);
         else
-        {
-            //destruir linhas
-            WorldUtils.destroyBody(GameController.getInstance().getEdges().get(0).getBody());
-            WorldUtils.destroyBody(GameController.getInstance().getEdges().get(1).getBody());
-
-            goalWidth = GameModel.getInstance().getEdges().get(0).getWidth()/2;
-            xCoord1 = GameModel.getInstance().getEdges().get(0).getX();
-            xCoord2 = GameModel.getInstance().getEdges().get(1).getX();
-            short mask = EntityBody.PUCK_BODY | EntityBody.HANDLE_BODY;
-
-            GameModel.getInstance().setEdge(xCoord1, goalWidth,0);
-            GameModel.getInstance().setEdge(xCoord2, goalWidth,1);
-
-            ArrayList<LineModel> models =  GameModel.getInstance().getEdges();
-            World world = GameController.getInstance().getWorld();
-
-            GameController.getInstance().setLine(new LineBody(world, models.get(0), BodyDef.BodyType.StaticBody, mask), 0);
-            GameController.getInstance().setLine(new LineBody(world, models.get(1), BodyDef.BodyType.StaticBody,  mask), 1);
-
-        }
-
-        active = true;
+            effectEdges(0,1, EFFECT_RATIO);
     }
 
     @Override
     public void reset() {
 
-        float goalWidth, xCoord1,xCoord2;
-
-        short mask = EntityBody.PUCK_BODY | EntityBody.HANDLE_BODY;
-
         if(lastTouch == "PLAYER")
-        {
-            WorldUtils.destroyBody(GameController.getInstance().getEdges().get(2).getBody());
-            WorldUtils.destroyBody(GameController.getInstance().getEdges().get(3).getBody());
-            ArrayList<LineModel> models =  GameModel.getInstance().getEdges();
-            World world = GameController.getInstance().getWorld();
-
-            goalWidth = GameModel.getInstance().getEdges().get(2).getWidth()*2;
-            xCoord1 = GameModel.getInstance().getEdges().get(2).getX();
-            xCoord2 = GameModel.getInstance().getEdges().get(3).getX();
-
-            GameModel.getInstance().setEdge(xCoord1, goalWidth, 2);
-            GameModel.getInstance().setEdge(xCoord2, goalWidth, 3);
-
-            GameController.getInstance().setLine(new LineBody(world, models.get(2), BodyDef.BodyType.StaticBody, mask), 2);
-            GameController.getInstance().setLine(new LineBody(world, models.get(3), BodyDef.BodyType.StaticBody, mask), 3);
-        }
+            effectEdges(2,3, RESET_RATIO);
         else
-        {
-            WorldUtils.destroyBody(GameController.getInstance().getEdges().get(0).getBody());
-            WorldUtils.destroyBody(GameController.getInstance().getEdges().get(1).getBody());
-            ArrayList<LineModel> models =  GameModel.getInstance().getEdges();
-            World world = GameController.getInstance().getWorld();
+            effectEdges(0,1, RESET_RATIO);
+    }
 
-            goalWidth = GameModel.getInstance().getEdges().get(0).getWidth()*2;
-            xCoord1 = GameModel.getInstance().getEdges().get(0).getX();
-            xCoord2 = GameModel.getInstance().getEdges().get(1).getX();
+    private void effectEdges(int which1, int which2, float ratio)
+    {
+        WorldUtils.destroyBody(GameController.getInstance().getEdges().get(which1).getBody());
+        WorldUtils.destroyBody(GameController.getInstance().getEdges().get(which2).getBody());
 
-            GameModel.getInstance().setEdge(xCoord1, goalWidth, 0);
-            GameModel.getInstance().setEdge(xCoord2, goalWidth, 1);
+        GameModel.getInstance().setEdge(ratio, which1);
+        GameModel.getInstance().setEdge(ratio, which2);
 
-            GameController.getInstance().setLine(new LineBody(world, models.get(0), BodyDef.BodyType.StaticBody, mask), 0);
-            GameController.getInstance().setLine(new LineBody(world, models.get(1), BodyDef.BodyType.StaticBody, mask), 1);
-        }
-
-        active = false;
+        ArrayList<LineModel> models =  GameModel.getInstance().getEdges();
+        World world = GameController.getInstance().getWorld();
+        GameController.getInstance().setLine(new LineBody(world, models.get(which1), BodyDef.BodyType.StaticBody, mask), which1);
+        GameController.getInstance().setLine(new LineBody(world, models.get(which2), BodyDef.BodyType.StaticBody, mask), which2);
     }
 
     @Override

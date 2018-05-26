@@ -63,11 +63,10 @@ public class GameModel {
         powerUp = new PowerUpModel(botPos.x, botPos.y, WIDTH/20, 0);
     }
 
-    public void setEdge(float x, float width, int which)
+    public void setEdge(float width, int which)
     {
         LineModel edge = edges.get(which);
-        edge.setWidth(width);
-        edge.setX(x);
+        edge.multWidth(width);
         edges.set(which, edge);
     }
 

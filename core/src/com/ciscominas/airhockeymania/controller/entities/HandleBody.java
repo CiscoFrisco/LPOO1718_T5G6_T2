@@ -21,6 +21,7 @@ public class HandleBody extends EntityBody {
 
         this.currentPos = new Vector2(model.getX(), model.getY());
         this.vel = new  Vector2(0,0);
+        controlOn = true;
 
         createFixture(body, createShape(model.getWidth(), CIRCLE, 0), density, friction, restitution, HANDLE_BODY,
                 (short) (LINE_BODY |PUCK_BODY));

@@ -44,7 +44,7 @@ public class SuperHandle implements PowerUpType {
         }
 
     }
-
+    
     @Override
     public boolean check() {
         return false;
