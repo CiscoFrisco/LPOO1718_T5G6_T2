@@ -40,30 +40,31 @@ import static com.ciscominas.airhockeymania.utils.Constants.BOT_X;
 import static com.ciscominas.airhockeymania.utils.Constants.BOT_Y;
 import static com.ciscominas.airhockeymania.utils.WorldUtils.randPowerUp;
 
-public class GameController implements ContactListener {
+public class GameController {
 
     private static GameController instance;
 
     private final World world;
 
-    public static final float ARENA_WIDTH = Gdx.graphics.getWidth()*GameView.PIXEL_TO_METER;//GameView.VIEWPORT_WIDTH;
+    public static final float ARENA_WIDTH = Gdx.graphics.getWidth()*GameView.PIXEL_TO_METER;
 
-    public static float ARENA_HEIGHT =  Gdx.graphics.getHeight()*GameView.PIXEL_TO_METER;//GameView.VIEWPORT_HEIGHT;
+    public static float ARENA_HEIGHT =  Gdx.graphics.getHeight()*GameView.PIXEL_TO_METER;
 
-    private final PuckBody puckBody;
+    private PuckBody puckBody;
     private HandleBody handleBody;
+    private BotBody botBody;
+    private PowerUpBody powerUpBody;
+    private ArrayList<LineBody> edges;
+
     private float accumulator;
     private String lastTouch;
-    private BotBody botBody;
 
     private Date begin;
     private Date end;
-    private PowerUpBody powerUpBody;
-    private ArrayList<LineBody> edges;
     private int scorePlayer;
     private int scoreOpponent;
     private boolean gameOver;
-    private boolean controlOn;
+
     private Sound hit;
     private boolean soundEnabled;
     private float volume;
@@ -72,6 +73,14 @@ public class GameController implements ContactListener {
 
         world = new World(new Vector2(0, 0), true);
 
+        setUpBodies();
+
+        world.setContactListener(new ContactHandler());
+        gameOver = false;
+    }
+
+    private void setUpBodies()
+    {
         puckBody = new PuckBody(world, GameModel.getInstance().getPuck(), BodyDef.BodyType.DynamicBody);
 
         handleBody = new HandleBody(world, GameModel.getInstance().getHandle(), BodyDef.BodyType.DynamicBody);
@@ -79,9 +88,6 @@ public class GameController implements ContactListener {
         botBody = new BotBody(world, GameModel.getInstance().getBot(), BodyDef.BodyType.DynamicBody);
 
         createEdges();
-
-        world.setContactListener(this);
-        gameOver = false;
     }
 
     public void setHandleBody(HandleBody handle)
@@ -95,26 +101,11 @@ public class GameController implements ContactListener {
         short mask = EntityBody.PUCK_BODY | EntityBody.HANDLE_BODY;
         short mask2 = EntityBody.HANDLE_BODY;
 
-        //Criar linhas de golo
-        float goalWidth = 0.15f, goalHeight = 0.1f;
-        edges.add(new LineBody(world, models.get(0), BodyDef.BodyType.StaticBody, mask));
-        edges.add(new LineBody(world, models.get(1), BodyDef.BodyType.StaticBody, mask));
-        edges.add(new LineBody(world, models.get(2), BodyDef.BodyType.StaticBody, mask));
-        edges.add(new LineBody(world, models.get(3), BodyDef.BodyType.StaticBody, mask));
+        for(int i = 0; i < 6; i++)
+            edges.add(new LineBody(world, models.get(i), BodyDef.BodyType.StaticBody, mask));
 
-        //Criar laterais
-        float latWidth = 0.1f, latHeight = 0.4f;
-        edges.add(new LineBody(world, models.get(4), BodyDef.BodyType.StaticBody, mask));
-        edges.add(new LineBody(world, models.get(5), BodyDef.BodyType.StaticBody, mask));
-
-        //Criar linha do meio
-        float midWidth = 0.4f, midHeight = 0.1f;
-        edges.add(new LineBody(world, models.get(6), BodyDef.BodyType.StaticBody, mask2));
-
-        //Criar linhas de baliza
-        float limitWidth = 0.4f, limitHeight = 0.1f;
-        edges.add(new LineBody(world, models.get(7), BodyDef.BodyType.StaticBody, mask2));
-        edges.add(new LineBody(world, models.get(8), BodyDef.BodyType.StaticBody, mask2));
+        for(int i = 6; i < 9; i++)
+            edges.add(new LineBody(world, models.get(i), BodyDef.BodyType.StaticBody, mask2));
     }
 
     public void setLine(LineBody line, int which)
@@ -128,7 +119,7 @@ public class GameController implements ContactListener {
         return instance;
     }
 
-    public void update(float delta)
+    private void step(float delta)
     {
         float frameTime = Math.min(delta, 0.25f);
         accumulator += frameTime;
@@ -136,24 +127,36 @@ public class GameController implements ContactListener {
             world.step(1/60f, 6, 2);
             accumulator -= 1/60f;
         }
+    }
+
+    public void update(float delta)
+    {
+        step(delta);
 
         end = new Date();
 
+        checkPowerUp();
+
+        checkScore();
+
+        updatePositions();
+    }
+
+    private void checkPowerUp()
+    {
         long timeElapsed = (end.getTime() - begin.getTime())/1000;
 
         if(timeElapsed >= Constants.POWERUP_FREQUENCY && powerUpBody == null)
             setUpPowerUp();
-
-        if(powerUpBody!=null)
+        else if(powerUpBody!=null && powerUpBody.check())
         {
-            if(powerUpBody.check()){
-                powerUpBody = null;
-                begin = new Date();
-            }
+            powerUpBody = null;
+            begin = new Date();
         }
+    }
 
-        checkScore();
-
+    private void updatePositions()
+    {
         Array<Body> bodies = new Array<Body>();
         world.getBodies(bodies);
 
@@ -169,24 +172,13 @@ public class GameController implements ContactListener {
         if(puckBody.getBody().getPosition().y < -2)
         {
             scoreOpponent++;
-            resetBodies();
             changed = true;
-            if(powerUpBody!=null && powerUpBody.isActive())
-            {
-                powerUpBody.reset();
-                powerUpBody = null;
-                begin = new Date();
-            }
+            handleGoal();
+
         } else if (puckBody.getBody().getPosition().y > GameController.ARENA_HEIGHT + 2) {
             scorePlayer++;
-            resetBodies();
             changed = true;
-            if(powerUpBody!=null && powerUpBody.isActive())
-            {
-                powerUpBody.reset();
-                powerUpBody = null;
-                begin = new Date();
-            }
+            handleGoal();
         }
 
         if((scoreOpponent >= Constants.WIN_SCORE || scorePlayer >= Constants.WIN_SCORE) && Math.abs(scorePlayer - scoreOpponent) >= 2) {
@@ -197,6 +189,17 @@ public class GameController implements ContactListener {
         return changed;
     }
 
+    private void handleGoal() {
+
+        resetBodies();
+        if(powerUpBody!=null && powerUpBody.isActive())
+        {
+            powerUpBody.reset();
+            powerUpBody = null;
+            begin = new Date();
+        }
+    }
+
     public boolean isGameOver(){
         return gameOver;
     }
@@ -204,77 +207,6 @@ public class GameController implements ContactListener {
     private void setUpPowerUp() {
         GameModel.getInstance().newPowerUp();
         powerUpBody = new PowerUpBody(world, GameModel.getInstance().getPowerUp(), BodyDef.BodyType.StaticBody);
-    }
-
-
-    @Override
-    public void beginContact(Contact contact) {
-        Body b1 = contact.getFixtureA().getBody();
-        Body b2 = contact.getFixtureB().getBody();
-
-        if(b1.getUserData() instanceof PuckModel && b2.getUserData() instanceof HandleModel)
-        {
-            b1.setLinearVelocity(handleBody.getVel().add(b1.getLinearVelocity()));
-            lastTouch = "PLAYER";
-            if(soundEnabled)
-                hit.play(volume);
-            ((BotModel) botBody.getUserData()).setDefended(false);
-            ((BotModel) botBody.getUserData()).setTrajectoryFlag(false);
-
-            ((PuckModel) b1.getUserData()).resetWallBounce();
-        }
-        else if (b2.getUserData() instanceof PuckModel && b1.getUserData() instanceof HandleModel)
-        {
-            b2.setLinearVelocity(handleBody.getVel().add(b2.getLinearVelocity()));
-            lastTouch = "PLAYER";
-            if(soundEnabled)
-                hit.play(volume);
-            ((BotModel) botBody.getUserData()).setDefended(false);
-            ((BotModel) botBody.getUserData()).setTrajectoryFlag(false);
-
-            ((PuckModel) b2.getUserData()).resetWallBounce();
-
-        }
-        else if(b1.getUserData() instanceof PuckModel && b2.getUserData() instanceof BotModel)
-        {
-            lastTouch = "BOT";
-            if(soundEnabled)
-                hit.play(volume);
-            ((BotModel) botBody.getUserData()).setDefended(true);
-            ((PuckModel) b1.getUserData()).resetWallBounce();
-        }
-        else if (b2.getUserData() instanceof PuckModel && b1.getUserData() instanceof BotModel) {
-            lastTouch = "BOT";
-            if(soundEnabled)
-                hit.play(volume);
-            ((BotModel) botBody.getUserData()).setDefended(true);
-            ((PuckModel) b2.getUserData()).resetWallBounce();
-
-        }
-        else if(b1.getUserData() instanceof PuckModel && b2.getUserData() instanceof LineModel && ((LineModel) b2.getUserData()).getPos().equals("Lat"))
-        {
-            ((PuckModel) b1.getUserData()).incWallBounce();
-        }
-        else if(b2.getUserData() instanceof PuckModel && b1.getUserData() instanceof LineModel && ((LineModel) b1.getUserData()).getPos().equals("Lat"))
-        {
-            ((PuckModel) b2.getUserData()).incWallBounce();
-        }
-
-    }
-
-    @Override
-    public void endContact(Contact contact) {
-
-    }
-
-    @Override
-    public void preSolve(Contact contact, Manifold oldManifold) {
-
-    }
-
-    @Override
-    public void postSolve(Contact contact, ContactImpulse impulse) {
-
     }
 
     public HandleBody getHandle() {
@@ -312,10 +244,6 @@ public class GameController implements ContactListener {
 
     public void incScoreOpponent() {
         this.scoreOpponent++;
-    }
-
-    public void setControlOn(boolean controlOn) {
-        this.controlOn = controlOn;
     }
 
     public BotBody getBot()
@@ -364,5 +292,21 @@ public class GameController implements ContactListener {
     public void setSound(float volume, boolean soundEffectsEnabled) {
         soundEnabled = soundEffectsEnabled;
         this.volume = volume;
+    }
+
+    public void setLastTouch(String lastTouch) {
+        this.lastTouch = lastTouch;
+    }
+
+    public boolean isSoundEnabled() {
+        return soundEnabled;
+    }
+
+    public Sound getHit() {
+        return hit;
+    }
+
+    public float getVolume() {
+        return volume;
     }
 }

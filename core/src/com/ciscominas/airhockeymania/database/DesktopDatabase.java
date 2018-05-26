@@ -25,7 +25,6 @@ public class DesktopDatabase implements Database{
     }
 
     private static Connection connect() {
-        // SQLite connection string
         String url = "jdbc:sqlite:" + DATABASE;
         Connection conn = null;
         try {
@@ -37,17 +36,14 @@ public class DesktopDatabase implements Database{
     }
 
     public void createNewTable() {
-        // SQLite connection string
         String url = "jdbc:sqlite:" + DATABASE;
 
-        // SQL statement for creating a new table
         String sql = "CREATE TABLE IF NOT EXISTS " + RESULTS_TABLE + "(\n" + "	" + ID_COLUMN + " integer PRIMARY KEY,\n"
                 + "	" + SCORE1_COLUMN + " integer NOT NULL,\n" + "	" + SCORE2_COLUMN + " integer NOT NULL,\n" + "	" + DATE_COLUMN + " integer NOT NULL\n" + ");";
 
         try {
             Connection conn = DriverManager.getConnection(url);
             Statement stmt = conn.createStatement();
-            // create a new table
             stmt.execute(sql);
         } catch (SQLException e) {
             System.out.println("createTable: " + e.getMessage());
@@ -80,10 +76,10 @@ public class DesktopDatabase implements Database{
             Connection conn = connect();
             Statement stmt = conn.createStatement();
             ResultSet rs = stmt.executeQuery(sql);
-            // loop through the result set
-            while (rs.next()) {
+
+            while (rs.next())
                 results.add(new GameResult(rs.getInt(SCORE1_COLUMN), rs.getInt(SCORE2_COLUMN), rs.getLong(DATE_COLUMN)));
-            }
+
         } catch (SQLException e) {
             System.out.println("select:" + e.getMessage());
         }
@@ -97,9 +93,7 @@ public class DesktopDatabase implements Database{
         try {
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
-            // set the corresponding param
             pstmt.setInt(1, id);
-            // execute the delete statement
             pstmt.executeUpdate();
 
         } catch (SQLException e) {

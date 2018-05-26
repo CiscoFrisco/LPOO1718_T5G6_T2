@@ -17,9 +17,6 @@ import static com.ciscominas.airhockeymania.utils.Constants.ID_COLUMN;
 import static com.ciscominas.airhockeymania.utils.Constants.LIMIT;
 import static com.ciscominas.airhockeymania.utils.Constants.RESULTS_TABLE;
 import static com.ciscominas.airhockeymania.utils.Constants.SCORE1_COLUMN;
-import static com.ciscominas.airhockeymania.utils.Constants.SCORE1_COLUMN;
-import static com.ciscominas.airhockeymania.utils.Constants.SCORE1_COLUMN;
-import static com.ciscominas.airhockeymania.utils.Constants.SCORE1_COLUMN;
 import static com.ciscominas.airhockeymania.utils.Constants.SCORE2_COLUMN;
 
 public class AndroidDatabase extends SQLiteOpenHelper implements Database{

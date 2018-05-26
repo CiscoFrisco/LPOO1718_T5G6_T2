@@ -1,10 +1,8 @@
 package com.ciscominas.airhockeymania.utils;
 
-import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.controller.entities.powerups.PowerUpType;
-import com.ciscominas.airhockeymania.model.entities.PowerUpModel;
 import com.ciscominas.airhockeymania.controller.entities.powerups.DuplicatePucks;
 import com.ciscominas.airhockeymania.controller.entities.powerups.FreezeHandle;
 import com.ciscominas.airhockeymania.controller.entities.powerups.SuperGoal;
@@ -22,16 +20,16 @@ public class WorldUtils {
         switch(number)
         {
             case 0:
-                powerUp = new SuperGoal();
+                powerUp = new SuperHandle();
                 break;
             case 1:
                 powerUp = new SuperGoal();
                 break;
             case 2:
-                powerUp = new SuperGoal();
+                powerUp = new FreezeHandle();
                 break;
             case 3:
-                powerUp = new SuperGoal();
+                powerUp = new DuplicatePucks();
                 break;
         }
 

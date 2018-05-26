@@ -2,9 +2,9 @@ package com.ciscominas.airhockeymania.model.entities;
 
 public class LineModel extends EntityModel {
 
-    private String pos;
+    private static int pos;
 
-    public LineModel(float x, float y, float width, float height,  String pos) {
+    public LineModel(float x, float y, float width, float height,  int pos) {
         super(x, y, width, height);
         this.pos = pos;
     }
@@ -14,7 +14,7 @@ public class LineModel extends EntityModel {
         return ModelType.LINE;
     }
 
-    public String getPos() {
+    public int getPos() {
         return pos;
     }
 
