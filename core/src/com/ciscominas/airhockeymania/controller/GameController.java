@@ -236,12 +236,14 @@ public class GameController implements ContactListener {
         else if(b1.getUserData() instanceof PuckModel && b2.getUserData() instanceof BotModel)
         {
             lastTouch = "BOT";
+            botBody.getBehaviour().changeState("RESET");
             if(soundEnabled)
                 hit.play(volume);
             ((PuckModel) b1.getUserData()).resetWallBounce();
         }
         else if (b2.getUserData() instanceof PuckModel && b1.getUserData() instanceof BotModel) {
             lastTouch = "BOT";
+            botBody.getBehaviour().changeState("RESET");
             if(soundEnabled)
                 hit.play(volume);
             ((PuckModel) b2.getUserData()).resetWallBounce();

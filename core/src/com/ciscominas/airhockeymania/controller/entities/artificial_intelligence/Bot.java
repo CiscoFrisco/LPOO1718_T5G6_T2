@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.controller.entities.PuckBody;
 import com.ciscominas.airhockeymania.model.GameModel;
+import com.ciscominas.airhockeymania.utils.Constants;
 
 import java.util.Random;
 
@@ -11,9 +12,8 @@ public class Bot {
 
     float alert_radius;
     float reaction_vel;
+    String state;
     boolean hasPrediction;
-    boolean hasAttacked;
-    boolean hasDeffended;
     Vector2 prediction;
     char difficulty;
     Vector2 offset;
@@ -43,9 +43,8 @@ public class Bot {
 
         difficulty = diff;
         prediction = new Vector2();
+        state = "DEFEND";
         hasPrediction = false;
-        hasAttacked = false;
-        hasDeffended = false;
     }
 
     private Vector2 calculateOffset(float maxOffset) {
@@ -60,27 +59,36 @@ public class Bot {
 
         if(puck.getBody().getPosition().sub(GameController.getInstance().getBot().getBody().getPosition()).len() < alert_radius)
         {
-            if (!hasPrediction) {
+            if (!hasPrediction && puck.getBody().getLinearVelocity().y > 0) {
                 getTrajectory(puck);
                 hasPrediction= true;
             }
 
-            if(!hasDeffended)
-                defend(prediction);
-            else
-                reset();
+            if(hasPrediction) {
+                if (state == "DEFEND")
+                    defend(prediction);
+                else if (state == "ATTACK")
+                    attack();
+                else
+                    reset();
+            }
         }
     }
 
     public void defend(Vector2 prediction)
     {
-        if(Math.abs(GameController.getInstance().getBot().getX() - prediction.x) > 0) // offset.x)
-            if(GameController.getInstance().getBot().getX() > prediction.x)
-            GameController.getInstance().getBot().setLinearVelocity(-reaction_vel,0);
-            else if(GameController.getInstance().getBot().getX() < prediction.x)
-                GameController.getInstance().getBot().setLinearVelocity(reaction_vel,0);
+        Vector2 puck_pos = GameController.getInstance().getPuckBody().getBody().getPosition();
+
+        if(puck_pos.y <= prediction.y ) {
+            if (GameController.getInstance().getBot().getX() > prediction.x + 0.1)
+                GameController.getInstance().getBot().setLinearVelocity(-reaction_vel, 0);
+            else if (GameController.getInstance().getBot().getX() < prediction.x - 0.1)
+                GameController.getInstance().getBot().setLinearVelocity(reaction_vel, 0);
+            else
+                GameController.getInstance().getBot().setLinearVelocity(0, 0);
+        }
         else
-            GameController.getInstance().getBot().setLinearVelocity(0,0);
+            changeState("RESET");
     }
 
     public void attack(){
@@ -88,12 +96,25 @@ public class Bot {
 
     }
 
-    public void reset(){
+    public void changeState(String new_state){
+        state = new_state;
+    }
 
+    public void reset(){
         //move bot back to his original position
-        hasDeffended = false;
-        hasAttacked = false;
-        hasPrediction = false;
+        Vector2 current_botPos = GameController.getInstance().getBot().getBody().getPosition();
+
+        if(Math.abs(current_botPos.x - Constants.BOT_X) > 0.1 || Math.abs(current_botPos.y - Constants.BOT_Y) > 0.1)
+        {               System.out.println("entrei");
+
+            GameController.getInstance().getBot().getBody().setLinearVelocity((Constants.BOT_X - current_botPos.x)*reaction_vel,(Constants.BOT_Y - current_botPos.y)*reaction_vel);
+        }
+        else{
+            System.out.println("tambem");
+            GameController.getInstance().getBot().getBody().setLinearVelocity(0,0);
+            hasPrediction = false;
+            changeState("DEFEND");
+        }
     }
 
     public void getTrajectory(PuckBody puck){
@@ -104,10 +125,8 @@ public class Bot {
         while(!calculateWallBounce(puck_pos, puck_vel))
         {
             puck_pos = prediction;
-            puck_vel = new Vector2(-puck.getBody().getLinearVelocity().x, puck.getBody().getLinearVelocity().y);
+            puck_vel = new Vector2(-puck_vel.x, puck_vel.y);
         }
-        System.out.println("out:" + prediction.x + "||" + prediction.y);
-
     }
 
     public boolean calculateWallBounce(Vector2 puck_pos, Vector2 puck_vel)
@@ -130,10 +149,8 @@ public class Bot {
             coef = (x_pos - puck_pos.x)*puck_vel.x;
 
         y_pos = puck_pos.y + puck_vel.y*coef;
-        System.out.println(y_pos);
-        if(y_pos >= GameController.getInstance().getBot().getY()) {
-
-            System.out.println("entrei");
+        if(y_pos >= GameController.getInstance().getBot().getY())
+        {
             y_pos = GameController.getInstance().getBot().getY();
 
             if(Math.abs(puck_vel.y) >= 1)
@@ -145,12 +162,11 @@ public class Bot {
 
             prediction = new Vector2(x_pos,y_pos);
             return true;
-
-        } else {
-
+        }
+        else
+        {
             prediction = new Vector2(x_pos, y_pos);
             return false;
-
         }
     }
 }
