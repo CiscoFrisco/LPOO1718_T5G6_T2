@@ -152,6 +152,8 @@ public class GameController implements ContactListener {
             }
         }
 
+        botBody.getBehaviour().move(puckBody);
+
         checkScore();
 
         Array<Body> bodies = new Array<Body>();
@@ -218,8 +220,6 @@ public class GameController implements ContactListener {
             lastTouch = "PLAYER";
             if(soundEnabled)
                 hit.play(volume);
-            ((BotModel) botBody.getUserData()).setDefended(false);
-            ((BotModel) botBody.getUserData()).setTrajectoryFlag(false);
 
             ((PuckModel) b1.getUserData()).resetWallBounce();
         }
@@ -229,8 +229,6 @@ public class GameController implements ContactListener {
             lastTouch = "PLAYER";
             if(soundEnabled)
                 hit.play(volume);
-            ((BotModel) botBody.getUserData()).setDefended(false);
-            ((BotModel) botBody.getUserData()).setTrajectoryFlag(false);
 
             ((PuckModel) b2.getUserData()).resetWallBounce();
 
@@ -240,14 +238,12 @@ public class GameController implements ContactListener {
             lastTouch = "BOT";
             if(soundEnabled)
                 hit.play(volume);
-            ((BotModel) botBody.getUserData()).setDefended(true);
             ((PuckModel) b1.getUserData()).resetWallBounce();
         }
         else if (b2.getUserData() instanceof PuckModel && b1.getUserData() instanceof BotModel) {
             lastTouch = "BOT";
             if(soundEnabled)
                 hit.play(volume);
-            ((BotModel) botBody.getUserData()).setDefended(true);
             ((PuckModel) b2.getUserData()).resetWallBounce();
 
         }
