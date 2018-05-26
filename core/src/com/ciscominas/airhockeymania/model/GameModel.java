@@ -17,6 +17,16 @@ import com.ciscominas.airhockeymania.view.GameView;
 
 import java.util.ArrayList;
 
+import static com.ciscominas.airhockeymania.utils.Constants.DOWN;
+import static com.ciscominas.airhockeymania.utils.Constants.LEFT;
+import static com.ciscominas.airhockeymania.utils.Constants.LOWER_LEFT;
+import static com.ciscominas.airhockeymania.utils.Constants.LOWER_RIGHT;
+import static com.ciscominas.airhockeymania.utils.Constants.MID;
+import static com.ciscominas.airhockeymania.utils.Constants.RIGHT;
+import static com.ciscominas.airhockeymania.utils.Constants.UP;
+import static com.ciscominas.airhockeymania.utils.Constants.UPPER_LEFT;
+import static com.ciscominas.airhockeymania.utils.Constants.UPPER_RIGHT;
+
 public class GameModel {
 
     private static GameModel instance;
@@ -28,6 +38,7 @@ public class GameModel {
 
     private float WIDTH = GameController.ARENA_WIDTH;
     private float HEIGHT = GameController.ARENA_HEIGHT;
+
     private PuckModel duplicate;
 
     public static GameModel getInstance() {
@@ -35,7 +46,6 @@ public class GameModel {
             instance = new GameModel();
         return instance;
     }
-
 
     private GameModel() {
 
@@ -72,17 +82,16 @@ public class GameModel {
 
     private void setUpEdges()
     {
-
         edges = new ArrayList<LineModel>();
-        edges.add(new LineModel(WIDTH/8,HEIGHT/48,  WIDTH/4,HEIGHT/24,"")); //down left edge
-        edges.add(new LineModel(WIDTH - WIDTH/8,HEIGHT/48, WIDTH/4,HEIGHT/24,"")); //down right edge
-        edges.add(new LineModel(WIDTH/8,47*HEIGHT/48,WIDTH/4 ,HEIGHT/24,"")); //upper left edge
-        edges.add(new LineModel(WIDTH - WIDTH/8,47*HEIGHT/48,WIDTH/4,HEIGHT/24, "")); //upper right edge
-        edges.add(new LineModel(WIDTH - WIDTH/32,HEIGHT/2, WIDTH/16,HEIGHT, "lat")); //right edge
-        edges.add(new LineModel(WIDTH/32,HEIGHT/2, WIDTH/16,HEIGHT, "lat")); //left edge
-        edges.add(new LineModel(WIDTH/2,HEIGHT/2, WIDTH, HEIGHT/96,"")); //mid line
-        edges.add(new LineModel(WIDTH/2,0,WIDTH/2 + 1 ,HEIGHT/96,"")); //down goal line
-        edges.add(new LineModel(WIDTH/2,HEIGHT, WIDTH/2 + 1,HEIGHT/96,"")); //upper goal line
+        edges.add(new LineModel(WIDTH/8,HEIGHT/48,  WIDTH/4,HEIGHT/24,LOWER_LEFT));
+        edges.add(new LineModel(WIDTH - WIDTH/8,HEIGHT/48, WIDTH/4,HEIGHT/24, LOWER_RIGHT));
+        edges.add(new LineModel(WIDTH/8,47*HEIGHT/48,WIDTH/4 ,HEIGHT/24,UPPER_LEFT));
+        edges.add(new LineModel(WIDTH - WIDTH/8,47*HEIGHT/48,WIDTH/4,HEIGHT/24, UPPER_RIGHT));
+        edges.add(new LineModel(WIDTH - WIDTH/32,HEIGHT/2, WIDTH/16,HEIGHT, RIGHT));
+        edges.add(new LineModel(WIDTH/32,HEIGHT/2, WIDTH/16,HEIGHT, LEFT));
+        edges.add(new LineModel(WIDTH/2,HEIGHT/2, WIDTH, HEIGHT/96,MID));
+        edges.add(new LineModel(WIDTH/2,0,WIDTH/2 + 1 ,HEIGHT/96,DOWN));
+        edges.add(new LineModel(WIDTH/2,HEIGHT, WIDTH/2 + 1,HEIGHT/96,UP));
     }
 
     public PuckModel getPuck() {

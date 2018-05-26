@@ -22,7 +22,7 @@ public abstract class EntityBody {
     final static int POLYGON = 0;
     final static int CIRCLE = 1;
 
-    Body body;
+    protected Body body;
 
     public EntityBody(World world, EntityModel model, BodyDef.BodyType type) {
         BodyDef bodyDef = new BodyDef();
