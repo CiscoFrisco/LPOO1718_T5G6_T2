@@ -137,6 +137,8 @@ public class GameController {
 
         checkPowerUp();
 
+        botBody.getBehaviour().move(puckBody);
+
         checkScore();
 
         updatePositions();
