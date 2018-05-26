@@ -19,11 +19,7 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ciscominas.airhockeymania.AirHockeyMania;
 
-public class PreferencesView extends ScreenAdapter {
-
-    private Skin skin;
-    private AirHockeyMania myGame;
-    private Stage stage;
+public class PreferencesView extends MenuView {
 
     private Label difficultyLabel;
     private Label titleLabel;
@@ -32,140 +28,132 @@ public class PreferencesView extends ScreenAdapter {
     private Label musicOnOffLabel;
     private Label soundOnOffLabel;
 
-    public PreferencesView(AirHockeyMania g)
+    private SelectBox<String> difficultySelect;
+    private Slider volumeMusicSlider;
+    private Slider soundMusicSlider;
+    private TextButton backButton;
+    private CheckBox musicCheckbox;
+    private CheckBox soundEffectsCheckbox;
+
+    public PreferencesView(AirHockeyMania game)
     {
-        myGame = g;
-
-        /// create stage and set it as input processor
-        stage = new Stage(new ScreenViewport());
-
-        skin = myGame.getAssetManager().get("skin/glassy-ui.json"); // new
+        super(game);
     }
 
-    @Override
-    public void show() {
-        stage.clear();
-// Create a table that fills the screen. Everything else will go inside this table.
-        Gdx.input.setInputProcessor(stage);
-
-// Create a table that fills the screen. Everything else will go inside this table.
-        Table table = new Table();
-        table.setFillParent(true);
-        table.setDebug(true);
-        stage.addActor(table);
-
+    private void setUpLabels()
+    {
         difficultyLabel = new Label("SP Difficulty", skin);
         titleLabel = new Label("Preferences", skin);
         volumeMusicLabel = new Label("Music Volume", skin);
         volumeSoundLabel = new Label("Sound Volume", skin);
         musicOnOffLabel = new Label("Music", skin);
         soundOnOffLabel = new Label("Sound Effect", skin);
+    }
 
-        final SelectBox<String> difficultySelect = new SelectBox<String>(skin);
+    protected void setUpElements()
+    {
+        setUpLabels();
+
+        difficultySelect = new SelectBox<String>(skin);
         String options[] = {"Easy","Medium", "Hard"};
         difficultySelect.setItems(options);
-        difficultySelect.setSelected(myGame.getPreferences().getDifficulty());
         difficultySelect.addListener(new EventListener() {
                                          @Override
                                          public boolean handle(Event event) {
-                                             myGame.getPreferences().setDifficulty(difficultySelect.getSelected());
+                                             game.getPreferences().setDifficulty(difficultySelect.getSelected());
                                              return true;
                                          }
                                      }
 
         );
 
-        //volume
-        final Slider volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
-        volumeMusicSlider.setValue(myGame.getPreferences().getMusicVolume());
+        volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
         volumeMusicSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                myGame.getPreferences().setMusicVolume(volumeMusicSlider.getValue());
+                game.getPreferences().setMusicVolume(volumeMusicSlider.getValue());
                 return false;
             }
         });
 
-        //volume
-        final Slider soundMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
-        soundMusicSlider.setValue(myGame.getPreferences().getSoundVolume());
+        soundMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
         soundMusicSlider.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
-                myGame.getPreferences().setSoundVolume(soundMusicSlider.getValue());
+                game.getPreferences().setSoundVolume(soundMusicSlider.getValue());
                 return false;
             }
         });
 
-
-        //music
-        final CheckBox musicCheckbox = new CheckBox(null, skin);
-        musicCheckbox.setChecked(myGame.getPreferences().isMusicEnabled());
+        musicCheckbox = new CheckBox(null, skin);
         musicCheckbox.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 boolean enabled = musicCheckbox.isChecked();
-                myGame.getPreferences().setMusicEnabled(enabled);
+                game.getPreferences().setMusicEnabled(enabled);
                 return false;
             }
         });
 
-        //music
-        final CheckBox soundEffectsCheckbox = new CheckBox(null, skin);
-        soundEffectsCheckbox.setChecked(myGame.getPreferences().isSoundEffectsEnabled());
+        soundEffectsCheckbox = new CheckBox(null, skin);
         soundEffectsCheckbox.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
                 boolean enabled = soundEffectsCheckbox.isChecked();
-                myGame.getPreferences().setSoundEffectsEnabled(enabled);
+                game.getPreferences().setSoundEffectsEnabled(enabled);
                 return false;
             }
         });
 
-        // return to main screen button
-        final TextButton backButton = new TextButton("Back", skin, "small"); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
+        backButton = new TextButton("Back", skin, "small"); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
         backButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                myGame.changeScreen(0);
+                game.changeScreen(0);
             }
         });
+    }
+
+    private void setValues()
+    {
+        difficultySelect.setSelected(game.getPreferences().getDifficulty());
+
+        volumeMusicSlider.setValue(game.getPreferences().getMusicVolume());
+
+        soundMusicSlider.setValue(game.getPreferences().getSoundVolume());
+
+        musicCheckbox.setChecked(game.getPreferences().isMusicEnabled());
+
+        soundEffectsCheckbox.setChecked(game.getPreferences().isSoundEffectsEnabled());
+    }
+
+    protected void setUpTable(Table table)
+    {
+        setValues();
 
         table.add(titleLabel).colspan(2);
         table.row().pad(10, 0, 0, 10);
+
         table.add(difficultyLabel).left();
         table.add(difficultySelect);
         table.row().pad(10, 0, 0, 10);
+
         table.add(volumeMusicLabel).left();
         table.add(volumeMusicSlider);
         table.row().pad(10, 0, 0, 10);
+
         table.add(musicOnOffLabel).left();
         table.add(musicCheckbox);
         table.row().pad(10, 0, 0, 10);
+
         table.add(volumeSoundLabel).left();
         table.add(soundMusicSlider);
         table.row().pad(10, 0, 0, 10);
+
         table.add(soundOnOffLabel).left();
         table.add(soundEffectsCheckbox);
         table.row().pad(10, 0, 0, 10);
+
         table.add(backButton).colspan(2);
-    }
-
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
     }
 }

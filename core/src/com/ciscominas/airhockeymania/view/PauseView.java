@@ -17,42 +17,28 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ciscominas.airhockeymania.AirHockeyMania;
 import com.ciscominas.airhockeymania.controller.GameController;
 
-public class PauseView extends ScreenAdapter {
+public class PauseView extends MenuView {
 
-    private final AirHockeyMania game;
-    private Stage stage;
-    private Skin skin;
     private Label musicOnOffLabel;
     private Label soundOnOffLabel;
     private Label titleLabel;
+    private TextButton resumeButton;
+    private TextButton exitButton;
+    private CheckBox musicCheckbox;
+    private CheckBox soundEffectsCheckbox;
 
     public PauseView(AirHockeyMania game)
     {
-        this.game = game;
-
-        /// create stage and set it as input processor
-        stage = new Stage(new ScreenViewport());
-
-        skin = game.getAssetManager().get("skin/glassy-ui.json"); // new
-
-        musicOnOffLabel = new Label("Music", skin);
-        soundOnOffLabel = new Label("Sound Effect", skin);
-        titleLabel = new Label("Pause", skin);
+        super(game);
     }
 
     @Override
-    public void show()
-    {
-        stage.clear();
-        Gdx.input.setInputProcessor(stage);
+    protected void setUpElements() {
+        musicOnOffLabel = new Label("Music", skin);
+        soundOnOffLabel = new Label("Sound Effect", skin);
+        titleLabel = new Label("Pause", skin);
 
-        Table table = new Table();
-        table.setFillParent(true);
-        table.setDebug(true);
-        stage.addActor(table);
-
-
-        final TextButton resumeButton = new TextButton("Resume", skin, "small"); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
+        resumeButton = new TextButton("Resume", skin, "small"); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
         resumeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -61,7 +47,7 @@ public class PauseView extends ScreenAdapter {
         });
 
 
-        final TextButton exitButton = new TextButton("Exit", skin, "small"); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
+        exitButton = new TextButton("Exit", skin, "small"); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
         exitButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
@@ -70,8 +56,7 @@ public class PauseView extends ScreenAdapter {
             }
         });
 
-        final CheckBox musicCheckbox = new CheckBox(null, skin);
-        musicCheckbox.setChecked(game.getPreferences().isMusicEnabled());
+        musicCheckbox = new CheckBox(null, skin);
         musicCheckbox.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
@@ -82,8 +67,7 @@ public class PauseView extends ScreenAdapter {
         });
 
         //music
-        final CheckBox soundEffectsCheckbox = new CheckBox(null, skin);
-        soundEffectsCheckbox.setChecked(game.getPreferences().isSoundEffectsEnabled());
+        soundEffectsCheckbox = new CheckBox(null, skin);
         soundEffectsCheckbox.addListener(new EventListener() {
             @Override
             public boolean handle(Event event) {
@@ -92,6 +76,12 @@ public class PauseView extends ScreenAdapter {
                 return false;
             }
         });
+    }
+
+    @Override
+    protected void setUpTable(Table table) {
+
+        setValues();
 
         table.add(titleLabel).colspan(2);
         table.row();
@@ -105,21 +95,10 @@ public class PauseView extends ScreenAdapter {
         table.row();
         table.add(exitButton);
     }
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
-    }
 
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
+    private void setValues()
+    {
+        soundEffectsCheckbox.setChecked(game.getPreferences().isSoundEffectsEnabled());
+        musicCheckbox.setChecked(game.getPreferences().isMusicEnabled());
     }
 }

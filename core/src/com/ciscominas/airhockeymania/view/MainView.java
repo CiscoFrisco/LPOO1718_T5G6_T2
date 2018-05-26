@@ -13,47 +13,24 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ciscominas.airhockeymania.AirHockeyMania;
 
-public class MainView extends ScreenAdapter {
+public class MainView extends MenuView {
 
-    private final AirHockeyMania game;
-    private Stage stage;
-    private Skin skin;
+    private TextButton newGame;
+    private TextButton preferences;
+    private TextButton exit;
+    private TextButton results;
 
 
     public MainView(AirHockeyMania game) {
-        this.game = game;
-        stage = new Stage(new ScreenViewport());
+        super(game);
+        }
 
-        SkinLoader.SkinParameter params = new SkinLoader.SkinParameter("skin/glassy-ui.atlas");
-        game.getAssetManager().load("skin/glassy-ui.json", Skin.class, params);
-        game.getAssetManager().finishLoading(); // new
-        skin = game.getAssetManager().get("skin/glassy-ui.json"); // new
-    }
-
-    @Override
-    public void show() {
-
-// Create a table that fills the screen. Everything else will go inside this table.
-        Gdx.input.setInputProcessor(stage);
-
-// Create a table that fills the screen. Everything else will go inside this table.
-        Table table = new Table();
-        table.setFillParent(true);
-        table.setDebug(true);
-        stage.addActor(table);
-
-        TextButton newGame = new TextButton("New Game", skin);
-        TextButton preferences = new TextButton("Preferences", skin);
-        TextButton results = new TextButton("Results", skin);
-        TextButton exit = new TextButton("Exit", skin);
-
-        table.add(newGame).fillX().uniformX();
-        table.row().pad(10, 0, 10, 0);
-        table.add(preferences).fillX().uniformX();
-        table.row().pad(0, 0, 10, 0);
-        table.add(results).fillX().uniformX();
-        table.row().pad(0, 0, 0, 0);
-        table.add(exit).fillX().uniformX();
+    protected void setUpElements()
+    {
+        newGame = new TextButton("New Game", skin);
+        preferences = new TextButton("Preferences", skin);
+        results = new TextButton("Results", skin);
+        exit = new TextButton("Exit", skin);
 
         exit.addListener(new ChangeListener() {
             @Override
@@ -84,8 +61,21 @@ public class MainView extends ScreenAdapter {
         });
     }
 
+
     @Override
-    public void render(float delta) {
+    protected void setUpTable(Table table)
+    {
+        table.add(newGame).fillX().uniformX();
+        table.row().pad(10, 0, 10, 0);
+        table.add(preferences).fillX().uniformX();
+        table.row().pad(0, 0, 10, 0);
+        table.add(results).fillX().uniformX();
+        table.row().pad(0, 0, 0, 0);
+        table.add(exit).fillX().uniformX();
+    }
+
+    private void checkMusic()
+    {
         if(game.getPreferences().isMusicEnabled())
         {
             game.getMenuMusic().setVolume(game.getPreferences().getMusicVolume());
@@ -93,19 +83,12 @@ public class MainView extends ScreenAdapter {
         }
         else
             game.getMenuMusic().stop();
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
     }
 
     @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
+    public void render(float delta) {
+        super.render(delta);
+        checkMusic();
     }
 
-    @Override
-    public void dispose() {
-        stage.dispose();
-    }
 }

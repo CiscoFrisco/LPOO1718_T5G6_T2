@@ -2,9 +2,11 @@ package com.ciscominas.airhockeymania;
 
 import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.ciscominas.airhockeymania.database.Database;
 import com.ciscominas.airhockeymania.view.GameView;
 import com.ciscominas.airhockeymania.view.MainView;
@@ -12,7 +14,11 @@ import com.ciscominas.airhockeymania.view.PauseView;
 import com.ciscominas.airhockeymania.view.PreferencesView;
 import com.ciscominas.airhockeymania.view.ResultsView;
 
+import static com.ciscominas.airhockeymania.utils.Constants.MENU_MUSIC;
+import static com.ciscominas.airhockeymania.utils.Constants.MENU_SKIN;
+
 public class AirHockeyMania extends Game {
+
 	public static final int MAIN_MENU = 0;
 	public static final int PREFERENCES_MENU = 1;
 	public static final int RESULTS_SCREEN = 2;
@@ -21,7 +27,6 @@ public class AirHockeyMania extends Game {
 
 	private Database database;
 	private SpriteBatch batch;
-	private BitmapFont font;
 	private AssetManager assetManager;
 
 	private MainView mainMenu;
@@ -42,21 +47,22 @@ public class AirHockeyMania extends Game {
 	public void create () {
 		preferences = new AppPreferences();
 		assetManager = new AssetManager();
-		mainMenu = new MainView(this);
 		batch = new SpriteBatch();
-		font = new BitmapFont();
 
 		loadMusic();
-		menuMusic = assetManager.get("menu.mp3");
+		menuMusic = assetManager.get(MENU_MUSIC);
 		menuMusic.setLooping(true);
 
-		changeScreen(MAIN_MENU);
+		SkinLoader.SkinParameter params = new SkinLoader.SkinParameter("skin/glassy-ui.atlas");
+		assetManager.load(MENU_SKIN, Skin.class, params);
+		assetManager.finishLoading();
 
+		changeScreen(MAIN_MENU);
 	}
 
 	public void loadMusic()
 	{
-		assetManager.load("menu.mp3", Music.class);
+		assetManager.load(MENU_MUSIC, Music.class);
 		assetManager.finishLoading();
 	}
 
@@ -89,7 +95,6 @@ public class AirHockeyMania extends Game {
 	public void dispose () {
 		batch.dispose();
 		assetManager.dispose();
-		font.dispose();
 	}
 
 	public AssetManager getAssetManager() {
@@ -102,10 +107,6 @@ public class AirHockeyMania extends Game {
 
 	public AppPreferences getPreferences() {
 		return preferences;
-	}
-
-	public BitmapFont getFont() {
-		return font;
 	}
 
 	public Database getDatabase() {

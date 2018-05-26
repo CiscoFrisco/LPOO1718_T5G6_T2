@@ -16,43 +16,45 @@ import com.ciscominas.airhockeymania.database.GameResult;
 
 import java.util.ArrayList;
 
-public class ResultsView extends ScreenAdapter {
 
-    private final Label titleLabel;
-    private final Label score1Label;
-    private final Label score2Label;
-    private final Label dateLabel;
+public class ResultsView extends MenuView {
 
-    private Skin skin;
-    private AirHockeyMania myGame;
-    private Stage stage;
+    private Label titleLabel;
+    private Label score1Label;
+    private Label score2Label;
+    private Label dateLabel;
+    private TextButton backButton;
 
     public ResultsView(AirHockeyMania game)
     {
-        myGame = game;
+        super(game);
+    }
 
-        stage = new Stage(new ScreenViewport());
-
-        skin = myGame.getAssetManager().get("skin/glassy-ui.json"); // new
-
+    private void setUpLabels()
+    {
         titleLabel = new Label("Results", skin);
         score1Label = new Label("Player", skin);
         score2Label = new Label("Computer", skin);
         dateLabel = new Label("Date", skin);
     }
 
-    @Override
-    public void show()
+    protected void setUpElements()
     {
-        ArrayList<GameResult> results = myGame.getDatabase().selectAll();
+        setUpLabels();
 
-        Gdx.input.setInputProcessor(stage);
+        backButton = new TextButton("Back", skin, "small"); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
+        backButton.addListener(new ChangeListener() {
+            @Override
+            public void changed(ChangeEvent event, Actor actor) {
+                game.changeScreen(AirHockeyMania.MAIN_MENU);
+            }
+        });
+    }
 
-        Table table = new Table();
-        table.setFillParent(true);
-        table.setDebug(true);
-        stage.addActor(table);
 
+    @Override
+    protected void setUpTable(Table table)
+    {
         table.add(titleLabel).colspan(3);
         table.row();
         table.add(score1Label);
@@ -60,45 +62,23 @@ public class ResultsView extends ScreenAdapter {
         table.add(dateLabel);
         table.row();
 
-
-        final TextButton backButton = new TextButton("Back", skin, "small"); // the extra argument here "small" is used to set the button to the smaller version instead of the big default version
-        backButton.addListener(new ChangeListener() {
-            @Override
-            public void changed(ChangeEvent event, Actor actor) {
-                myGame.changeScreen(AirHockeyMania.MAIN_MENU);
-            }
-        });
+        ArrayList<GameResult> results = game.getDatabase().selectAll();
 
         for(GameResult result : results)
-        {
-            Label score1 = new Label(Integer.toString(result.getScore1()), skin);
-            Label score2 = new Label(Integer.toString(result.getScore2()), skin);
-            Label date = new Label(result.getDate().toString(), skin);
-
-            table.add(score1);
-            table.add(score2);
-            table.add(date);
-            table.row();
-        }
+            addTableRow(table, result);
 
         table.add(backButton).colspan(3);
     }
 
-    @Override
-    public void render(float delta) {
-        Gdx.gl.glClearColor(0f, 0f, 0f, 1);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
-        stage.draw();
-    }
+    private void addTableRow(Table table, GameResult result)
+    {
+        Label score1 = new Label(Integer.toString(result.getScore1()), skin);
+        Label score2 = new Label(Integer.toString(result.getScore2()), skin);
+        Label date = new Label(result.getDate().toString(), skin);
 
-    @Override
-    public void resize(int width, int height) {
-        stage.getViewport().update(width, height, true);
-    }
-
-    @Override
-    public void dispose() {
-        stage.dispose();
+        table.add(score1);
+        table.add(score2);
+        table.add(date);
+        table.row();
     }
 }
