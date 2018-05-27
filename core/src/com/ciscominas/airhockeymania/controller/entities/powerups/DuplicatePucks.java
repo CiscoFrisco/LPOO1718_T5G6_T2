@@ -31,12 +31,12 @@ public class DuplicatePucks implements PowerUpType {
         {
             if(puck.getBody().getPosition().y < 0)
             {
-                GameController.getInstance().incScorePlayer();
+                GameController.getInstance().incScoreOpponent();
                 GameController.getInstance().resetBodies();
                 reset();
                 return true;
             } else if (puck.getBody().getPosition().y > GameController.ARENA_HEIGHT) {
-                GameController.getInstance().incScoreOpponent();
+                GameController.getInstance().incScorePlayer();
                 GameController.getInstance().resetBodies();
                 reset();
                 return true;

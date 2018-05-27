@@ -27,6 +27,7 @@ public class BotBody extends EntityBody {
         body.setTransform(botX, botY, 0);
         body.setLinearVelocity(0,0);
         bot.reset();
+        //bot.changeState("RESET");
     }
 
     public Bot getBehaviour(){

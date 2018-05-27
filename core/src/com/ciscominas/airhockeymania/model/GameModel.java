@@ -62,14 +62,11 @@ public class GameModel {
         handle.setWidth(width);
     }
 
-    public void duplicatePuck()
-    {
-        duplicate = new PuckModel(WIDTH/2, HEIGHT/2, WIDTH/16f, 0);
-    }
+    public void duplicatePuck() { duplicate =  new PuckModel(Constants.PUCK_X, Constants.PUCK_Y, Constants.PUCK_RADIUS, 0);}
 
     public void newPowerUp()
     {
-        Vector2 botPos = BodyUtils.randPosition((int) WIDTH/4,(int)HEIGHT/4, (int) (3*WIDTH/4),(int) (3*HEIGHT/4));
+        Vector2 botPos = BodyUtils.randPosition((int) WIDTH/4,(int)HEIGHT/4, (int) (2*WIDTH/4),(int) (2*HEIGHT/4));
         powerUp = new PowerUpModel(botPos.x, botPos.y, WIDTH/20, 0);
     }
 

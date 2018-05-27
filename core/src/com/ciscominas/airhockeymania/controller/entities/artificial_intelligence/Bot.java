@@ -16,7 +16,6 @@ public class Bot {
     boolean hasPrediction;
     Vector2 prediction;
     char difficulty;
-    Vector2 offset;
 
 
     public Bot(char diff){
@@ -25,17 +24,14 @@ public class Bot {
             case 'E': //easy
                 alert_radius = GameController.ARENA_WIDTH/3;
                 reaction_vel = GameController.ARENA_WIDTH/8;
-                //offset = calculateOffset(GameController.ARENA_WIDTH/8);
                 break;
             case 'N': //normal
                 alert_radius = GameController.ARENA_WIDTH/2;
                 reaction_vel = GameController.ARENA_WIDTH/4;
-                //offset = calculateOffset(GameController.ARENA_WIDTH/12);
                 break;
             case 'H': //hard
                 alert_radius = GameController.ARENA_HEIGHT/3;
                 reaction_vel = GameController.ARENA_WIDTH/2;
-                //offset = calculateOffset(GameController.ARENA_WIDTH/16);
                 break;
             default:
                 break;
@@ -43,46 +39,45 @@ public class Bot {
 
         difficulty = diff;
         prediction = new Vector2();
-        state = "DEFEND";
+        state = "RESET";
         hasPrediction = false;
-    }
-
-    private Vector2 calculateOffset(float maxOffset) {
-
-        Random random = new Random();
-        int off = random.nextInt((int) maxOffset*10);
-        off /= 10.0;
-        return new Vector2(off,off);
     }
 
     public void move(PuckBody puck){
 
+       System.out.println(puck.getBody().getLinearVelocity().len());
         if(puck.getBody().getPosition().sub(GameController.getInstance().getBot().getBody().getPosition()).len() < alert_radius)
         {
-            if (!hasPrediction && puck.getBody().getLinearVelocity().y > 0) {
+           if(puck.getBody().getLinearVelocity().len() < GameController.ARENA_HEIGHT /4.0 )
+                state = "ATTACK";
+
+            else if (!hasPrediction && puck.getBody().getLinearVelocity().y > 0) {
+                state = "DEFEND";
                 getTrajectory(puck);
                 hasPrediction= true;
             }
-
-            if(hasPrediction) {
-                if (state == "DEFEND")
-                    defend(prediction);
-                else if (state == "ATTACK")
-                    attack();
-                else
-                    reset();
-            }
         }
+
+        System.out.println(state);
+        if (state == "DEFEND" && hasPrediction)
+            defend(prediction);
+        else if (state == "ATTACK")
+            attack();
+        else
+            reset();
+
     }
 
     public void defend(Vector2 prediction)
     {
+        System.out.println("deffend");
+
         Vector2 puck_pos = GameController.getInstance().getPuckBody().getBody().getPosition();
 
         if(puck_pos.y <= prediction.y ) {
-            if (GameController.getInstance().getBot().getX() > prediction.x + 0.1)
+            if (GameController.getInstance().getBot().getX() > prediction.x + GameController.ARENA_WIDTH/160)
                 GameController.getInstance().getBot().setLinearVelocity(-reaction_vel, 0);
-            else if (GameController.getInstance().getBot().getX() < prediction.x - 0.1)
+            else if (GameController.getInstance().getBot().getX() < prediction.x -  GameController.ARENA_WIDTH/160)
                 GameController.getInstance().getBot().setLinearVelocity(reaction_vel, 0);
             else
                 GameController.getInstance().getBot().setLinearVelocity(0, 0);
@@ -92,8 +87,12 @@ public class Bot {
     }
 
     public void attack(){
-
-
+        state = "RESET";
+        System.out.println("attack");
+        Vector2 bot_pos = GameController.getInstance().getBot().getBody().getPosition();
+        Vector2 puck_pos = GameController.getInstance().getPuckBody().getBody().getPosition();
+        Vector2 vel = new Vector2((puck_pos.x - bot_pos.x) * reaction_vel, (puck_pos.y - bot_pos.y) * reaction_vel);
+        GameController.getInstance().getBot().getBody().setLinearVelocity(vel);
     }
 
     public void changeState(String new_state){
@@ -104,16 +103,15 @@ public class Bot {
         //move bot back to his original position
         Vector2 current_botPos = GameController.getInstance().getBot().getBody().getPosition();
 
-        if(Math.abs(current_botPos.x - Constants.BOT_X) > 0.1 || Math.abs(current_botPos.y - Constants.BOT_Y) > 0.1)
-        {               System.out.println("entrei");
-
+        if(Math.abs(current_botPos.x - Constants.BOT_X) >  GameController.ARENA_WIDTH/160 || Math.abs(current_botPos.y - Constants.BOT_Y) >  GameController.ARENA_WIDTH/160)
+        {
+            System.out.println("entrei");
             GameController.getInstance().getBot().getBody().setLinearVelocity((Constants.BOT_X - current_botPos.x)*reaction_vel,(Constants.BOT_Y - current_botPos.y)*reaction_vel);
         }
         else{
             System.out.println("tambem");
             GameController.getInstance().getBot().getBody().setLinearVelocity(0,0);
             hasPrediction = false;
-            changeState("DEFEND");
         }
     }
 
@@ -132,7 +130,7 @@ public class Bot {
     public boolean calculateWallBounce(Vector2 puck_pos, Vector2 puck_vel)
     {
         float x_pos = 0;
-        float y_pos;
+        float y_pos = 0;
         float coef;
 
         //get bounce x_coordinate (depending on the x puck_vel)
@@ -143,17 +141,20 @@ public class Bot {
             x_pos = GameController.ARENA_WIDTH - GameModel.getInstance().getEdges().get(4).getWidth();
         }
 
-        if(Math.abs(puck_vel.x) >= 1)
-            coef = (x_pos - puck_pos.x)/puck_vel.x;
-        else
-            coef = (x_pos - puck_pos.x)*puck_vel.x;
+        if(puck_vel.x != 0) {
+            if (Math.abs(puck_vel.x) >= GameController.ARENA_WIDTH / 16)
+                coef = (x_pos - puck_pos.x) / puck_vel.x;
+            else
+                coef = (x_pos - puck_pos.x) * puck_vel.x;
 
-        y_pos = puck_pos.y + puck_vel.y*coef;
-        if(y_pos >= GameController.getInstance().getBot().getY())
+            y_pos = puck_pos.y + puck_vel.y*coef;
+        }
+
+        if((y_pos >= GameController.getInstance().getBot().getY() && y_pos != 0) || puck_vel.x == 0)
         {
             y_pos = GameController.getInstance().getBot().getY();
 
-            if(Math.abs(puck_vel.y) >= 1)
+            if(Math.abs(puck_vel.y) >=  GameController.ARENA_WIDTH/16)
                 coef = (y_pos - puck_pos.y)/puck_vel.y;
             else
                 coef = (y_pos - puck_pos.y)*puck_vel.y;

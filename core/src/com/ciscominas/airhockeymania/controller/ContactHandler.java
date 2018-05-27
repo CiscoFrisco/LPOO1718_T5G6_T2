@@ -70,7 +70,7 @@ public class ContactHandler implements ContactListener {
             ((PuckModel) b1UserData).incWallBounce();
         }
         else if(b2UserData instanceof PuckModel && b1UserData instanceof LineModel &&
-                (((LineModel) b1UserData).getPos()==RIGHT) || ((LineModel) b1UserData).getPos()==LEFT)
+                (((LineModel) b1UserData).getPos()==RIGHT || ((LineModel) b1UserData).getPos()==LEFT))
         {
             ((PuckModel) b2UserData).incWallBounce();
         }
