@@ -17,13 +17,23 @@ import static com.ciscominas.airhockeymania.utils.Constants.RESULTS_TABLE;
 import static com.ciscominas.airhockeymania.utils.Constants.SCORE1_COLUMN;
 import static com.ciscominas.airhockeymania.utils.Constants.SCORE2_COLUMN;
 
+/**
+ * Implements a database for the desktop version of the game, using jdbc library for SQLite.
+ */
 public class DesktopDatabase implements Database{
 
+    /**
+     * Creates a DesktopDatabase object and a new results table, if it doesn't exit already.
+     */
     public DesktopDatabase()
     {
         createNewTable();
     }
 
+    /**
+     * Creates a connection to the database.
+     * @return a database connection.
+     */
     private static Connection connect() {
         String url = "jdbc:sqlite:" + DATABASE;
         Connection conn = null;
@@ -35,6 +45,10 @@ public class DesktopDatabase implements Database{
         return conn;
     }
 
+    /**
+     * Creates a new results table, if it doesn't already exist.
+     * The table will have the following columns: id, player score, bot score, and date, all stored as integers.
+     */
     public void createNewTable() {
         String url = "jdbc:sqlite:" + DATABASE;
 
@@ -50,6 +64,10 @@ public class DesktopDatabase implements Database{
         }
     }
 
+    /**
+     * Inserts a result onto the results table.
+     * @param result Result of a game, containing scores and date.
+     */
     public void insert(GameResult result) {
         String sql = "INSERT INTO " +  RESULTS_TABLE + "(" + SCORE1_COLUMN +"," +
                 SCORE2_COLUMN + "," + DATE_COLUMN +") VALUES(?,?,?)";
@@ -66,6 +84,12 @@ public class DesktopDatabase implements Database{
         }
     }
 
+    /**
+     * Connects to the database and selects the latest results, ordered by date.
+     * A limit can be specified through the constants class.
+     *
+     * @return an ArrayList containing the latest results.
+     */
     public ArrayList<GameResult> selectAll() {
 
         ArrayList<GameResult> results = new ArrayList<GameResult>();
@@ -85,19 +109,5 @@ public class DesktopDatabase implements Database{
         }
 
         return results;
-    }
-
-    public void delete(int id) {
-        String sql = "DELETE FROM results WHERE id = ?";
-
-        try {
-            Connection conn = connect();
-            PreparedStatement pstmt = conn.prepareStatement(sql);
-            pstmt.setInt(1, id);
-            pstmt.executeUpdate();
-
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
     }
 }

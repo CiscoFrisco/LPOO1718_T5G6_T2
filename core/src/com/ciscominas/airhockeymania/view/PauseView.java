@@ -17,6 +17,9 @@ import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ciscominas.airhockeymania.AirHockeyMania;
 import com.ciscominas.airhockeymania.controller.GameController;
 
+/**
+ * The Pause Menu
+ */
 public class PauseView extends MenuView {
 
     private Label musicOnOffLabel;
@@ -27,11 +30,18 @@ public class PauseView extends MenuView {
     private CheckBox musicCheckbox;
     private CheckBox soundEffectsCheckbox;
 
+    /**
+     * Creates a PauseView object
+     * @param game the main game class
+     */
     public PauseView(AirHockeyMania game)
     {
         super(game);
     }
 
+    /**
+     * Sets up the table elements: music and sound effects checkboxes, resume and exit buttons.
+     */
     @Override
     protected void setUpElements() {
         musicOnOffLabel = new Label("Music", skin);
@@ -78,6 +88,10 @@ public class PauseView extends MenuView {
         });
     }
 
+    /**
+     * Sets up the table, adding the buttons to it in a formatted manner.
+     * @param table the table
+     */
     @Override
     protected void setUpTable(Table table) {
 
@@ -96,6 +110,10 @@ public class PauseView extends MenuView {
         table.add(exitButton);
     }
 
+    /**
+     * Sets the current values of the sound effects and music checkboxes, by fetching them
+     * from the game preferences.
+     */
     private void setValues()
     {
         soundEffectsCheckbox.setChecked(game.getPreferences().isSoundEffectsEnabled());

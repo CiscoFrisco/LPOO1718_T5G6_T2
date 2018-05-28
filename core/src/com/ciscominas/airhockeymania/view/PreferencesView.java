@@ -19,6 +19,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ciscominas.airhockeymania.AirHockeyMania;
 
+/**
+ * The Preferences Menu
+ */
 public class PreferencesView extends MenuView {
 
     private Label difficultyLabel;
@@ -35,11 +38,18 @@ public class PreferencesView extends MenuView {
     private CheckBox musicCheckbox;
     private CheckBox soundEffectsCheckbox;
 
+    /**
+     * Creates a PreferencesView object.
+     * @param game the main game class
+     */
     public PreferencesView(AirHockeyMania game)
     {
         super(game);
     }
 
+    /**
+     * Sets up the labels.
+     */
     private void setUpLabels()
     {
         difficultyLabel = new Label("SP Difficulty", skin);
@@ -50,6 +60,9 @@ public class PreferencesView extends MenuView {
         soundOnOffLabel = new Label("Sound Effect", skin);
     }
 
+    /**
+     * Sets up the table's elements: labels, checkboxes and back button.
+     */
     protected void setUpElements()
     {
         setUpLabels();
@@ -114,6 +127,9 @@ public class PreferencesView extends MenuView {
         });
     }
 
+    /**
+     * Sets the current values of the settings by fetching them from the game's preferences.
+     */
     private void setValues()
     {
         difficultySelect.setSelected(game.getPreferences().getDifficulty());
@@ -127,6 +143,10 @@ public class PreferencesView extends MenuView {
         soundEffectsCheckbox.setChecked(game.getPreferences().isSoundEffectsEnabled());
     }
 
+    /**
+     * Sets up the table, adding the labels, checkboxes, selectbox and back button.
+     * @param table the table
+     */
     protected void setUpTable(Table table)
     {
         setValues();

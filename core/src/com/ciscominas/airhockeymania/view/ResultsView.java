@@ -16,7 +16,9 @@ import com.ciscominas.airhockeymania.database.GameResult;
 
 import java.util.ArrayList;
 
-
+/**
+ * The Results menu
+ */
 public class ResultsView extends MenuView {
 
     private Label titleLabel;
@@ -25,11 +27,18 @@ public class ResultsView extends MenuView {
     private Label dateLabel;
     private TextButton backButton;
 
+    /**
+     * Creates a ResultsView object.
+     * @param game the main game class
+     */
     public ResultsView(AirHockeyMania game)
     {
         super(game);
     }
 
+    /**
+     * Sets up the labels (table headers)
+     */
     private void setUpLabels()
     {
         titleLabel = new Label("Results", skin);
@@ -38,6 +47,9 @@ public class ResultsView extends MenuView {
         dateLabel = new Label("Date", skin);
     }
 
+    /**
+     * Sets up the table's elements: labels and back button.
+     */
     protected void setUpElements()
     {
         setUpLabels();
@@ -51,7 +63,10 @@ public class ResultsView extends MenuView {
         });
     }
 
-
+    /**
+     * Sets up the table, adding the labels, and back button.
+     * @param table the table
+     */
     @Override
     protected void setUpTable(Table table)
     {
@@ -70,6 +85,11 @@ public class ResultsView extends MenuView {
         table.add(backButton).colspan(3);
     }
 
+    /**
+     * Adds a row to the table, adding data about a game result.
+     * @param table the table
+     * @param result the game result
+     */
     private void addTableRow(Table table, GameResult result)
     {
         Label score1 = new Label(Integer.toString(result.getScore1()), skin);

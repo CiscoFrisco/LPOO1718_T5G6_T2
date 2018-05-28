@@ -13,6 +13,9 @@ import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ciscominas.airhockeymania.AirHockeyMania;
 
+/**
+ * Main menu.
+ */
 public class MainView extends MenuView {
 
     private TextButton newGame;
@@ -21,10 +24,17 @@ public class MainView extends MenuView {
     private TextButton results;
 
 
+    /**
+     * Creates a MainView object.
+     * @param game the main game class
+     */
     public MainView(AirHockeyMania game) {
         super(game);
-        }
+    }
 
+    /**
+     * Sets up the table elements: newGame, preferences, results and exit buttons.
+     */
     protected void setUpElements()
     {
         newGame = new TextButton("New Game", skin);
@@ -61,7 +71,10 @@ public class MainView extends MenuView {
         });
     }
 
-
+    /**
+     * Sets up the table, adding the buttons to it in a formatted manner.
+     * @param table the table
+     */
     @Override
     protected void setUpTable(Table table)
     {
@@ -74,6 +87,9 @@ public class MainView extends MenuView {
         table.add(exit).fillX().uniformX();
     }
 
+    /**
+     * Checks if the music is activated, playing it with the volume set by the user (or default).
+     */
     private void checkMusic()
     {
         if(game.getPreferences().isMusicEnabled())

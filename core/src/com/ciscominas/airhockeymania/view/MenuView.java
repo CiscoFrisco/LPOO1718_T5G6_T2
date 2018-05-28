@@ -11,12 +11,30 @@ import com.ciscominas.airhockeymania.AirHockeyMania;
 
 import static com.ciscominas.airhockeymania.utils.Constants.MENU_SKIN;
 
+/**
+ * Represents a Menu.
+ */
 public abstract class MenuView extends ScreenAdapter {
 
+    /**
+     * The main game
+     */
     protected final AirHockeyMania game;
+
+    /**
+     * The stage that will handle input
+     */
     protected Stage stage;
+
+    /**
+     * The skin for the table
+     */
     protected Skin skin;
 
+    /**
+     * Creates a MenuView object.
+     * @param game the main game class
+     */
     protected MenuView(AirHockeyMania game) {
         this.game = game;
         stage = new Stage(new ScreenViewport());
@@ -25,6 +43,10 @@ public abstract class MenuView extends ScreenAdapter {
         setUpElements();
     }
 
+    /**
+     * Creates a table to be added to the stage.
+     * @return a table
+     */
     protected Table createTable()
     {
         Table table = new Table();
@@ -35,10 +57,20 @@ public abstract class MenuView extends ScreenAdapter {
         return table;
     }
 
+    /**
+     * Sets up the elements that compose the table.
+     */
     protected abstract void setUpElements();
 
+    /**
+     * Adds the elements to the table.
+     * @param table the table
+     */
     protected abstract void setUpTable(Table table);
 
+    /**
+     * Clears the stage and sets up the table.
+     */
     @Override
     public void show()
     {

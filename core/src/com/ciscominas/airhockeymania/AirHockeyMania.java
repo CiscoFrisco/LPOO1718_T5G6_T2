@@ -17,6 +17,9 @@ import com.ciscominas.airhockeymania.view.ResultsView;
 import static com.ciscominas.airhockeymania.utils.Constants.MENU_MUSIC;
 import static com.ciscominas.airhockeymania.utils.Constants.MENU_SKIN;
 
+/**
+ * Main game class
+ */
 public class AirHockeyMania extends Game {
 
 	public static final int MAIN_MENU = 0;
@@ -43,6 +46,10 @@ public class AirHockeyMania extends Game {
 		this.database = database;
 	}
 
+    /**
+     * Initializes the main game assets, like preferences and assets, and sets the current menu
+     * to the main menu.
+     */
 	@Override
 	public void create () {
 		preferences = new AppPreferences();
@@ -60,12 +67,19 @@ public class AirHockeyMania extends Game {
 		changeScreen(MAIN_MENU);
 	}
 
+    /**
+     * Loads the menu music.
+     */
 	public void loadMusic()
 	{
 		assetManager.load(MENU_MUSIC, Music.class);
 		assetManager.finishLoading();
 	}
 
+    /**
+     * Changes the current screen to the desired one.
+     * @param screen screen identifier
+     */
 	public void changeScreen(int screen){
 		switch(screen){
 			case MAIN_MENU:
@@ -91,28 +105,51 @@ public class AirHockeyMania extends Game {
 		}
 	}
 
+    /**
+     * Disposes the game's assets.
+     */
 	@Override
 	public void dispose () {
 		batch.dispose();
 		assetManager.dispose();
 	}
 
+    /**
+     * Returns the asset manager.
+     * @return the asset manager.
+     */
 	public AssetManager getAssetManager() {
 		return assetManager;
 	}
 
+    /**
+     * Returns the sprite batch.
+     * @return the sprite batch.
+     */
 	public SpriteBatch getBatch() {
 		return batch;
 	}
 
+    /**
+     * Returns the game's preferences.
+     * @return the game's preferences.
+     */
 	public AppPreferences getPreferences() {
 		return preferences;
 	}
 
+    /**
+     * Returns the game's database.
+     * @return the game's database.
+     */
 	public Database getDatabase() {
 		return database;
 	}
 
+    /**
+     * Returns the menu music.
+     * @return the menu music.
+     */
 	public Music getMenuMusic() {
 		return menuMusic;
 	}

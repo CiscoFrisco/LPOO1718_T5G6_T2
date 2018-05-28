@@ -1,19 +1,14 @@
 package com.ciscominas.airhockeymania.model;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.math.Vector2;
 import com.ciscominas.airhockeymania.controller.GameController;
-import com.ciscominas.airhockeymania.controller.entities.LineBody;
 import com.ciscominas.airhockeymania.model.entities.BotModel;
-import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.model.entities.HandleModel;
 import com.ciscominas.airhockeymania.model.entities.LineModel;
 import com.ciscominas.airhockeymania.model.entities.PowerUpModel;
 import com.ciscominas.airhockeymania.model.entities.PuckModel;
 import com.ciscominas.airhockeymania.utils.BodyUtils;
 import com.ciscominas.airhockeymania.utils.Constants;
-import com.ciscominas.airhockeymania.view.GameView;
 
 import java.util.ArrayList;
 
@@ -41,6 +36,10 @@ public class GameModel {
 
     private PuckModel duplicate;
 
+    /**
+     * Returns the instance of the GameModel, creating it if it doesn't already exist.
+     * @return this instance.
+     */
     public static GameModel getInstance() {
         if (instance == null)
             instance = new GameModel();
@@ -57,19 +56,34 @@ public class GameModel {
         setUpEdges();
     }
 
+    /**
+     * Sets the handles width
+     * @param width the new width
+     */
     public void setHandle(float width)
     {
-        handle.setWidth(width);
+        handle.multWidth(width);
     }
 
+    /**
+     * Creates a new puck model, designed for the DuplicatePuck powerup.
+     */
     public void duplicatePuck() { duplicate =  new PuckModel(Constants.PUCK_X, Constants.PUCK_Y, Constants.PUCK_RADIUS, 0);}
 
+    /**
+     * Creates a new power up, on a random position of the screen.
+     */
     public void newPowerUp()
     {
         Vector2 botPos = BodyUtils.randPosition((int) WIDTH/4,(int)HEIGHT/4, (int) (2*WIDTH/4),(int) (2*HEIGHT/4));
         powerUp = new PowerUpModel(botPos.x, botPos.y, WIDTH/15, 0);
     }
 
+    /**
+     * Sets an edge's with by a given ratio.
+     * @param width the ratio
+     * @param which identifier of the edge
+     */
     public void setEdge(float width, int which)
     {
         LineModel edge = edges.get(which);
@@ -77,6 +91,9 @@ public class GameModel {
         edges.set(which, edge);
     }
 
+    /**
+     * Creates the edges.
+     */
     private void setUpEdges()
     {
         edges = new ArrayList<LineModel>();
@@ -91,26 +108,50 @@ public class GameModel {
         edges.add(new LineModel(WIDTH/2,HEIGHT, WIDTH/2 + 1,HEIGHT/96,UP));
     }
 
+    /**
+     * Returns the puck's model.
+     * @return the puck's model.
+     */
     public PuckModel getPuck() {
         return puck;
     }
 
+    /**
+     * Returns the handle's model.
+     * @return the handle's model.
+     */
     public HandleModel getHandle() {
         return handle;
     }
 
+    /**
+     * Returns the edges models.
+     * @return the edges models.
+     */
     public ArrayList<LineModel> getEdges() {
         return edges;
     }
 
+    /**
+     * Returns the bot's model.
+     * @return the bot's model.
+     */
     public BotModel getBot() {
         return bot;
     }
 
+    /**
+     * Returns the powerup's model.
+     * @return the powerup's model.
+     */
     public PowerUpModel getPowerUp() {
         return powerUp;
     }
 
+    /**
+     * Returns the duplicate's model.
+     * @return the duplicate's model.
+     */
     public PuckModel getDuplicate() {
         return duplicate;
     }

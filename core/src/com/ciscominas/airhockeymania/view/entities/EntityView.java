@@ -9,6 +9,9 @@ import com.ciscominas.airhockeymania.view.GameView;
 
 import static com.ciscominas.airhockeymania.view.GameView.PIXEL_TO_METER;
 
+/**
+ *
+ */
 public abstract class EntityView {
     Sprite sprite;
 

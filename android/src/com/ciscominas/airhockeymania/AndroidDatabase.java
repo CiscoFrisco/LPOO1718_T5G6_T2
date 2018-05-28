@@ -19,13 +19,28 @@ import static com.ciscominas.airhockeymania.utils.Constants.RESULTS_TABLE;
 import static com.ciscominas.airhockeymania.utils.Constants.SCORE1_COLUMN;
 import static com.ciscominas.airhockeymania.utils.Constants.SCORE2_COLUMN;
 
+/**
+ * Implements a database for the android version of the game, using Android's SQLite
+ * interface.
+ */
 public class AndroidDatabase extends SQLiteOpenHelper implements Database{
 
+    /**
+     * Creates an AndroidDatabase object.
+     *
+     * @param context
+     */
     public AndroidDatabase(Context context)
     {
         super(context, DATABASE, null, 1);
     }
 
+    /**
+     * Creates a results table, if it doesn't already exist.
+     * The table will have the following columns: id, player score, bot score, and date, all stored as integers.
+     *
+     * @param db the database
+     */
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(
@@ -34,6 +49,12 @@ public class AndroidDatabase extends SQLiteOpenHelper implements Database{
         );
     }
 
+    /**
+     *
+     * @param db the database
+     * @param oldVersion
+     * @param newVersion
+     */
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
         db.execSQL("DROP TABLE IF EXISTS " + RESULTS_TABLE);
@@ -41,6 +62,12 @@ public class AndroidDatabase extends SQLiteOpenHelper implements Database{
     }
 
 
+    /**
+     * Selects the latest results, ordered by date.
+     * A limit can be specified through the constants class.
+     *
+     * @return an ArrayList containing the latest results.
+     */
     @Override
     public ArrayList<GameResult> selectAll() {
         ArrayList<GameResult> results = new ArrayList<>();
@@ -59,6 +86,10 @@ public class AndroidDatabase extends SQLiteOpenHelper implements Database{
         return results;
     }
 
+    /**
+     * Inserts a result onto the results table.
+     * @param result Result of a game, containing scores and date.
+     */
     @Override
     public void insert(GameResult result) {
         SQLiteDatabase db = this.getWritableDatabase();
