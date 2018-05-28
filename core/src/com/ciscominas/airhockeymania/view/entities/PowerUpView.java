@@ -13,7 +13,7 @@ public class PowerUpView extends EntityView {
 
     @Override
     public Sprite createSprite(AirHockeyMania game) {
-        Texture texture = game.getAssetManager().get("puck.png");
+        Texture texture = game.getAssetManager().get("powerup.png");
 
         return new Sprite(texture, texture.getWidth(), texture.getHeight());
     }

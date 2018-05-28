@@ -15,7 +15,7 @@ public class BotBody extends EntityBody {
 
         super(world, model, type);
 
-        bot = new Bot('H');
+        bot = new Bot("Hard");
 
         float density = 200000f, friction = 1f, restitution = 0.5f;
 
@@ -37,5 +37,9 @@ public class BotBody extends EntityBody {
     public void setControlOn(boolean control)
     {
         this.controlOn = control;
+    }
+
+    public void setDifficulty(String botDiff) {
+        bot.setDifficulty(botDiff);
     }
 }

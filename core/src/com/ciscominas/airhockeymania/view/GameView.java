@@ -90,6 +90,8 @@ public class GameView extends ScreenAdapter {
 
     private void loadAssets() {
         game.getAssetManager().load("puck.png", Texture.class);
+        game.getAssetManager().load("handle.png", Texture.class);
+        game.getAssetManager().load("powerup.png", Texture.class);
         game.getAssetManager().load("line.png", Texture.class);
         game.getAssetManager().load( "hit.mp3", Sound.class);
         game.getAssetManager().load( "bkg_music1.mp3", Music.class);
@@ -103,6 +105,9 @@ public class GameView extends ScreenAdapter {
         game.getMenuMusic().stop();
         GameController.getInstance().setBegin();
         Gdx.input.setInputProcessor(new InputHandler(this));
+
+        GameController.getInstance().setBotDiff(game.getPreferences().getDifficulty());
+
         if(game.getPreferences().isMusicEnabled())
         {
             bkg_music.setVolume(game.getPreferences().getMusicVolume());

@@ -8,6 +8,11 @@ Just make sure not to update gradle even if the IDE asks for it!
 
 ## App Setup
 
+Desktop: Run the provided .jar on both Windows and Linux, with a double-click or ENTER. Obviously, the latest
+JRE is recommended.
+
+Android: Run the provided .apk, after allowing installation of external apps.
+
 ## UML
 
 ### Package and Class Diagram

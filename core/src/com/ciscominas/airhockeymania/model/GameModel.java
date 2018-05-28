@@ -67,7 +67,7 @@ public class GameModel {
     public void newPowerUp()
     {
         Vector2 botPos = BodyUtils.randPosition((int) WIDTH/4,(int)HEIGHT/4, (int) (2*WIDTH/4),(int) (2*HEIGHT/4));
-        powerUp = new PowerUpModel(botPos.x, botPos.y, WIDTH/20, 0);
+        powerUp = new PowerUpModel(botPos.x, botPos.y, WIDTH/15, 0);
     }
 
     public void setEdge(float width, int which)

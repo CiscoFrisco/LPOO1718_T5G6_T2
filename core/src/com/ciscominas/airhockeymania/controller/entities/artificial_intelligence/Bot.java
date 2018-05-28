@@ -15,32 +15,39 @@ public class Bot {
     String state;
     boolean hasPrediction;
     Vector2 prediction;
-    char difficulty;
+    String difficulty;
 
 
-    public Bot(char diff){
-        switch(diff)
-        {
-            case 'E': //easy
-                alert_radius = GameController.ARENA_WIDTH/3;
-                reaction_vel = GameController.ARENA_WIDTH/8;
-                break;
-            case 'N': //normal
-                alert_radius = GameController.ARENA_WIDTH/2;
-                reaction_vel = GameController.ARENA_WIDTH/4;
-                break;
-            case 'H': //hard
-                alert_radius = GameController.ARENA_HEIGHT/3;
-                reaction_vel = GameController.ARENA_WIDTH/2;
-                break;
-            default:
-                break;
-        }
+    public Bot(String diff){
 
         difficulty = diff;
+        setValues();
+
         prediction = new Vector2();
         state = "RESET";
         hasPrediction = false;
+    }
+
+    public void setDifficulty(String diff)
+    {
+        difficulty = diff;
+        setValues();
+    }
+
+    private void setValues()
+    {
+        if(difficulty == "Easy") {
+            alert_radius = GameController.ARENA_WIDTH/3;
+            reaction_vel = GameController.ARENA_WIDTH/8;
+        }
+        else if(difficulty == "Medium") {
+            alert_radius = GameController.ARENA_WIDTH/2;
+            reaction_vel = GameController.ARENA_WIDTH/4;
+        }
+        else {
+            alert_radius = GameController.ARENA_HEIGHT / 3;
+            reaction_vel = GameController.ARENA_WIDTH / 2;
+        }
     }
 
     public void move(PuckBody puck){
@@ -70,7 +77,7 @@ public class Bot {
 
     public void defend(Vector2 prediction)
     {
-        System.out.println("deffend");
+        System.out.println("defend");
 
         Vector2 puck_pos = GameController.getInstance().getPuckBody().getBody().getPosition();
 

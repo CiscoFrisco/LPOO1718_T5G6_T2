@@ -311,4 +311,8 @@ public class GameController {
     public float getVolume() {
         return volume;
     }
+
+    public void setBotDiff(String botDiff) {
+        this.botBody.setDifficulty(botDiff);
+    }
 }
