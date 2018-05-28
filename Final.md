@@ -36,6 +36,33 @@ Android: Run the provided .apk, after allowing installation of external apps.
 
 ## Relevant Design Decisions
 
+Some of the following may have already been explained elsewhere, but we feel these are the most
+import design decision in our project.
+
+- MVC
+
+    Initially we had another structure, but after careful thought we decided this was the best way to model the project. This way each task is split accordingly and we can more easily detect bugs, or refactor the code.
+
+- PowerUp
+
+    Since we needed to inject something 'original', we decided to introduce powerups. In order to implement them, we used the Strategy design pattern: the power up body also holds a reference to a power up type, which can be changed any time and holds the main logic in other classes that implement that interface. In the GameController update method, 3 methods are effectively called:
+    
+    - check: responsible for checking if the power up has been activated by the puck passing through it.
+    - effect: makes changes on the world based on the type.
+    - reset: resets the changes made by the power up.
+
+    The main functionality is the following: 5 seconds after the beggining of the game, a power up is created and put on the world. After the puck passes through it, it is activated and the body is erased. When a goal is scored, the power up is deactivated and the timer restarts, thus 5 seconds later a neW power up comes up.
+
+- Database
+
+    Since there's no way to use the same database for Android and Desktop, the main game class will hold
+    an object that implements the Database interface. In Android, it will be AndroidDatabase (using Android's SQLite interface), and in Desktop it will be DesktopDatabase (using jqbc library for SQLite). Thus, in each device, the user will have access to their previous results, independently of the operative system.
+
+- Bot
+
+    In this case we decided not to use derived classes or implement the Strategy interface. There are 3
+    difficulties (Easy, Medium and Hard), and the only difference are some internal values like the distance to the puck before the bot starts to calculate trajectories, etc.
+
 ## Major Difficulties
 
 Since this was our first time working with Android and libgdx, we had a touch time learning
@@ -77,3 +104,26 @@ As explained above, we had to follow some external tutorials in order to complet
 - Recurring questions: libgdx wiki, stack overflow and similar sites
 
 ## User manual
+
+### Menus
+
+By clicking the buttons, the user will be redirected to their respective menus. Besides New Game, all of them have a Back Button to allow them to comeback to the main menu.
+In the Game screen, there is a pause button, which also allows the user to quit and comeback to the main menu.
+
+- New Game: Starts a new AirHockeyMania game, with settings that are available in the Preferences menu.
+
+- Preferences: Allows the user to change settings like Music, Sound and bot difficulty.
+
+- Results: Shows (at most) the 10 latest results to the user: the game score and date.
+
+- Exit: Exits the game.
+
+### In-Game
+
+Your handle is in the lower half of the game and you are not allowed to go the upper one.
+In order to move it, touch and drag your phone, or move your mouse around while clicking on the screen.
+In order to score, hit the puck and hope the bot lets it go into the net.
+Some power ups may show up, in order to gain them, send the puck in their direction, and it will
+be activated. Some of them may spoil the bot, but be careful. The bot may also get the powerup, thus affecting you!
+
+You can pause the game by pressing the button at the top right corner. There are options to activate/deactivate music and sounds and to resume/exit the game.
