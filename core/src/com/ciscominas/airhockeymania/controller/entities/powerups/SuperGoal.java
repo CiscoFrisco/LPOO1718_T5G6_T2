@@ -11,13 +11,32 @@ import com.ciscominas.airhockeymania.utils.WorldUtils;
 
 import java.util.ArrayList;
 
+/**
+ * Represents a powerUpType that increases a player's goal size.
+ */
 public class SuperGoal implements PowerUpType {
+    /**
+     * String referring to who was the last to touch the puck. This entity is referred as the powerUp owner.
+     */
     private String lastTouch;
+
+    /**
+     * Resize ratio applied once the powerUp is activated.
+     */
     private static final float EFFECT_RATIO = 0.5f;
+    /**
+     * Resize ratio applied once the powerUp is deactivated.
+     */
     private static final float RESET_RATIO = 2f;
+    /**
+     * Mask used to detect collision with the edges since this powerUp will create new Edges.
+     */
     private static final short mask = EntityBody.PUCK_BODY | EntityBody.HANDLE_BODY;
 
-
+    /**
+     * This powerUp has the purpose of harming the player that wasn't the last to touch the puck.
+     * According to the lastTouch attribute this function will increase the bot's goal size or the player's goal size.
+     */
     @Override
     public void effect() {
         lastTouch = GameController.getInstance().getLastTouch();
@@ -28,6 +47,9 @@ public class SuperGoal implements PowerUpType {
             effectEdges(0,1, EFFECT_RATIO);
     }
 
+    /**
+     * Resizes bot or player goal back to it's default size according to the lastTouch attribute.
+     */
     @Override
     public void reset() {
 
@@ -37,6 +59,12 @@ public class SuperGoal implements PowerUpType {
             effectEdges(0,1, RESET_RATIO);
     }
 
+    /**
+     * Resizes both edges of the goal accoridng to a certain ratio.
+     * @param which1 Edge of the goal.
+     * @param which2 Edge of the goal.
+     * @param ratio Ratio by which the current size will be multiplied.
+     */
     private void effectEdges(int which1, int which2, float ratio)
     {
         WorldUtils.destroyBody(GameController.getInstance().getEdges().get(which1).getBody());
@@ -51,6 +79,10 @@ public class SuperGoal implements PowerUpType {
         GameController.getInstance().setLine(new LineBody(world, models.get(which2), BodyDef.BodyType.StaticBody, mask), which2);
     }
 
+    /**
+     * Checks whether or not the PowerUp should be deactivated.
+     * @return Return true if it should be deactivated, false otherwise.
+     */
     @Override
     public boolean check() {
         return false;

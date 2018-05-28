@@ -13,8 +13,16 @@ import com.ciscominas.airhockeymania.model.entities.PuckModel;
 import static com.ciscominas.airhockeymania.utils.Constants.RIGHT;
 import static com.ciscominas.airhockeymania.utils.Constants.LEFT;
 
+/**
+ * Controls the collision of the World
+ */
 public class ContactHandler implements ContactListener {
-
+    /**
+     * Checks the contact between different world elements and acts according to the entities that collided.
+     * When a puck colides with a handle, lastTouch is updated for powerUp purposes.
+     * Also if bot collides with the puck, the bot's behaviour state attribute is updated (RESET).
+     * @param contact COntact established between world elements.
+     */
     @Override
     public void beginContact(Contact contact) {
         Body b1 = contact.getFixtureA().getBody();
@@ -64,17 +72,6 @@ public class ContactHandler implements ContactListener {
             ((PuckModel) b2UserData).resetWallBounce();
 
         }
-        else if(b1UserData instanceof PuckModel && b2UserData instanceof LineModel &&
-                (((LineModel) b2UserData).getPos()==RIGHT || ((LineModel) b2UserData).getPos()==LEFT))
-        {
-            ((PuckModel) b1UserData).incWallBounce();
-        }
-        else if(b2UserData instanceof PuckModel && b1UserData instanceof LineModel &&
-                (((LineModel) b1UserData).getPos()==RIGHT || ((LineModel) b1UserData).getPos()==LEFT))
-        {
-            ((PuckModel) b2UserData).incWallBounce();
-        }
-
     }
 
     @Override

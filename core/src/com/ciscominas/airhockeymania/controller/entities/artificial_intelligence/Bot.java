@@ -8,32 +8,60 @@ import com.ciscominas.airhockeymania.utils.Constants;
 
 import java.util.Random;
 
+/**
+ * Controls the behaviour of the Bot
+ */
 public class Bot {
 
+    /**
+     * Bot alert range. It will only react when a puck enters the area within this range.
+     */
     float alert_radius;
+    /**
+     * Bot movement velocity.
+     */
     float reaction_vel;
+    /**
+     * Represents the bot current state, affecting the current behaviour (attacking, defending or waiting)
+     */
     String state;
+    /**
+     * Indicates whether or not the bot as calculated a prediction to where the puck will move.
+     */
     boolean hasPrediction;
+    /**
+     * Bot prediction to where the puck will move.
+     */
     Vector2 prediction;
+    /**
+     * Bot difficulty. Affects other attributes like reaction_vel and alert_radius.
+     */
     String difficulty;
 
-
-    public Bot(String diff){
-
-        difficulty = diff;
-        setValues();
+    /**
+     *  Bot constructor.
+     *  Attributes are initialized with some default values(not depending on the difficulty).
+     */
+    public Bot(){
 
         prediction = new Vector2();
         state = "RESET";
         hasPrediction = false;
     }
 
+    /**
+     * Updates the current difficulty and the attributes that depend from it.
+     * @param diff Bot intelligence
+     */
     public void setDifficulty(String diff)
     {
         difficulty = diff;
         setValues();
     }
 
+    /**
+     * According to the current difficulty sets default values to the alert_radius and reaction_vel attributes.
+     */
     private void setValues()
     {
         if(difficulty == "Easy") {
@@ -50,6 +78,13 @@ public class Bot {
         }
     }
 
+    /**
+     * This function will update the current behaviour (attacking or deffensive behaviour) base on some conditions.
+     * This update will only occur when the puck enters the area within the alert_radius.
+     * It will also call the respective functions according to the current state, acting like a state machine.
+     * @param puck Puck
+     */
+    //provavelmente vai-se mudar o parametro desta função
     public void move(PuckBody puck){
 
        System.out.println(puck.getBody().getLinearVelocity().len());
@@ -75,6 +110,11 @@ public class Bot {
 
     }
 
+    /**
+     * While puck y coordinate is less than bot y coordinate, move bot towards the prediction position.
+     * If the bot fails to get to the prediction position on time (puck y coordinate > bot y coordinate), change bot state back do the initial state(RESET).
+     * @param prediction 2D Vector referring to the final position of the puck (final position corresponds the position where the puck y coordinate is equal to the bot y coordinate).
+     */
     public void defend(Vector2 prediction)
     {
         System.out.println("defend");
@@ -93,6 +133,10 @@ public class Bot {
             changeState("RESET");
     }
 
+    /**
+     * Applies a linear velocity towards the puck.
+     * Changes current state to initial state(RESET) to prevent the bot from start following the puck's movement.
+     */
     public void attack(){
         state = "RESET";
         System.out.println("attack");
@@ -102,26 +146,38 @@ public class Bot {
         GameController.getInstance().getBot().getBody().setLinearVelocity(vel);
     }
 
+    /**
+     * Changes the current state of the bot
+     * @param new_state New state to which the bot will be updated
+     */
     public void changeState(String new_state){
         state = new_state;
     }
 
+    /**
+     * Applies a linear velocity towards the bot's initial position and stops it once it gets there.
+     * It also sets hasPrediction attribute back to it's default value (false).
+     */
     public void reset(){
         //move bot back to his original position
         Vector2 current_botPos = GameController.getInstance().getBot().getBody().getPosition();
 
         if(Math.abs(current_botPos.x - Constants.BOT_X) >  GameController.ARENA_WIDTH/160 || Math.abs(current_botPos.y - Constants.BOT_Y) >  GameController.ARENA_WIDTH/160)
         {
-            System.out.println("entrei");
             GameController.getInstance().getBot().getBody().setLinearVelocity((Constants.BOT_X - current_botPos.x)*reaction_vel,(Constants.BOT_Y - current_botPos.y)*reaction_vel);
         }
         else{
-            System.out.println("tambem");
             GameController.getInstance().getBot().getBody().setLinearVelocity(0,0);
             hasPrediction = false;
         }
     }
 
+    /**
+     * Updates prediction member variable to the final position of the puck.
+     * This function has a while loop that calls a function that calculates a wallBounce from the puck.
+     * It will only leave that loop when the final position is retrieved (final position = position where puck y position = bot y position)
+     * @param puck Puck
+     */
     public void getTrajectory(PuckBody puck){
 
         Vector2 puck_pos = puck.getBody().getPosition();
@@ -134,6 +190,13 @@ public class Bot {
         }
     }
 
+    /**
+     * This function uses vectorial algebra to calculate where the puck bounces in the field.
+     * If it reaches/goes over the bots y coordinate, it will calculate the final position.
+     * @param puck_pos Puck's current position
+     * @param puck_vel Pucc's current velocity
+     * @return Return whether or not the final position has been calculated.
+     */
     public boolean calculateWallBounce(Vector2 puck_pos, Vector2 puck_vel)
     {
         float x_pos = 0;

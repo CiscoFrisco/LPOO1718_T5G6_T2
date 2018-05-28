@@ -7,10 +7,20 @@ import com.ciscominas.airhockeymania.controller.entities.HandleBody;
 import com.ciscominas.airhockeymania.model.GameModel;
 import com.ciscominas.airhockeymania.utils.WorldUtils;
 
+/**
+ * Represents a powerUpType that increases a player's handle size.
+ */
 public class SuperHandle implements PowerUpType {
 
+    /**
+     * String referring to who was the last to touch the puck. This entity is referred as the powerUp owner.
+     */
     private String lastTouch;
 
+    /**
+     * This powerUp has the purpose of helping the player that was the last to touch the puck.
+     * According to the lastTouch attribute this function will increase the bot's  handle size or the player's handle size.
+     */
     @Override
     public void effect() {
         lastTouch = GameController.getInstance().getLastTouch();
@@ -29,6 +39,9 @@ public class SuperHandle implements PowerUpType {
         }
     }
 
+    /**
+     * Resizes bot or player handle back to it's default size according to the lastTouch attribute.
+     */
     @Override
     public void reset() {
         if(lastTouch == "PLAYER")
@@ -44,7 +57,11 @@ public class SuperHandle implements PowerUpType {
         }
 
     }
-    
+
+    /**
+     * Checks whether or not the PowerUp should be deactivated.
+     * @return Return true if it should be deactivated, false otherwise.
+     */
     @Override
     public boolean check() {
         return false;
