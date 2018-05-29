@@ -75,6 +75,7 @@ we had to rely on external tutorials to solve our problems.
 The major issues were learning how to use world and screen coordinates, how to use touchDragged
 in order to move the handles and impact the puck, how to setup different difficulties for
 the bot, since we tried to make it as 'human' as possible, and also how to implement a database with SQLite. The problem came when we realised there was no easy solution to use the same methods for Desktop and Android, so after a few hours of searching, we decided to make two databases: one to be used on Android, and another to be used on Desktop. Both implement a common interface, so the core module is not affected.
+Another big problem came when writing unit tests. In our game, Arena and View dimensions are closely related, since the arena should fill the screen. As such, when testing GameController, an error came up because graphics were not initialized. So, we had to put default values into the arena dimensions, that would later be altered by the game view, in case it existed. After fixing this mistake, we still couldn't write tests, as we got some strange compiler errors. Fortunately, after some research, we fixed the build.gradle file and we could finally start unit testing. Unfortunately, some features could not be tested, like Views and Preferences.
 
 ## Lessons Learned
 
