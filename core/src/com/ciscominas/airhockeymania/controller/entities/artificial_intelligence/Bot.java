@@ -104,7 +104,6 @@ public class Bot {
             }
         }
 
-        System.out.println(state);
         if (state == "DEFEND" && hasPrediction)
             defend(prediction, puck);
         else if (state == "ATTACK")
@@ -148,8 +147,6 @@ public class Bot {
      */
     public void defend(Vector2 prediction, PuckBody puck)
     {
-        System.out.println("defend");
-
         Vector2 puck_pos = puck.getBody().getPosition();
 
         if(puck_pos.y <= prediction.y ) {
@@ -170,7 +167,6 @@ public class Bot {
      */
     public void attack(PuckBody puck){
         state = "RESET";
-        System.out.println("attack");
         Vector2 bot_pos = GameController.getInstance().getBot().getBody().getPosition();
         Vector2 puck_pos = puck.getBody().getPosition();
         Vector2 vel = new Vector2((puck_pos.x - bot_pos.x) * reaction_vel, (puck_pos.y - bot_pos.y) * reaction_vel);

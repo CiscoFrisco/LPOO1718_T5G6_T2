@@ -13,15 +13,6 @@ import com.ciscominas.airhockeymania.utils.Constants;
 
 import java.util.ArrayList;
 
-import static com.ciscominas.airhockeymania.utils.Constants.DOWN;
-import static com.ciscominas.airhockeymania.utils.Constants.LEFT;
-import static com.ciscominas.airhockeymania.utils.Constants.LOWER_LEFT;
-import static com.ciscominas.airhockeymania.utils.Constants.LOWER_RIGHT;
-import static com.ciscominas.airhockeymania.utils.Constants.MID;
-import static com.ciscominas.airhockeymania.utils.Constants.RIGHT;
-import static com.ciscominas.airhockeymania.utils.Constants.UP;
-import static com.ciscominas.airhockeymania.utils.Constants.UPPER_LEFT;
-import static com.ciscominas.airhockeymania.utils.Constants.UPPER_RIGHT;
 
 public class GameModel {
 
@@ -36,6 +27,11 @@ public class GameModel {
     private float HEIGHT = GameController.ARENA_HEIGHT;
 
     private PuckModel duplicate;
+
+    /**
+     * Keeps track of the last player touching the puck.
+     */
+    private String lastTouch;
 
     /**
      * Returns the instance of the GameModel, creating it if it doesn't already exist.
@@ -98,15 +94,15 @@ public class GameModel {
     private void setUpEdges()
     {
         edges = new ArrayList<LineModel>();
-        edges.add(new LineModel(WIDTH/8,HEIGHT/48,  WIDTH/4,HEIGHT/24,LOWER_LEFT));
-        edges.add(new LineModel(WIDTH - WIDTH/8,HEIGHT/48, WIDTH/4,HEIGHT/24, LOWER_RIGHT));
-        edges.add(new LineModel(WIDTH/8,47*HEIGHT/48,WIDTH/4 ,HEIGHT/24,UPPER_LEFT));
-        edges.add(new LineModel(WIDTH - WIDTH/8,47*HEIGHT/48,WIDTH/4,HEIGHT/24, UPPER_RIGHT));
-        edges.add(new LineModel(WIDTH - WIDTH/32,HEIGHT/2, WIDTH/16,HEIGHT, RIGHT));
-        edges.add(new LineModel(WIDTH/32,HEIGHT/2, WIDTH/16,HEIGHT, LEFT));
-        edges.add(new LineModel(WIDTH/2,HEIGHT/2, WIDTH, HEIGHT/96,MID));
-        edges.add(new LineModel(WIDTH/2,0,WIDTH/2 + 1 ,HEIGHT/96,DOWN));
-        edges.add(new LineModel(WIDTH/2,HEIGHT, WIDTH/2 + 1,HEIGHT/96,UP));
+        edges.add(new LineModel(WIDTH/8,HEIGHT/48,  WIDTH/4,HEIGHT/24));
+        edges.add(new LineModel(WIDTH - WIDTH/8,HEIGHT/48, WIDTH/4,HEIGHT/24));
+        edges.add(new LineModel(WIDTH/8,47*HEIGHT/48,WIDTH/4 ,HEIGHT/24));
+        edges.add(new LineModel(WIDTH - WIDTH/8,47*HEIGHT/48,WIDTH/4,HEIGHT/24));
+        edges.add(new LineModel(WIDTH - WIDTH/32,HEIGHT/2, WIDTH/16,HEIGHT));
+        edges.add(new LineModel(WIDTH/32,HEIGHT/2, WIDTH/16,HEIGHT));
+        edges.add(new LineModel(WIDTH/2,HEIGHT/2, WIDTH, HEIGHT/96));
+        edges.add(new LineModel(WIDTH/2,0,WIDTH/2 + 1 ,HEIGHT/96));
+        edges.add(new LineModel(WIDTH/2,HEIGHT, WIDTH/2 + 1,HEIGHT/96));
     }
 
     /**
@@ -163,5 +159,21 @@ public class GameModel {
      */
     public GameResult getResult() {
         return new GameResult(handle.getScore(), bot.getScore(), System.currentTimeMillis());
+    }
+
+    /**
+     *  Returns the person who last touched the puck.
+     * @return Person who last touched the puck.
+     */
+    public String getLastTouch() {
+        return lastTouch;
+    }
+
+    /**
+     * Sets lastTouch as parameter lasTouch. Called every time there's a collision between a puck and a handle or bot.
+     * @param lastTouch Last touch.
+     */
+    public void setLastTouch(String lastTouch) {
+        this.lastTouch = lastTouch;
     }
 }

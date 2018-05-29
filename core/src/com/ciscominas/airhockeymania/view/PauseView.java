@@ -1,19 +1,13 @@
 package com.ciscominas.airhockeymania.view;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.Event;
 import com.badlogic.gdx.scenes.scene2d.EventListener;
-import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.CheckBox;
 import com.badlogic.gdx.scenes.scene2d.ui.Label;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ciscominas.airhockeymania.AirHockeyMania;
 import com.ciscominas.airhockeymania.controller.GameController;
 
@@ -52,7 +46,7 @@ public class PauseView extends MenuView {
         resumeButton.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(3);
+                game.changeScreen(AirHockeyMania.Screen.GAME);
             }
         });
 
@@ -62,7 +56,7 @@ public class PauseView extends MenuView {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
                 GameController.getInstance().reset();
-                game.changeScreen(0);
+                game.changeScreen(AirHockeyMania.Screen.MAIN);
             }
         });
 
@@ -76,7 +70,6 @@ public class PauseView extends MenuView {
             }
         });
 
-        //music
         soundEffectsCheckbox = new CheckBox(null, skin);
         soundEffectsCheckbox.addListener(new EventListener() {
             @Override

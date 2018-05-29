@@ -1,6 +1,10 @@
 package com.ciscominas.airhockeymania.test;
 
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.World;
 import com.ciscominas.airhockeymania.controller.GameController;
+import com.ciscominas.airhockeymania.controller.entities.PowerUpBody;
 import com.ciscominas.airhockeymania.controller.entities.powerups.DuplicatePucks;
 import com.ciscominas.airhockeymania.controller.entities.powerups.FreezeHandle;
 import com.ciscominas.airhockeymania.controller.entities.powerups.PowerUpType;
@@ -9,6 +13,7 @@ import com.ciscominas.airhockeymania.controller.entities.powerups.SuperHandle;
 import com.ciscominas.airhockeymania.database.DesktopDatabase;
 import com.ciscominas.airhockeymania.database.GameResult;
 import com.ciscominas.airhockeymania.model.GameModel;
+import com.ciscominas.airhockeymania.model.entities.PowerUpModel;
 import com.ciscominas.airhockeymania.utils.Constants;
 import com.ciscominas.airhockeymania.utils.Functions;
 
@@ -35,7 +40,7 @@ public class Test1 {
         assertEquals(gameController.getPuckBodies().get(0).getY(), Constants.PUCK_Y, 0.1f);
     }
 
-    @Test(timeout = 1000)
+    @Test
     public void testDatabase()
     {
         DesktopDatabase database = new DesktopDatabase();
@@ -97,12 +102,70 @@ public class Test1 {
     }
 
     @Test
-    public void test()
+    public void testPowerUps()
     {
+        World world = new World(new Vector2(0,0), true);
+        PowerUpType type;
+        PowerUpModel model = new PowerUpModel(0, 0, 1, 0);
+        PowerUpBody body;
+        GameModel.getInstance().setLastTouch("PLAYER");
+
+        body = new PowerUpBody(world, model, BodyDef.BodyType.StaticBody);
+        type = new SuperGoal();
+        testSuperGoal(type,body);
+
+
+       type = new FreezeHandle();
+        testFreeze(type,body);
+
+        type = new SuperHandle();
+        testSuperHandle(type,body);
+
+        type = new DuplicatePucks();
+        testDuplicatePucks(type,body);
 
     }
 
+    private void testSuperGoal(PowerUpType type, PowerUpBody body) {
 
+        assertEquals(GameModel.getInstance().getEdges().get(2).getWidth(), 4, 0.1f);
+
+        type.effect();
+
+        assertEquals(GameModel.getInstance().getEdges().get(2).getWidth(), 2, 0.1f);
+
+        type.reset();
+
+        assertEquals(GameModel.getInstance().getEdges().get(2).getWidth(), 4, 0.1f);
+    }
+
+    private void testFreeze(PowerUpType type, PowerUpBody body) {
+
+        assertTrue(GameController.getInstance().getBot().getControlOn());
+        type.effect();
+        assertFalse(GameController.getInstance().getBot().getControlOn());
+
+        type.reset();
+        assertTrue(GameController.getInstance().getBot().getControlOn());
+    }
+
+    private void testSuperHandle(PowerUpType type, PowerUpBody body) {
+        assertEquals(GameModel.getInstance().getHandle().getWidth(), Constants.HANDLE_RADIUS,0.1f);
+        type.effect();
+        assertEquals(GameModel.getInstance().getHandle().getWidth(), 2*Constants.HANDLE_RADIUS,0.1f);
+        type.reset();
+        assertEquals(GameModel.getInstance().getHandle().getWidth(), Constants.HANDLE_RADIUS,0.1f);
+
+    }
+
+    private void testDuplicatePucks(PowerUpType type, PowerUpBody body) {
+        assertEquals(GameController.getInstance().getPuckBodies().size(), 1);
+        type.effect();
+        assertEquals(GameController.getInstance().getPuckBodies().size(), 2);
+        type.reset();
+        assertEquals(GameController.getInstance().getPuckBodies().size(), 1);
+
+    }
 
 
 }

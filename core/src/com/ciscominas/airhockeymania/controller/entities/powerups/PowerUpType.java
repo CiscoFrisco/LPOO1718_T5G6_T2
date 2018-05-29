@@ -13,10 +13,4 @@ public interface PowerUpType {
      * Resets the current powerUp by deleting its changes and updates its values back to their respective default values.
      */
     void reset();
-
-    /**
-     * Checks whether or not the PowerUp should be deactivated.
-     * @return Return true if it should be deactivated, false otherwise.
-     */
-    boolean check();
 }

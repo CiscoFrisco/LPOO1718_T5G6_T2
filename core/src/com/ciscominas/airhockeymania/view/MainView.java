@@ -1,16 +1,10 @@
 package com.ciscominas.airhockeymania.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.ScreenAdapter;
-import com.badlogic.gdx.assets.loaders.SkinLoader;
-import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
-import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ciscominas.airhockeymania.AirHockeyMania;
 
 /**
@@ -52,21 +46,21 @@ public class MainView extends MenuView {
         newGame.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(AirHockeyMania.GAME_SCREEN);
+                game.changeScreen(AirHockeyMania.Screen.GAME);
             }
         });
 
         preferences.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(AirHockeyMania.PREFERENCES_MENU);
+                game.changeScreen(AirHockeyMania.Screen.PREFERENCES);
             }
         });
 
         results.addListener(new ChangeListener() {
             @Override
             public void changed(ChangeEvent event, Actor actor) {
-                game.changeScreen(AirHockeyMania.RESULTS_SCREEN);
+                game.changeScreen(AirHockeyMania.Screen.RESULTS);
             }
         });
     }

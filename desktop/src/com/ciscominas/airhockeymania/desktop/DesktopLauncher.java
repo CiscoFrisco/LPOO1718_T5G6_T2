@@ -11,8 +11,8 @@ import com.ciscominas.airhockeymania.utils.Constants;
 public class DesktopLauncher {
 	public static void main (String[] arg) {
 		LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
-		config.width = Constants.APP_WIDTH;
-		config.height = Constants.APP_HEIGHT;
+		config.width = 400;
+		config.height = 600;
 		config.resizable = false;
 		new LwjglApplication(new AirHockeyMania(new DesktopDatabase()), config);
 	}

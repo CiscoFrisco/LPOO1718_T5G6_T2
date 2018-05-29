@@ -39,7 +39,7 @@ public class SuperGoal implements PowerUpType {
      */
     @Override
     public void effect() {
-        lastTouch = GameController.getInstance().getLastTouch();
+        lastTouch = GameModel.getInstance().getLastTouch();
 
        if(lastTouch == "PLAYER")
             effectEdges(2,3, EFFECT_RATIO);
@@ -77,14 +77,5 @@ public class SuperGoal implements PowerUpType {
         World world = GameController.getInstance().getWorld();
         GameController.getInstance().setLine(new LineBody(world, models.get(which1), BodyDef.BodyType.StaticBody, mask), which1);
         GameController.getInstance().setLine(new LineBody(world, models.get(which2), BodyDef.BodyType.StaticBody, mask), which2);
-    }
-
-    /**
-     * Checks whether or not the PowerUp should be deactivated.
-     * @return Return true if it should be deactivated, false otherwise.
-     */
-    @Override
-    public boolean check() {
-        return false;
     }
 }

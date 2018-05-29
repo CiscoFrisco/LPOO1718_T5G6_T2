@@ -50,6 +50,16 @@ public class GameController {
     public static float ARENA_HEIGHT = 24;
 
     /**
+     * Number of seconds between the deactivation of a powerup, and the creation of another
+     */
+    private static final int POWERUP_FREQUENCY = 5;
+
+    /**
+     * Minimum number of goals to win a game
+     */
+    private static final int WIN_SCORE = 5;
+
+    /**
      * The puck body.
      */
     private ArrayList<PuckBody> puckBodies;
@@ -78,11 +88,6 @@ public class GameController {
      * Accumulator used to calculate the simulation step.
      */
     private float accumulator;
-
-    /**
-     * Keeps track of the last player touching the puck.
-     */
-    private String lastTouch;
 
     /**
      * Used, in association to "end" attribute, to count up the time to generate a powerUp.
@@ -225,7 +230,7 @@ public class GameController {
 
         checkPowerUp();
 
-        botBody.getBehaviour().move(puckBodies);
+        botBody.move(puckBodies);
 
         checkScore();
 
@@ -240,13 +245,10 @@ public class GameController {
     {
         long timeElapsed = (end.getTime() - begin.getTime())/1000;
 
-        if(timeElapsed >= Constants.POWERUP_FREQUENCY && powerUpBody == null)
+        if(timeElapsed >= POWERUP_FREQUENCY && powerUpBody == null)
             setUpPowerUp();
-        else if(powerUpBody!=null && powerUpBody.check())
-        {
-            powerUpBody = null;
-            begin = new Date();
-        }
+        else if(powerUpBody != null)
+            powerUpBody.check();
     }
 
     /**
@@ -288,7 +290,7 @@ public class GameController {
             int scorePlayer = GameModel.getInstance().getHandle().getScore();
             int scoreOpponent = GameModel.getInstance().getBot().getScore();
 
-            if ((scoreOpponent >= Constants.WIN_SCORE || scorePlayer >= Constants.WIN_SCORE) && Math.abs(scorePlayer - scoreOpponent) >= 2) {
+            if ((scoreOpponent >= WIN_SCORE || scorePlayer >= WIN_SCORE) && Math.abs(scorePlayer - scoreOpponent) >= 2) {
                 gameOver = true;
                 changed = true;
         }
@@ -331,14 +333,6 @@ public class GameController {
      */
     public HandleBody getHandle() {
         return handleBody;
-    }
-
-    /**
-     *  Returns the person who last touched the puck.
-     * @return Person who last touched the puck.
-     */
-    public String getLastTouch() {
-        return lastTouch;
     }
 
     /**
@@ -416,7 +410,6 @@ public class GameController {
         if(powerUpBody != null && powerUpBody.getBody() != null)
         {
             Functions.destroyBody(powerUpBody.getBody());
-            powerUpBody.getBody().setUserData(null);
             powerUpBody = null;
         }
     }
@@ -434,8 +427,9 @@ public class GameController {
      * @param sounds AssetManager containing the sound wanted.
      */
     public void setSounds(AssetManager sounds) {
-        hit = sounds.get("hit.mp3");
+        hit = sounds.get(Constants.HIT_SOUND);
     }
+
     /**
      *  Sets sound related variables as the ones parsed to the function as parameters.
      * @param volume Volume
@@ -444,14 +438,6 @@ public class GameController {
     public void setSound(float volume, boolean soundEffectsEnabled) {
         soundEnabled = soundEffectsEnabled;
         this.volume = volume;
-    }
-
-    /**
-     * Sets lastTouch as parameter lasTouch. Called every time there's a collision between a puck and a handle or bot.
-     * @param lastTouch Last touch.
-     */
-    public void setLastTouch(String lastTouch) {
-        this.lastTouch = lastTouch;
     }
 
     /**

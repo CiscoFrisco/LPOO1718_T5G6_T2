@@ -10,11 +10,15 @@ import com.ciscominas.airhockeymania.view.GameView;
 import static com.ciscominas.airhockeymania.view.GameView.PIXEL_TO_METER;
 
 /**
- *
+ * Represents an entity on the screen
  */
 public abstract class EntityView {
     Sprite sprite;
 
+    /**
+     * Creates an EntityView object, setting up its sprite
+     * @param game the main game class
+     */
     EntityView(AirHockeyMania game) {
         sprite = createSprite(game);
     }

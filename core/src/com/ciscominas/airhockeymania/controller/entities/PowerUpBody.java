@@ -74,10 +74,9 @@ public class PowerUpBody extends EntityBody {
         if(!active && body != null)
         {
             checkContact();
-            return false;
         }
 
-        return type.check();
+        return false;
     }
 
     /**

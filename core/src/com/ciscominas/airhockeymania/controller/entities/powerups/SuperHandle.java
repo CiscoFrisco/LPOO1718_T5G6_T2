@@ -23,7 +23,7 @@ public class SuperHandle implements PowerUpType {
      */
     @Override
     public void effect() {
-        lastTouch = GameController.getInstance().getLastTouch();
+        lastTouch = GameModel.getInstance().getLastTouch();
 
         if(lastTouch == "PLAYER")
         {
@@ -56,14 +56,5 @@ public class SuperHandle implements PowerUpType {
             GameController.getInstance().setBotBody(new BotBody(GameController.getInstance().getWorld(), GameModel.getInstance().getBot(), BodyDef.BodyType.DynamicBody));
         }
 
-    }
-
-    /**
-     * Checks whether or not the PowerUp should be deactivated.
-     * @return Return true if it should be deactivated, false otherwise.
-     */
-    @Override
-    public boolean check() {
-        return false;
     }
 }

@@ -6,6 +6,8 @@ import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.controller.entities.artificial_intelligence.Bot;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 
+import java.util.ArrayList;
+
 /**
  * Sub-class of EntityBody, represents a bot body.
  */
@@ -32,11 +34,18 @@ public class BotBody extends EntityBody {
         super(world, model, type);
 
         bot = new Bot();
+        controlOn = true;
 
         float density = 200000f, friction = 1f, restitution = 0.5f;
 
         createFixture(body, createShape(model.getWidth(), CIRCLE, 0), density, friction, restitution, HANDLE_BODY,
                 (short) (LINE_BODY |PUCK_BODY));
+    }
+
+    public void move(ArrayList<PuckBody> puckBodies)
+    {
+        if(controlOn)
+            bot.move(puckBodies);
     }
 
     /**
@@ -74,5 +83,9 @@ public class BotBody extends EntityBody {
      */
     public void setDifficulty(String botDiff) {
         bot.setDifficulty(botDiff);
+    }
+
+    public boolean getControlOn() {
+        return controlOn;
     }
 }

@@ -4,7 +4,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.ciscominas.airhockeymania.database.Database;
@@ -22,25 +21,67 @@ import static com.ciscominas.airhockeymania.utils.Constants.MENU_SKIN;
  */
 public class AirHockeyMania extends Game {
 
-	public static final int MAIN_MENU = 0;
-	public static final int PREFERENCES_MENU = 1;
-	public static final int RESULTS_SCREEN = 2;
-	public static final int GAME_SCREEN = 3;
-	public static final int PAUSE_SCREEN = 4;
+	/**
+	 * Screen IDs
+	 */
+	public enum Screen {MAIN, PREFERENCES, RESULTS, GAME, PAUSE}
 
+
+	/**
+	 * Database to store game results
+	 */
 	private Database database;
+
+	/**
+	 * SpriteBatch to draw the elements
+	 */
 	private SpriteBatch batch;
+
+	/**
+	 * Manage sounds, music and textures
+	 */
 	private AssetManager assetManager;
 
+	/**
+	 * Main menu
+	 */
 	private MainView mainMenu;
+
+	/**
+	 * Game screen
+	 */
 	private GameView gameScreen;
+
+	/**
+	 * Preferences screen
+	 */
 	private PreferencesView preferencesScreen;
+
+	/**
+	 * Pause screen
+	 */
 	private PauseView pauseScreen;
+
+	/**
+	 * Results screen
+	 */
 	private ResultsView resultsScreen;
 
+	/**
+	 * Game preferences
+	 */
 	private AppPreferences preferences;
+
+	/**
+	 * Music to be played in the menus
+	 */
 	private Music menuMusic;
 
+	/**
+	 * Builds an AirHockeyMania object. Necessary here in order to correctly initialize the database
+	 * according to the device.
+	 * @param database desktop or android database
+	 */
 	public AirHockeyMania(Database database)
 	{
 		this.database = database;
@@ -64,7 +105,7 @@ public class AirHockeyMania extends Game {
 		assetManager.load(MENU_SKIN, Skin.class, params);
 		assetManager.finishLoading();
 
-		changeScreen(MAIN_MENU);
+		changeScreen(Screen.MAIN);
 	}
 
     /**
@@ -80,25 +121,25 @@ public class AirHockeyMania extends Game {
      * Changes the current screen to the desired one.
      * @param screen screen identifier
      */
-	public void changeScreen(int screen){
+	public void changeScreen(Screen screen){
 		switch(screen){
-			case MAIN_MENU:
+			case MAIN:
 				if(mainMenu == null) mainMenu = new MainView(this);
 				this.setScreen(mainMenu);
 				break;
-			case PREFERENCES_MENU:
+			case PREFERENCES:
 				if(preferencesScreen == null) preferencesScreen = new PreferencesView(this);
 				this.setScreen(preferencesScreen);
 				break;
-			case RESULTS_SCREEN:
+			case RESULTS:
 				if(resultsScreen == null) resultsScreen = new ResultsView(this);
 				this.setScreen(resultsScreen);
 				break;
-			case GAME_SCREEN:
+			case GAME:
 				if(gameScreen == null) gameScreen = new GameView(this);
 				this.setScreen(gameScreen);
 				break;
-			case PAUSE_SCREEN:
+			case PAUSE:
 				if(pauseScreen == null) pauseScreen = new PauseView(this);
 				this.setScreen(pauseScreen);
 				break;

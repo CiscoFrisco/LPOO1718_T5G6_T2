@@ -26,30 +26,4 @@ public class DuplicatePucks implements PowerUpType {
         GameController.getInstance().getPuckBodies().remove(1);
         GameController.getInstance().setBegin();
     }
-
-    public boolean checkScore() {
-        if(puck != null && puck.getBody() != null)
-        {
-            if(puck.getBody().getPosition().y < 0)
-            {
-                GameModel.getInstance().getBot().incScore();
-                GameController.getInstance().resetBodies();
-                reset();
-                return true;
-            } else if (puck.getBody().getPosition().y > GameController.ARENA_HEIGHT) {
-                GameModel.getInstance().getHandle().incScore();
-                GameController.getInstance().resetBodies();
-                reset();
-                return true;
-            }
-        }
-
-        return false;
-
-    }
-
-    public boolean check() {
-
-         return checkScore();
-    }
 }

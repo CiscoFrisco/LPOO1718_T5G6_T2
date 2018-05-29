@@ -105,7 +105,6 @@ public class DesktopDatabase implements Database{
 
             while (rs.next())
                 results.add(new GameResult(rs.getInt(SCORE1_COLUMN), rs.getInt(SCORE2_COLUMN), rs.getLong(DATE_COLUMN)));
-
         } catch (SQLException e) {
             System.out.println("select:" + e.getMessage());
         }
@@ -117,14 +116,12 @@ public class DesktopDatabase implements Database{
 
         String sql = "DELETE FROM " + Constants.RESULTS_TABLE + " WHERE id = (SELECT MAX(id) FROM " +  Constants.RESULTS_TABLE + ")";
 
-
         try{
             Connection conn = connect();
             PreparedStatement pstmt = conn.prepareStatement(sql);
             pstmt.executeUpdate();
         }
-        catch(SQLException e)
-        {
+        catch(SQLException e) {
             System.out.println(e.getMessage());
         }
     }

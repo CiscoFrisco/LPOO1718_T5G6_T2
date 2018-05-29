@@ -1,7 +1,6 @@
 package com.ciscominas.airhockeymania.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
@@ -13,20 +12,18 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 import com.ciscominas.airhockeymania.AirHockeyMania;
 import com.ciscominas.airhockeymania.controller.GameController;
-import com.ciscominas.airhockeymania.controller.entities.EntityBody;
 import com.ciscominas.airhockeymania.controller.entities.powerups.DuplicatePucks;
 import com.ciscominas.airhockeymania.model.GameModel;
-import com.ciscominas.airhockeymania.model.entities.BotModel;
-import com.ciscominas.airhockeymania.model.entities.HandleModel;
-import com.ciscominas.airhockeymania.model.entities.LineModel;
-import com.ciscominas.airhockeymania.model.entities.PowerUpModel;
-import com.ciscominas.airhockeymania.model.entities.PuckModel;
+import com.ciscominas.airhockeymania.model.entities.*;
 import com.ciscominas.airhockeymania.view.entities.EntityView;
-import com.ciscominas.airhockeymania.view.entities.PuckView;
 import com.ciscominas.airhockeymania.view.entities.ViewFactory;
 
 import java.util.ArrayList;
 
+/**
+ * The game screen. Responsible for showing the game elements to the user, receiving input,
+ * and senting it to the game controller.
+ */
 public class GameView extends ScreenAdapter {
 
     private static final boolean DEBUG_PHYSICS = true;
@@ -55,6 +52,11 @@ public class GameView extends ScreenAdapter {
 
     private BitmapFont score;
 
+    /**
+     * Builds a GameView object. Loads the assets, sets up the camera and sends the screen coordinates
+     * to the GameController.
+     * @param game the main game class
+     */
     public GameView(AirHockeyMania game) {
         this.game = game;
 
@@ -66,13 +68,17 @@ public class GameView extends ScreenAdapter {
         bkg_music.setLooping(true);
 
         pause = game.getAssetManager().get("pause.png");
-        score =new BitmapFont();
+        score = new BitmapFont();
         camera = createCamera();
     }
 
+    /**
+     * Creates a camera and sets its position to the center.
+     * @return the game camera
+     */
     private OrthographicCamera createCamera() {
 
-        VIEWPORT_HEIGHT = GameController.ARENA_HEIGHT;  //VIEWPORT_WIDTH * ((float) Gdx.graphics.getHeight() / (float)Gdx.graphics.getWidth());
+        VIEWPORT_HEIGHT = GameController.ARENA_HEIGHT;
         PAUSE_Y = VIEWPORT_HEIGHT/PIXEL_TO_METER - PAUSE_WIDTH;
         OrthographicCamera camera = new OrthographicCamera(VIEWPORT_WIDTH / PIXEL_TO_METER, VIEWPORT_HEIGHT/PIXEL_TO_METER);
 
@@ -88,7 +94,9 @@ public class GameView extends ScreenAdapter {
         return camera;
     }
 
-
+    /**
+     * Loads the game assets, such as textures and background music.
+     */
     private void loadAssets() {
         game.getAssetManager().load("puck.png", Texture.class);
         game.getAssetManager().load("handle.png", Texture.class);
@@ -100,6 +108,9 @@ public class GameView extends ScreenAdapter {
         game.getAssetManager().finishLoading();
     }
 
+    /**
+     * Shows the screen to the user, playing the background music if enabled, and setting the bot's difficulty.
+     */
     @Override
     public void show() {
         super.show();
@@ -120,6 +131,10 @@ public class GameView extends ScreenAdapter {
         GameController.getInstance().setSound(game.getPreferences().getSoundVolume(), game.getPreferences().isSoundEffectsEnabled());
     }
 
+    /**
+     * Draw the entities to the screen, along with the score.
+     * @param delta
+     */
     public void render(float delta) {
         GameController.getInstance().update(delta);
 
@@ -152,6 +167,9 @@ public class GameView extends ScreenAdapter {
         }
     }
 
+    /**
+     * Draw the duplicate puck to the screen if its corresponding power up is active.
+     */
     private void drawDuplicate() {
         PuckModel duplicate = GameModel.getInstance().getDuplicate();
 
@@ -160,6 +178,9 @@ public class GameView extends ScreenAdapter {
         view.draw(game.getBatch());
     }
 
+    /**
+     * Draw the power up to the screen.
+     */
     private void drawPowerUp() {
 
         PowerUpModel powerUp = GameModel.getInstance().getPowerUp();
@@ -170,6 +191,9 @@ public class GameView extends ScreenAdapter {
         view.draw(game.getBatch());
     }
 
+    /**
+     * Draw entities to the screen: puck, edges and handles.
+     */
     private void drawEntities()
     {
         ArrayList<LineModel> lines = GameModel.getInstance().getEdges();
@@ -203,23 +227,34 @@ public class GameView extends ScreenAdapter {
         view.draw(game.getBatch());
     }
 
+    /**
+     * Checks if the game is over. In that case, resets the gamecontroller, stops the music and
+     * sends a new result to the database.
+     */
     public void checkGameOver()
     {
         if(GameController.getInstance().isGameOver())
         {
-            game.changeScreen(0);
+            game.changeScreen(AirHockeyMania.Screen.MAIN);
             bkg_music.stop();
             game.getDatabase().insert(GameModel.getInstance().getResult());
             GameController.getInstance().reset();
         }
     }
 
+    /**
+     * Returns this camera.
+     * @return the camera.
+     */
     public OrthographicCamera getCamera() {
         return camera;
     }
 
+    /**
+     * Pauses the game, stopping the music and changing to the pause screen.
+     */
     public void pauseGame() {
         bkg_music.stop();
-        game.changeScreen(AirHockeyMania.PAUSE_SCREEN);
+        game.changeScreen(AirHockeyMania.Screen.PAUSE);
     }
 }
