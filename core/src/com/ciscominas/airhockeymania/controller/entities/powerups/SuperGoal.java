@@ -7,7 +7,7 @@ import com.ciscominas.airhockeymania.controller.entities.EntityBody;
 import com.ciscominas.airhockeymania.controller.entities.LineBody;
 import com.ciscominas.airhockeymania.model.GameModel;
 import com.ciscominas.airhockeymania.model.entities.LineModel;
-import com.ciscominas.airhockeymania.utils.WorldUtils;
+import com.ciscominas.airhockeymania.utils.Functions;
 
 import java.util.ArrayList;
 
@@ -67,8 +67,8 @@ public class SuperGoal implements PowerUpType {
      */
     private void effectEdges(int which1, int which2, float ratio)
     {
-        WorldUtils.destroyBody(GameController.getInstance().getEdges().get(which1).getBody());
-        WorldUtils.destroyBody(GameController.getInstance().getEdges().get(which2).getBody());
+        Functions.destroyBody(GameController.getInstance().getEdges().get(which1).getBody());
+        Functions.destroyBody(GameController.getInstance().getEdges().get(which2).getBody());
 
         GameModel.getInstance().setEdge(ratio, which1);
         GameModel.getInstance().setEdge(ratio, which2);

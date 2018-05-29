@@ -39,9 +39,7 @@ public class ContactHandler implements ContactListener {
 
             if(controller.isSoundEnabled())
                 controller.getHit().play(controller.getVolume());
-
-            ((PuckModel) b1UserData).resetWallBounce();
-        }
+            }
         else if (b2UserData instanceof PuckModel && b1UserData instanceof HandleModel)
         {
             b2.setLinearVelocity(controller.getHandle().getVel().add(b2.getLinearVelocity()));
@@ -50,27 +48,18 @@ public class ContactHandler implements ContactListener {
             if(controller.isSoundEnabled())
                 controller.getHit().play(controller.getVolume());
 
-
-            ((PuckModel) b2UserData).resetWallBounce();
-
         }
         else if(b1UserData instanceof PuckModel && b2UserData instanceof BotModel)
         {
             controller.setLastTouch("BOT");
             GameController.getInstance().getBot().getBehaviour().changeState("RESET");
             if(controller.isSoundEnabled())
-                controller.getHit().play(controller.getVolume());
-
-            ((PuckModel) b1UserData).resetWallBounce();
-        }
+                controller.getHit().play(controller.getVolume()); }
         else if (b2UserData instanceof PuckModel && b1UserData instanceof BotModel) {
             controller.setLastTouch("BOT");
             GameController.getInstance().getBot().getBehaviour().changeState("RESET");
             if(controller.isSoundEnabled())
                 controller.getHit().play(controller.getVolume());
-
-            ((PuckModel) b2UserData).resetWallBounce();
-
         }
     }
 

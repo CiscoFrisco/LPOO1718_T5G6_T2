@@ -4,7 +4,6 @@ import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.controller.entities.PuckBody;
 import com.ciscominas.airhockeymania.model.GameModel;
-import com.ciscominas.airhockeymania.utils.BodyUtils;
 
 public class DuplicatePucks implements PowerUpType {
 
@@ -14,8 +13,9 @@ public class DuplicatePucks implements PowerUpType {
     public void effect() {
         GameModel.getInstance().duplicatePuck();
         puck = new PuckBody(GameController.getInstance().getWorld(), GameModel.getInstance().getDuplicate(), BodyDef.BodyType.DynamicBody);
-        puck.setTransform(GameController.getInstance().getPuckBody().getX(),GameController.getInstance().getPuckBody().getY(),0);
-        puck.setLinearVelocity(-GameController.getInstance().getPuckBody().getLinearVelocity().x,GameController.getInstance().getPuckBody().getLinearVelocity().y);
+        puck.setTransform(GameController.getInstance().getPuckBodies().get(0).getX(),GameController.getInstance().getPuckBodies().get(0).getY(),0);
+        puck.setLinearVelocity(-GameController.getInstance().getPuckBodies().get(0).getLinearVelocity().x,GameController.getInstance().getPuckBodies().get(0).getLinearVelocity().y);
+        GameController.getInstance().getPuckBodies().add(puck);
     }
 
     @Override
@@ -23,6 +23,7 @@ public class DuplicatePucks implements PowerUpType {
         GameController.getInstance().getWorld().destroyBody(puck.getBody());
         puck.setUserData(null);
         puck.deleteBody();
+        GameController.getInstance().getPuckBodies().remove(1);
         GameController.getInstance().setBegin();
     }
 
@@ -31,12 +32,12 @@ public class DuplicatePucks implements PowerUpType {
         {
             if(puck.getBody().getPosition().y < 0)
             {
-                GameController.getInstance().incScoreOpponent();
+                GameModel.getInstance().getBot().incScore();
                 GameController.getInstance().resetBodies();
                 reset();
                 return true;
             } else if (puck.getBody().getPosition().y > GameController.ARENA_HEIGHT) {
-                GameController.getInstance().incScorePlayer();
+                GameModel.getInstance().getHandle().incScore();
                 GameController.getInstance().resetBodies();
                 reset();
                 return true;

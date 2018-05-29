@@ -2,10 +2,13 @@ package com.ciscominas.airhockeymania.controller.entities.artificial_intelligenc
 
 import com.badlogic.gdx.math.Vector2;
 import com.ciscominas.airhockeymania.controller.GameController;
+import com.ciscominas.airhockeymania.controller.entities.BotBody;
 import com.ciscominas.airhockeymania.controller.entities.PuckBody;
 import com.ciscominas.airhockeymania.model.GameModel;
 import com.ciscominas.airhockeymania.utils.Constants;
 
+import java.lang.reflect.Array;
+import java.util.ArrayList;
 import java.util.Random;
 
 /**
@@ -82,12 +85,13 @@ public class Bot {
      * This function will update the current behaviour (attacking or deffensive behaviour) base on some conditions.
      * This update will only occur when the puck enters the area within the alert_radius.
      * It will also call the respective functions according to the current state, acting like a state machine.
-     * @param puck Puck
+     * @param puckBodies Array of Pucks
      */
     //provavelmente vai-se mudar o parametro desta função
-    public void move(PuckBody puck){
+    public void move(ArrayList<PuckBody> puckBodies){
 
-       System.out.println(puck.getBody().getLinearVelocity().len());
+        PuckBody puck = getClosestPuck(puckBodies);
+
         if(puck.getBody().getPosition().sub(GameController.getInstance().getBot().getBody().getPosition()).len() < alert_radius)
         {
            if(puck.getBody().getLinearVelocity().len() < GameController.ARENA_HEIGHT /4.0 )
@@ -102,12 +106,39 @@ public class Bot {
 
         System.out.println(state);
         if (state == "DEFEND" && hasPrediction)
-            defend(prediction);
+            defend(prediction, puck);
         else if (state == "ATTACK")
-            attack();
+            attack(puck);
         else
             reset();
 
+    }
+
+    private PuckBody getClosestPuck(ArrayList<PuckBody> puckBodies) {
+
+        PuckBody puck = puckBodies.get(0);
+        Vector2 puck_pos = puck.getBody().getPosition();
+        Vector2 bot_pos = GameController.getInstance().getBot().getBody().getPosition();
+        float distance = getDistance(bot_pos,puck_pos);
+        float min_distance = distance;
+
+        for(PuckBody puckBody: puckBodies)
+        {
+            distance = getDistance(puckBody.getBody().getPosition(),bot_pos);
+
+            if(distance <= min_distance)
+            {
+                puck = puckBody;
+                min_distance = distance;
+            }
+        }
+
+        return puck;
+    }
+
+    private float getDistance(Vector2 vector1, Vector2 vector2){
+
+        return new Vector2(vector2.x - vector1.x, vector2.y - vector1.y).len();
     }
 
     /**
@@ -115,11 +146,11 @@ public class Bot {
      * If the bot fails to get to the prediction position on time (puck y coordinate > bot y coordinate), change bot state back do the initial state(RESET).
      * @param prediction 2D Vector referring to the final position of the puck (final position corresponds the position where the puck y coordinate is equal to the bot y coordinate).
      */
-    public void defend(Vector2 prediction)
+    public void defend(Vector2 prediction, PuckBody puck)
     {
         System.out.println("defend");
 
-        Vector2 puck_pos = GameController.getInstance().getPuckBody().getBody().getPosition();
+        Vector2 puck_pos = puck.getBody().getPosition();
 
         if(puck_pos.y <= prediction.y ) {
             if (GameController.getInstance().getBot().getX() > prediction.x + GameController.ARENA_WIDTH/160)
@@ -137,11 +168,11 @@ public class Bot {
      * Applies a linear velocity towards the puck.
      * Changes current state to initial state(RESET) to prevent the bot from start following the puck's movement.
      */
-    public void attack(){
+    public void attack(PuckBody puck){
         state = "RESET";
         System.out.println("attack");
         Vector2 bot_pos = GameController.getInstance().getBot().getBody().getPosition();
-        Vector2 puck_pos = GameController.getInstance().getPuckBody().getBody().getPosition();
+        Vector2 puck_pos = puck.getBody().getPosition();
         Vector2 vel = new Vector2((puck_pos.x - bot_pos.x) * reaction_vel, (puck_pos.y - bot_pos.y) * reaction_vel);
         GameController.getInstance().getBot().getBody().setLinearVelocity(vel);
     }

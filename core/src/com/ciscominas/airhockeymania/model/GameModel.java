@@ -2,12 +2,13 @@ package com.ciscominas.airhockeymania.model;
 
 import com.badlogic.gdx.math.Vector2;
 import com.ciscominas.airhockeymania.controller.GameController;
+import com.ciscominas.airhockeymania.database.GameResult;
 import com.ciscominas.airhockeymania.model.entities.BotModel;
 import com.ciscominas.airhockeymania.model.entities.HandleModel;
 import com.ciscominas.airhockeymania.model.entities.LineModel;
 import com.ciscominas.airhockeymania.model.entities.PowerUpModel;
 import com.ciscominas.airhockeymania.model.entities.PuckModel;
-import com.ciscominas.airhockeymania.utils.BodyUtils;
+import com.ciscominas.airhockeymania.utils.Functions;
 import com.ciscominas.airhockeymania.utils.Constants;
 
 import java.util.ArrayList;
@@ -75,7 +76,7 @@ public class GameModel {
      */
     public void newPowerUp()
     {
-        Vector2 botPos = BodyUtils.randPosition((int) WIDTH/4,(int)HEIGHT/4, (int) (2*WIDTH/4),(int) (2*HEIGHT/4));
+        Vector2 botPos = Functions.randPosition((int) WIDTH/4,(int)HEIGHT/4, (int) (2*WIDTH/4),(int) (2*HEIGHT/4));
         powerUp = new PowerUpModel(botPos.x, botPos.y, WIDTH/15, 0);
     }
 
@@ -154,5 +155,13 @@ public class GameModel {
      */
     public PuckModel getDuplicate() {
         return duplicate;
+    }
+
+    /**
+     *  Returns the current Game Result.
+     * @return The current Game Result.
+     */
+    public GameResult getResult() {
+        return new GameResult(handle.getScore(), bot.getScore(), System.currentTimeMillis());
     }
 }

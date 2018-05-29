@@ -6,6 +6,11 @@ package com.ciscominas.airhockeymania.model.entities;
 public class BotModel extends EntityModel{
 
     /**
+     * Number of goals scored in a single game
+     */
+    private int score;
+
+    /**
      * Creates a BotModel object.
      * @param x the x-coordinate in meters
      * @param y the y-coordinate in meters
@@ -23,5 +28,19 @@ public class BotModel extends EntityModel{
     @Override
     public ModelType getType() {
         return ModelType.BOT;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void incScore()
+    {
+        score++;
+    }
+
+    public void resetScore()
+    {
+        score = 0;
     }
 }

@@ -1,5 +1,7 @@
 package com.ciscominas.airhockeymania.database;
 
+import com.ciscominas.airhockeymania.utils.Constants;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -109,5 +111,21 @@ public class DesktopDatabase implements Database{
         }
 
         return results;
+    }
+
+    public void clear() {
+
+        String sql = "DELETE FROM " + Constants.RESULTS_TABLE + " WHERE id = (SELECT MAX(id) FROM " +  Constants.RESULTS_TABLE + ")";
+
+
+        try{
+            Connection conn = connect();
+            PreparedStatement pstmt = conn.prepareStatement(sql);
+            pstmt.executeUpdate();
+        }
+        catch(SQLException e)
+        {
+            System.out.println(e.getMessage());
+        }
     }
 }

@@ -10,6 +10,7 @@ import com.ciscominas.airhockeymania.model.entities.EntityModel;
  * Sub-class of EntityBody, represents a bot body.
  */
 public class BotBody extends EntityBody {
+
     /**
      * Bot's behaviour
      */

@@ -2,43 +2,27 @@ package com.ciscominas.airhockeymania.controller;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
-import com.badlogic.gdx.physics.box2d.Contact;
-import com.badlogic.gdx.physics.box2d.ContactImpulse;
-import com.badlogic.gdx.physics.box2d.ContactListener;
-import com.badlogic.gdx.physics.box2d.Manifold;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.ciscominas.airhockeymania.AirHockeyMania;
 import com.ciscominas.airhockeymania.controller.entities.BotBody;
 import com.ciscominas.airhockeymania.controller.entities.EntityBody;
 import com.ciscominas.airhockeymania.controller.entities.HandleBody;
 import com.ciscominas.airhockeymania.controller.entities.LineBody;
 import com.ciscominas.airhockeymania.controller.entities.PowerUpBody;
 import com.ciscominas.airhockeymania.controller.entities.PuckBody;
-import com.ciscominas.airhockeymania.database.GameResult;
 import com.ciscominas.airhockeymania.model.GameModel;
-import com.ciscominas.airhockeymania.model.entities.BotModel;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
-import com.ciscominas.airhockeymania.model.entities.HandleModel;
 import com.ciscominas.airhockeymania.model.entities.LineModel;
-import com.ciscominas.airhockeymania.model.entities.PowerUpModel;
-import com.ciscominas.airhockeymania.model.entities.PuckModel;
-import com.ciscominas.airhockeymania.utils.BodyUtils;
 import com.ciscominas.airhockeymania.utils.Constants;
-import com.ciscominas.airhockeymania.utils.WorldUtils;
+import com.ciscominas.airhockeymania.utils.Functions;
 import com.ciscominas.airhockeymania.view.GameView;
 
 import java.util.ArrayList;
 import java.util.Date;
-
-import static com.ciscominas.airhockeymania.utils.Constants.BOT_X;
-import static com.ciscominas.airhockeymania.utils.Constants.BOT_Y;
-import static com.ciscominas.airhockeymania.utils.WorldUtils.randPowerUp;
 
 /**
  * Implements the in-game logic bringing together all other classes from controller package and making the most of their capabilies.
@@ -58,17 +42,17 @@ public class GameController {
     /**
      * The arena width in meters.
      */
-    public static final float ARENA_WIDTH = Gdx.graphics.getWidth()*GameView.PIXEL_TO_METER;
+    public static float ARENA_WIDTH = 16;
 
     /**
      * The arena height in meters.
      */
-    public static float ARENA_HEIGHT =  Gdx.graphics.getHeight()*GameView.PIXEL_TO_METER;
+    public static float ARENA_HEIGHT = 24;
 
     /**
      * The puck body.
      */
-    private PuckBody puckBody;
+    private ArrayList<PuckBody> puckBodies;
 
     /**
      * The handle body.
@@ -111,16 +95,6 @@ public class GameController {
     private Date end;
 
     /**
-     * Keeps track of the player's score.
-     */
-    private int scorePlayer;
-
-    /**
-     * Keeps track of the opponent's score.
-     */
-    private int scoreOpponent;
-
-    /**
      * Indicates whether or not the game is over.
      */
     private boolean gameOver;
@@ -147,7 +121,6 @@ public class GameController {
     private GameController() {
 
         world = new World(new Vector2(0, 0), true);
-
         setUpBodies();
 
         world.setContactListener(new ContactHandler());
@@ -155,17 +128,29 @@ public class GameController {
     }
 
     /**
-     * Creates all elemnts to be present in the world (puck, handle, bot and edges) except the powerUp.
+     * Creates all elements to be present in the world (puck, handle, bot and edges) except the powerUp.
      */
     private void setUpBodies()
     {
-        puckBody = new PuckBody(world, GameModel.getInstance().getPuck(), BodyDef.BodyType.DynamicBody);
+        puckBodies = new ArrayList<PuckBody>();
+        puckBodies.add(new PuckBody(world, GameModel.getInstance().getPuck(), BodyDef.BodyType.DynamicBody));
 
         handleBody = new HandleBody(world, GameModel.getInstance().getHandle(), BodyDef.BodyType.DynamicBody);
 
         botBody = new BotBody(world, GameModel.getInstance().getBot(), BodyDef.BodyType.DynamicBody);
 
         createEdges();
+    }
+
+    /**
+     * Sets up ARENA_HEIGHT and ARENA_WIDTH. Necessary to perform Unit Tests, since graphics are not available.
+     * So, default values are set.
+     */
+    public static void setUpDimensions()
+    {
+        ARENA_WIDTH = Gdx.graphics.getWidth()*GameView.PIXEL_TO_METER;
+
+        ARENA_HEIGHT =  Gdx.graphics.getHeight()*GameView.PIXEL_TO_METER;
     }
 
     /**
@@ -240,7 +225,7 @@ public class GameController {
 
         checkPowerUp();
 
-        botBody.getBehaviour().move(puckBody);
+        botBody.getBehaviour().move(puckBodies);
 
         checkScore();
 
@@ -286,23 +271,27 @@ public class GameController {
     {
         boolean changed = false;
 
-        if(puckBody.getBody().getPosition().y < -2)
-        {
-            scoreOpponent++;
-            changed = true;
-            handleGoal();
+        for(PuckBody puckBody: puckBodies) {
+            if (puckBody.getBody().getPosition().y < -2) {
+                GameModel.getInstance().getBot().incScore();
+                changed = true;
+                handleGoal();
+                break;
 
-        } else if (puckBody.getBody().getPosition().y > GameController.ARENA_HEIGHT + 2) {
-            scorePlayer++;
-            changed = true;
-            handleGoal();
+            } else if (puckBody.getBody().getPosition().y > GameController.ARENA_HEIGHT + 2) {
+                GameModel.getInstance().getHandle().incScore();
+                changed = true;
+                handleGoal();
+                break;
+            }
         }
+            int scorePlayer = GameModel.getInstance().getHandle().getScore();
+            int scoreOpponent = GameModel.getInstance().getBot().getScore();
 
-        if((scoreOpponent >= Constants.WIN_SCORE || scorePlayer >= Constants.WIN_SCORE) && Math.abs(scorePlayer - scoreOpponent) >= 2) {
-            gameOver = true;
-            changed = true;
+            if ((scoreOpponent >= Constants.WIN_SCORE || scorePlayer >= Constants.WIN_SCORE) && Math.abs(scorePlayer - scoreOpponent) >= 2) {
+                gameOver = true;
+                changed = true;
         }
-
         return changed;
     }
 
@@ -378,15 +367,8 @@ public class GameController {
      *Returns puck body.
      * @return Puck body.
      */
-    public PuckBody getPuckBody() {
-        return puckBody;
-    }
-
-    /**
-     * Increment player's score by one.
-     */
-    public void incScorePlayer() {
-        this.scorePlayer++;
+    public ArrayList<PuckBody> getPuckBodies() {
+        return puckBodies;
     }
 
     /**
@@ -394,15 +376,9 @@ public class GameController {
      */
     public void resetBodies() {
         handleBody.reset(Constants.HANDLE_X,Constants.HANDLE_Y);
-        puckBody.reset();
+        for(PuckBody puckBody : puckBodies)
+            puckBody.reset();
         botBody.reset(Constants.BOT_X, Constants.BOT_Y);
-    }
-
-    /**
-     * Increment opponent's score by one.
-     */
-    public void incScoreOpponent() {
-        this.scoreOpponent++;
     }
 
     /**
@@ -434,23 +410,15 @@ public class GameController {
         handleBody.setControlOn(true);
         botBody.setControlOn(true);
         resetBodies();
-        scoreOpponent = 0;
-        scorePlayer = 0;
+        GameModel.getInstance().getBot().resetScore();
+        GameModel.getInstance().getHandle().resetScore();
 
         if(powerUpBody != null && powerUpBody.getBody() != null)
         {
-            WorldUtils.destroyBody(powerUpBody.getBody());
+            Functions.destroyBody(powerUpBody.getBody());
             powerUpBody.getBody().setUserData(null);
             powerUpBody = null;
         }
-    }
-
-    /**
-     *  Returns the current Game Result.
-     * @return The current Game Result.
-     */
-    public GameResult getResult() {
-        return new GameResult(scorePlayer, scoreOpponent, System.currentTimeMillis());
     }
 
     /**
@@ -468,23 +436,6 @@ public class GameController {
     public void setSounds(AssetManager sounds) {
         hit = sounds.get("hit.mp3");
     }
-
-    /**
-     * Returns the player's current score.
-     * @return Player's score.
-     */
-    public int getPlayerScore() {
-        return scorePlayer;
-    }
-
-    /**
-     *  Returns the opponent's current score.
-     * @return Opponent's score.
-     */
-    public int getScoreOpponent() {
-        return scoreOpponent;
-    }
-
     /**
      *  Sets sound related variables as the ones parsed to the function as parameters.
      * @param volume Volume

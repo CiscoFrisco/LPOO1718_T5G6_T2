@@ -5,7 +5,7 @@ import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.controller.entities.BotBody;
 import com.ciscominas.airhockeymania.controller.entities.HandleBody;
 import com.ciscominas.airhockeymania.model.GameModel;
-import com.ciscominas.airhockeymania.utils.WorldUtils;
+import com.ciscominas.airhockeymania.utils.Functions;
 
 /**
  * Represents a powerUpType that increases a player's handle size.
@@ -27,13 +27,13 @@ public class SuperHandle implements PowerUpType {
 
         if(lastTouch == "PLAYER")
         {
-            WorldUtils.destroyBody(GameController.getInstance().getHandle().getBody());
+            Functions.destroyBody(GameController.getInstance().getHandle().getBody());
             GameModel.getInstance().setHandle(2f);
             GameController.getInstance().setHandleBody(new HandleBody(GameController.getInstance().getWorld(), GameModel.getInstance().getHandle(), BodyDef.BodyType.DynamicBody));
         }
         else
         {
-            WorldUtils.destroyBody(GameController.getInstance().getBot().getBody());
+            Functions.destroyBody(GameController.getInstance().getBot().getBody());
             GameModel.getInstance().setHandle(2f);
             GameController.getInstance().setBotBody(new BotBody(GameController.getInstance().getWorld(), GameModel.getInstance().getBot(), BodyDef.BodyType.DynamicBody));
         }
@@ -46,12 +46,12 @@ public class SuperHandle implements PowerUpType {
     public void reset() {
         if(lastTouch == "PLAYER")
         {
-            WorldUtils.destroyBody(GameController.getInstance().getHandle().getBody());
+            Functions.destroyBody(GameController.getInstance().getHandle().getBody());
             GameModel.getInstance().setHandle(0.5f);
             GameController.getInstance().setHandleBody(new HandleBody(GameController.getInstance().getWorld(), GameModel.getInstance().getHandle(), BodyDef.BodyType.DynamicBody));        }
         else
         {
-            WorldUtils.destroyBody(GameController.getInstance().getBot().getBody());
+            Functions.destroyBody(GameController.getInstance().getBot().getBody());
             GameModel.getInstance().setHandle(0.5f);
             GameController.getInstance().setBotBody(new BotBody(GameController.getInstance().getWorld(), GameModel.getInstance().getBot(), BodyDef.BodyType.DynamicBody));
         }

@@ -5,8 +5,7 @@ import com.badlogic.gdx.physics.box2d.World;
 import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.controller.entities.powerups.PowerUpType;
-import com.ciscominas.airhockeymania.utils.BodyUtils;
-import com.ciscominas.airhockeymania.utils.WorldUtils;
+import com.ciscominas.airhockeymania.utils.Functions;
 
 /**
  * Sub-class of EntityBody, represents a powerUp body.
@@ -36,7 +35,7 @@ public class PowerUpBody extends EntityBody {
         createFixture(body, createShape(model.getWidth(), CIRCLE, 0), density, friction, restitution, POWERUP_BODY,
                 (short) (LINE_BODY | HANDLE_BODY | PUCK_BODY));
 
-        setType(WorldUtils.randPowerUp());
+        setType(Functions.randPowerUp());
     }
 
     /**
@@ -86,10 +85,10 @@ public class PowerUpBody extends EntityBody {
      * If it does then the currentPowerUp is activated and its body is destroyed.
      */
     public void checkContact() {
-        if (BodyUtils.checkIntersection(body, GameController.getInstance().getPuckBody().getBody(),0.5))
+        if (Functions.checkIntersection(body, GameController.getInstance().getPuckBodies().get(0).getBody(),0.5))
         {
             effect();
-            WorldUtils.destroyBody(body);
+            Functions.destroyBody(body);
             body = null;
         }
 

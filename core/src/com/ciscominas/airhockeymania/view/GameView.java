@@ -60,6 +60,7 @@ public class GameView extends ScreenAdapter {
 
         loadAssets();
         GameController.getInstance().setSounds(game.getAssetManager());
+        GameController.getInstance().setUpDimensions();
 
         bkg_music = game.getAssetManager().get("bkg_music1.mp3");
         bkg_music.setLooping(true);
@@ -132,8 +133,8 @@ public class GameView extends ScreenAdapter {
 
         game.getBatch().draw(pause, PAUSE_X,PAUSE_Y, PAUSE_WIDTH,PAUSE_WIDTH);
         score.getData().setScale(2,2);
-        score.draw(game.getBatch(), Integer.toString(GameController.getInstance().getPlayerScore()),(VIEWPORT_WIDTH - VIEWPORT_WIDTH/8)/PIXEL_TO_METER , (5*VIEWPORT_HEIGHT/12)/PIXEL_TO_METER);
-        score.draw(game.getBatch(), Integer.toString(GameController.getInstance().getScoreOpponent()),(VIEWPORT_WIDTH - VIEWPORT_WIDTH/8)/PIXEL_TO_METER, (7*VIEWPORT_HEIGHT/12)/PIXEL_TO_METER);
+        score.draw(game.getBatch(), Integer.toString(GameModel.getInstance().getHandle().getScore()),(VIEWPORT_WIDTH - VIEWPORT_WIDTH/8)/PIXEL_TO_METER , (5*VIEWPORT_HEIGHT/12)/PIXEL_TO_METER);
+        score.draw(game.getBatch(), Integer.toString(GameModel.getInstance().getBot().getScore()),(VIEWPORT_WIDTH - VIEWPORT_WIDTH/8)/PIXEL_TO_METER, (7*VIEWPORT_HEIGHT/12)/PIXEL_TO_METER);
 
  
         if(GameController.getInstance().getPowerUp()!=null)
@@ -208,7 +209,7 @@ public class GameView extends ScreenAdapter {
         {
             game.changeScreen(0);
             bkg_music.stop();
-            game.getDatabase().insert(GameController.getInstance().getResult());
+            game.getDatabase().insert(GameModel.getInstance().getResult());
             GameController.getInstance().reset();
         }
     }

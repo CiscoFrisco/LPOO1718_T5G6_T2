@@ -70,14 +70,14 @@ public class InputHandler extends InputAdapter {
      */
     @Override
     public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        convertCoordinates(screenX, screenY);
 
-        if(checkPause(screenX,screenY))
+        if(checkPause(x,y))
             view.pauseGame();
 
         return true;
 
     }
-
     /**
      * Checks if the mouse or touch coordinates are on the pause button.
      * @param x x-coordinate on the screen
@@ -85,9 +85,8 @@ public class InputHandler extends InputAdapter {
      * @return true or false according to the touch position.
      */
     private boolean checkPause(float x, float y) {
-        return x>=view.PAUSE_X && y>=view.PAUSE_Y;
+        return x/PIXEL_TO_METER>=view.PAUSE_X && y/PIXEL_TO_METER>=view.PAUSE_Y;
     }
-
     /**
      * Checks if the user cursor is inside his half of the screen.
      * @param x x-coordinate in meters
