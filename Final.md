@@ -5,6 +5,7 @@
 The project was developed with Android Studio.
 After cloning the repo, building with gradle should be sufficient to get everything to work.
 Just make sure not to update gradle even if the IDE asks for it!
+Although, in order to run the desktop version, you may need to set the working directory to /android/assets, in Edit Configurations.
 
 ## App Setup
 
