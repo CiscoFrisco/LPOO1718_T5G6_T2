@@ -267,4 +267,13 @@ public class Bot {
             return false;
         }
     }
+    
+    public String getState()
+    {
+        return state;
+    }
+
+    public boolean getPrediction() {
+        return hasPrediction;
+    }
 }

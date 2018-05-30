@@ -4,6 +4,7 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.assets.loaders.SkinLoader;
 import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.ciscominas.airhockeymania.database.Database;
@@ -100,6 +101,8 @@ public class AirHockeyMania extends Game {
 		loadMusic();
 		menuMusic = assetManager.get(MENU_MUSIC);
 		menuMusic.setLooping(true);
+
+		assetManager.load("menu.png", Texture.class);
 
 		SkinLoader.SkinParameter params = new SkinLoader.SkinParameter("skin/glassy-ui.atlas");
 		assetManager.load(MENU_SKIN, Skin.class, params);

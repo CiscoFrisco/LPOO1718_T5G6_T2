@@ -14,7 +14,7 @@ public class LineView extends EntityView {
 
     @Override
     public Sprite createSprite(AirHockeyMania game) {
-        Texture texture = game.getAssetManager().get("line.png");
+        Texture texture = game.getAssetManager().get("ice.png");
 
         return new Sprite(texture, texture.getWidth(), texture.getHeight());
     }

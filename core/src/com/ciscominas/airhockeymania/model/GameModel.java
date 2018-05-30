@@ -100,7 +100,7 @@ public class GameModel {
         edges.add(new LineModel(WIDTH - WIDTH/8,47*HEIGHT/48,WIDTH/4,HEIGHT/24));
         edges.add(new LineModel(WIDTH - WIDTH/32,HEIGHT/2, WIDTH/16,HEIGHT));
         edges.add(new LineModel(WIDTH/32,HEIGHT/2, WIDTH/16,HEIGHT));
-        edges.add(new LineModel(WIDTH/2,HEIGHT/2, WIDTH, HEIGHT/96));
+        //edges.add(new LineModel(WIDTH/2,HEIGHT/2, WIDTH, HEIGHT/96));
         edges.add(new LineModel(WIDTH/2,0,WIDTH/2 + 1 ,HEIGHT/96));
         edges.add(new LineModel(WIDTH/2,HEIGHT, WIDTH/2 + 1,HEIGHT/96));
     }

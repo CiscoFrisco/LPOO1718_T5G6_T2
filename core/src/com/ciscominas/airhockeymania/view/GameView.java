@@ -2,6 +2,7 @@ package com.ciscominas.airhockeymania.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
@@ -18,6 +19,7 @@ import com.ciscominas.airhockeymania.model.entities.*;
 import com.ciscominas.airhockeymania.view.entities.EntityView;
 import com.ciscominas.airhockeymania.view.entities.ViewFactory;
 
+import java.awt.Image;
 import java.util.ArrayList;
 
 /**
@@ -98,14 +100,15 @@ public class GameView extends ScreenAdapter {
      * Loads the game assets, such as textures and background music.
      */
     private void loadAssets() {
-        game.getAssetManager().load("puck.png", Texture.class);
-        game.getAssetManager().load("handle.png", Texture.class);
-        game.getAssetManager().load("powerup.png", Texture.class);
-        game.getAssetManager().load("line.png", Texture.class);
-        game.getAssetManager().load( "hit.mp3", Sound.class);
-        game.getAssetManager().load( "bkg_music1.mp3", Music.class);
-        game.getAssetManager().load("pause.png", Texture.class);
-        game.getAssetManager().finishLoading();
+        AssetManager manager = game.getAssetManager();
+        manager.load("puck.png", Texture.class);
+        manager.load("handle.png", Texture.class);
+        manager.load("powerup.png", Texture.class);
+        manager.load("ice.png", Texture.class);
+        manager.load( "hit.mp3", Sound.class);
+        manager.load( "bkg_music1.mp3", Music.class);
+        manager.load("pause.png", Texture.class);
+        manager.finishLoading();
     }
 
     /**

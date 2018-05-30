@@ -89,4 +89,12 @@ public class HandleBody extends EntityBody {
     public void setControlOn(boolean controlOn) {
         this.controlOn = controlOn;
     }
+
+    /**
+     * Gets controlOn attribute that indicates whether or not the handle is able to move.
+     * @return Boolean that indicates whether or not the handle is able to move.
+     */
+    public boolean getControlOn() {
+        return controlOn;
+    }
 }

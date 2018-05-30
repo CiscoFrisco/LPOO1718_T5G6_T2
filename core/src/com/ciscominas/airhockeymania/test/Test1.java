@@ -3,8 +3,11 @@ package com.ciscominas.airhockeymania.test;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+import com.ciscominas.airhockeymania.controller.ContactHandler;
 import com.ciscominas.airhockeymania.controller.GameController;
+import com.ciscominas.airhockeymania.controller.entities.HandleBody;
 import com.ciscominas.airhockeymania.controller.entities.PowerUpBody;
+import com.ciscominas.airhockeymania.controller.entities.PuckBody;
 import com.ciscominas.airhockeymania.controller.entities.powerups.DuplicatePucks;
 import com.ciscominas.airhockeymania.controller.entities.powerups.FreezeHandle;
 import com.ciscominas.airhockeymania.controller.entities.powerups.PowerUpType;
@@ -13,7 +16,9 @@ import com.ciscominas.airhockeymania.controller.entities.powerups.SuperHandle;
 import com.ciscominas.airhockeymania.database.DesktopDatabase;
 import com.ciscominas.airhockeymania.database.GameResult;
 import com.ciscominas.airhockeymania.model.GameModel;
+import com.ciscominas.airhockeymania.model.entities.HandleModel;
 import com.ciscominas.airhockeymania.model.entities.PowerUpModel;
+import com.ciscominas.airhockeymania.model.entities.PuckModel;
 import com.ciscominas.airhockeymania.utils.Constants;
 import com.ciscominas.airhockeymania.utils.Functions;
 
@@ -22,6 +27,7 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 import java.util.ArrayList;
+import java.util.Date;
 
 public class Test1 {
 
@@ -76,9 +82,6 @@ public class Test1 {
                 superHandle = true;
             else if(powerUp instanceof DuplicatePucks)
                 duplicatePucks = true;
-            else
-                fail("Not a valid PowerUp type!");
-
         }
     }
 
@@ -166,6 +169,109 @@ public class Test1 {
         assertEquals(GameController.getInstance().getPuckBodies().size(), 1);
 
     }
+
+    @Test
+    public void testHandleMove()
+    {
+        World world = new World(new Vector2(0,0), true);
+        HandleModel model = new HandleModel(Constants.HANDLE_X, Constants.HANDLE_Y, Constants.HANDLE_RADIUS, 0);
+        HandleBody handle = new HandleBody(world, model, BodyDef.BodyType.DynamicBody);
+
+        handle.setControlOn(true);
+        assertTrue(GameController.getInstance().getHandle().getControlOn());
+
+        handle.move(9, 3);
+
+        assertEquals(handle.getBody().getPosition().x, 9, 0.1f);
+        assertEquals(handle.getBody().getPosition().y,3,0.1f);
+        assertEquals(handle.getVel().x, 20, 0.1f);
+        assertEquals(handle.getVel().y, 20, 0.1f);
+
+    }
+
+    @Test(timeout = 10000)
+    public void testContact()
+    {
+        GameController controller = GameController.getInstance();
+
+        Vector2 direction = controller.getPuckBodies().get(0).getBody().getPosition();
+        direction.sub(controller.getHandle().getBody().getPosition());
+        direction.nor();
+
+        float speed = 10;
+        controller.getHandle().getBody().setLinearVelocity(direction.scl(speed));
+
+        float delta = 0;
+        while(controller.getPuckBodies().get(0).getBody().getLinearVelocity().len() == 0f)
+        {
+            controller.update(delta);
+            delta+=1f;
+        }
+
+        assertNotEquals(controller.getHandle().getBody().getPosition().y, Constants.HANDLE_Y);
+        assertEquals(GameModel.getInstance().getLastTouch(), "PLAYER");
+    }
+
+   /* @Test(timeout = 10000)
+    public void testBot()
+    {
+        GameController controller = GameController.getInstance();
+
+        Vector2 direction = controller.getBot().getBody().getPosition();
+        direction.sub(controller.getPuckBodies().get(0).getBody().getPosition());
+        direction.nor();
+
+        float speed = 10;
+        controller.getPuckBodies().get(0).getBody().setLinearVelocity(direction.scl(speed));
+
+        float delta = 0;
+        while(controller.getBot().getBehaviour().getState() == "RESET")
+        {
+            controller.update(delta);
+            delta+=1f;
+        }
+
+        assertTrue(controller.getBot().getBehaviour().getPrediction());
+    }*/
+
+   @Test
+   public void checkGoal()
+   {
+       GameController controller = GameController.getInstance();
+
+
+       Vector2 direction = controller.getBot().getBody().getPosition();
+       direction.sub(controller.getPuckBodies().get(0).getBody().getPosition());
+       direction.nor();
+       controller.getBot().getBody().setTransform(14, Constants.BOT_Y, 0);
+       float speed = 10;
+       controller.getPuckBodies().get(0).getBody().setLinearVelocity(direction.scl(speed));
+
+       float delta = 0;
+       while(GameModel.getInstance().getHandle().getScore() != 1)
+       {
+           controller.update(delta);
+           delta+=1f;
+       }
+
+       assertEquals(GameModel.getInstance().getHandle().getScore(), 1);
+       GameModel.getInstance().getHandle().resetScore();
+   }
+
+   @Test
+   public void checkPowerUp()
+   {
+       GameController controller = GameController.getInstance();
+       controller.setUpPowerUp();
+
+        controller.getPuckBodies().get(0).getBody().setTransform(controller.getPowerUp().getX(),controller.getPowerUp().getY(),0);
+
+        controller.update(1f);
+
+        assertTrue(controller.getPowerUp().isActive());
+
+        controller.getPuckBodies().get(0).reset();
+   }
 
 
 }

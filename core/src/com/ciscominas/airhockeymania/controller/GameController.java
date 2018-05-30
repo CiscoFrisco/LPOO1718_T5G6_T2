@@ -128,6 +128,7 @@ public class GameController {
         world = new World(new Vector2(0, 0), true);
         setUpBodies();
 
+        begin = new Date();
         world.setContactListener(new ContactHandler());
         gameOver = false;
     }
@@ -179,7 +180,7 @@ public class GameController {
         for(int i = 0; i < 6; i++)
             edges.add(new LineBody(world, models.get(i), BodyDef.BodyType.StaticBody, mask));
 
-        for(int i = 6; i < 9; i++)
+        for(int i = 6; i < 8; i++)
             edges.add(new LineBody(world, models.get(i), BodyDef.BodyType.StaticBody, mask2));
     }
 
@@ -322,7 +323,7 @@ public class GameController {
     /**
      * Generates a new random PowerUp.
      */
-    private void setUpPowerUp() {
+    public void setUpPowerUp() {
         GameModel.getInstance().newPowerUp();
         powerUpBody = new PowerUpBody(world, GameModel.getInstance().getPowerUp(), BodyDef.BodyType.StaticBody);
     }
