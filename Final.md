@@ -35,6 +35,10 @@ Android: Run the provided .apk, after allowing installation of external apps.
     The game has powerups like DuplicatePucks and FreezeHandle, so it was a good idea to implement
     Strategy here. This way, the game can, at a defined rate, substitute the current power up with another random one, while not needing to change the methods it needs to call.
 
+- Flyweight
+
+    ViewFactory stores in a cache the EntityViews: intrinsic state. In GameView the operation makeView() is invoked: extrinsic state.
+
 ## Relevant Design Decisions
 
 Some of the following may have already been explained elsewhere, but we feel these are the most
