@@ -9,18 +9,24 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
 
 import com.ciscominas.airhockeymania.AirHockeyMania;
+import com.ciscominas.airhockeymania.AppPreferences;
 import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.controller.entities.powerups.DuplicatePucks;
 import com.ciscominas.airhockeymania.model.GameModel;
 import com.ciscominas.airhockeymania.model.entities.*;
+import com.ciscominas.airhockeymania.utils.Functions;
 import com.ciscominas.airhockeymania.view.entities.EntityView;
 import com.ciscominas.airhockeymania.view.entities.ViewFactory;
 
 import java.util.ArrayList;
+
+import static com.ciscominas.airhockeymania.utils.Constants.GRAPHICS_HEIGHT;
+import static com.ciscominas.airhockeymania.utils.Constants.GRAPHICS_WIDTH;
 
 /**
  * The game screen. Responsible for showing the game elements to the user, receiving input,
@@ -50,8 +56,10 @@ public class GameView extends ScreenAdapter {
 
     private Texture background;
 
-    private final float PAUSE_WIDTH = Gdx.graphics.getWidth()/8;
+    private final float PAUSE_WIDTH = GRAPHICS_WIDTH/8;
+
     protected final float PAUSE_X = VIEWPORT_WIDTH/PIXEL_TO_METER - PAUSE_WIDTH;
+
     protected float PAUSE_Y;
 
     private BitmapFont score;
@@ -63,18 +71,29 @@ public class GameView extends ScreenAdapter {
      */
     public GameView(AirHockeyMania game) {
         this.game = game;
+        camera = createCamera();
 
         loadAssets();
+
         GameController.getInstance().setSounds(game.getAssetManager());
         GameController.getInstance().setUpDimensions();
 
+        setAssets();
+    }
+
+    /**
+     * Sets backgorund music, pause texture, score font and background.
+     */
+    private void setAssets()
+    {
         bkg_music = game.getAssetManager().get("bkg_music1.mp3");
         bkg_music.setLooping(true);
 
         pause = game.getAssetManager().get("pause.png");
+
         score = new BitmapFont();
         score.setColor(243/255f,12/255f,12/255f, 1);
-        camera = createCamera();
+
         background = game.getAssetManager().get("rink.png");
     }
 
@@ -122,20 +141,19 @@ public class GameView extends ScreenAdapter {
     @Override
     public void show() {
         super.show();
-        GameController.getInstance().setBegin();
+
+        GameController controller = GameController.getInstance();
+        AppPreferences preferences = game.getPreferences();
+
+        controller.setBegin();
+
         Gdx.input.setInputProcessor(new InputHandler(this));
 
-        GameController.getInstance().setBotDiff(game.getPreferences().getDifficulty());
+        controller.setBotDiff(preferences.getDifficulty());
 
-        if(game.getPreferences().isMusicEnabled())
-        {
-            bkg_music.setVolume(game.getPreferences().getMusicVolume());
-            bkg_music.play();
-        }
-        else
-            bkg_music.stop();
+        Functions.checkMusic(preferences, bkg_music);
 
-        GameController.getInstance().setSound(game.getPreferences().getSoundVolume(), game.getPreferences().isSoundEffectsEnabled());
+        controller.setSound(preferences.getSoundVolume(), preferences.isSoundEffectsEnabled());
     }
 
     /**
@@ -143,98 +161,84 @@ public class GameView extends ScreenAdapter {
      * @param delta
      */
     public void render(float delta) {
-        GameController.getInstance().update(delta);
+
+        GameController controller = GameController.getInstance();
+        SpriteBatch batch = game.getBatch();
+        GameModel model = GameModel.getInstance();
+
+        controller.update(delta);
 
         checkGameOver();
 
         Gdx.gl.glClearColor( 253/255f, 207/255f, 113/255f, 1 );
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 
-        game.getBatch().begin();
+        batch.begin();
 
-        game.getBatch().draw(background,0,0, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+        batch.draw(background,0,0, GRAPHICS_WIDTH, GRAPHICS_HEIGHT);
 
-        drawEntities();
+        batch.draw(pause, PAUSE_X,PAUSE_Y, PAUSE_WIDTH,PAUSE_WIDTH);
 
-        game.getBatch().draw(pause, PAUSE_X,PAUSE_Y, PAUSE_WIDTH,PAUSE_WIDTH);
-        score.getData().setScale(2,2);
-        score.draw(game.getBatch(), Integer.toString(GameModel.getInstance().getHandle().getScore()),(VIEWPORT_WIDTH - VIEWPORT_WIDTH/8)/PIXEL_TO_METER , (5*VIEWPORT_HEIGHT/12)/PIXEL_TO_METER);
-        score.draw(game.getBatch(), Integer.toString(GameModel.getInstance().getBot().getScore()),(VIEWPORT_WIDTH - VIEWPORT_WIDTH/8)/PIXEL_TO_METER, (7*VIEWPORT_HEIGHT/12)/PIXEL_TO_METER);
+        drawEntities(controller, model, batch);
 
- 
-        if(GameController.getInstance().getPowerUp()!=null)
-            if(GameController.getInstance().getPowerUp().getBody() != null)
-                drawPowerUp();
-            else if(GameController.getInstance().getPowerUp().getType() instanceof DuplicatePucks)
-                drawDuplicate();
+        drawScore(model, batch);
 
-        game.getBatch().end();
+        batch.end();
 
         if (DEBUG_PHYSICS) {
             debugCamera = camera.combined.cpy();
             debugCamera.scl(1 / PIXEL_TO_METER);
-            debugRenderer.render(GameController.getInstance().getWorld(), debugCamera);
+            debugRenderer.render(controller.getWorld(), debugCamera);
         }
     }
 
     /**
-     * Draw the duplicate puck to the screen if its corresponding power up is active.
+     * Draws the current score to the right side of the screen.
+     * @param model the game's model instance
+     * @param batch the main game's sprite batch
      */
-    private void drawDuplicate() {
-        PuckModel duplicate = GameModel.getInstance().getDuplicate();
-
-        EntityView view = ViewFactory.makeView(game, duplicate);
-        view.update(duplicate);
-        view.draw(game.getBatch());
-    }
-
-    /**
-     * Draw the power up to the screen.
-     */
-    private void drawPowerUp() {
-
-        PowerUpModel powerUp = GameModel.getInstance().getPowerUp();
-
-        EntityView view = ViewFactory.makeView(game, powerUp);
-        view.resize(powerUp);
-        view.update(powerUp);
-        view.draw(game.getBatch());
+    private void drawScore(GameModel model, SpriteBatch batch)
+    {
+        score.getData().setScale(2,2);
+        score.draw(batch, Integer.toString(model.getHandle().getScore()),(VIEWPORT_WIDTH - VIEWPORT_WIDTH/8)/PIXEL_TO_METER , (5*VIEWPORT_HEIGHT/12)/PIXEL_TO_METER);
+        score.draw(batch, Integer.toString(model.getBot().getScore()),(VIEWPORT_WIDTH - VIEWPORT_WIDTH/8)/PIXEL_TO_METER, (7*VIEWPORT_HEIGHT/12)/PIXEL_TO_METER);
     }
 
     /**
      * Draw entities to the screen: puck, edges and handles.
+     * @param controller the game's controller instance
+     * @param model the game's model instance
+     * @param batch the main game's sprite batch
      */
-    private void drawEntities()
+    private void drawEntities(GameController controller, GameModel model, SpriteBatch batch)
     {
-        ArrayList<LineModel> lines = GameModel.getInstance().getEdges();
-        EntityView view;
+        ArrayList<LineModel> lines = model.getEdges();
 
         for(LineModel line : lines)
-        {
-            view = ViewFactory.makeView(game, line);
-            view.resize(line);
-            view.update(line);
-            view.draw(game.getBatch());
-        }
+            drawEntity(line, batch);
 
-        PuckModel puck = GameModel.getInstance().getPuck();
-        BotModel bot = GameModel.getInstance().getBot();
-        HandleModel handle = GameModel.getInstance().getHandle();
+        drawEntity(model.getPuck(), batch);
+        drawEntity(model.getBot(), batch);
+        drawEntity(model.getHandle(), batch);
 
-        view = ViewFactory.makeView(game, puck);
-        view.resize(puck);
-        view.update(puck);
-        view.draw(game.getBatch());
+        if(controller.getPowerUp()!=null)
+            if(controller.getPowerUp().getBody() != null)
+                drawEntity(model.getPowerUp(), batch);
+            else if(controller.getPowerUp().getType() instanceof DuplicatePucks)
+                drawEntity(model.getDuplicate(), batch);
+    }
 
-        view = ViewFactory.makeView(game, bot);
-        view.resize(bot);
-        view.update(bot);
-        view.draw(game.getBatch());
-
-        view = ViewFactory.makeView(game, handle);
-        view.resize(handle);
-        view.update(handle);
-        view.draw(game.getBatch());
+    /**
+     * Draws an entity to the screen.
+     * @param model the entity's model
+     * @param batch the main game's sprite batch
+     */
+    private void drawEntity(EntityModel model, SpriteBatch batch)
+    {
+        EntityView view = ViewFactory.makeView(game, model);
+        view.resize(model);
+        view.update(model);
+        view.draw(batch);
     }
 
     /**

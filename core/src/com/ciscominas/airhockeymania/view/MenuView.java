@@ -14,6 +14,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 
 import com.ciscominas.airhockeymania.AirHockeyMania;
+import com.ciscominas.airhockeymania.utils.Functions;
 
 /**
  * Represents a Menu.
@@ -117,19 +118,6 @@ public abstract class MenuView extends ScreenAdapter {
         return table;
     }
 
-    /**
-     * Checks if the music is activated, playing it with the volume set by the user (or default).
-     */
-    protected void checkMusic()
-    {
-        if(game.getPreferences().isMusicEnabled())
-        {
-            menuMusic.setVolume(game.getPreferences().getMusicVolume());
-            menuMusic.play();
-        }
-        else
-            menuMusic.stop();
-    }
 
     /**
      * Sets up the elements that compose the table.
@@ -155,7 +143,7 @@ public abstract class MenuView extends ScreenAdapter {
         Table table = createTable();
 
         setUpTable(table);
-        checkMusic();
+        Functions.checkMusic(game.getPreferences(), menuMusic);
     }
 
     @Override

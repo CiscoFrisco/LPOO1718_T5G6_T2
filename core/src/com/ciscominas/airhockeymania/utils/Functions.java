@@ -1,7 +1,10 @@
 package com.ciscominas.airhockeymania.utils;
 
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.Body;
+import com.ciscominas.airhockeymania.AirHockeyMania;
+import com.ciscominas.airhockeymania.AppPreferences;
 import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.controller.entities.powerups.*;
 
@@ -91,5 +94,23 @@ public class Functions {
     {
         GameController.getInstance().getWorld().destroyBody(body);
         body.setUserData(null);
+    }
+
+    /**
+     * Checks if music playback is enabled, if so plays the given music with volume
+     * set by the user (or default).
+     * Else, stops.
+     * @param preferences game's preferences
+     * @param music music to play
+     */
+    public static void checkMusic(AppPreferences preferences, Music music)
+    {
+        if(preferences.isMusicEnabled())
+        {
+            music.setVolume(preferences.getMusicVolume());
+            music.play();
+        }
+        else
+            music.stop();
     }
 }
