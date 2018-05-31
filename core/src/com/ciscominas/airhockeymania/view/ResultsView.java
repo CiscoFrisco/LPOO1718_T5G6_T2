@@ -66,8 +66,8 @@ public class ResultsView extends MenuView {
     {
         table.add(titleLabel).colspan(3);
         table.row();
-        table.add(score1Label);
-        table.add(score2Label);
+        table.add(score1Label).pad(0,0,0,5f);
+        table.add(score2Label).pad(0,0,0,5f);
         table.add(dateLabel);
         table.row();
 
@@ -90,8 +90,8 @@ public class ResultsView extends MenuView {
         Label score2 = new Label(Integer.toString(result.getScore2()), skin);
         Label date = new Label(result.getDate().toString(), skin);
 
-        table.add(score1);
-        table.add(score2);
+        table.add(score1).pad(0,0,0,5f);;
+        table.add(score2).pad(0,0,0,5f);;
         table.add(date);
         table.row();
     }

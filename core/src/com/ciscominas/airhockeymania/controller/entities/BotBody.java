@@ -77,15 +77,11 @@ public class BotBody extends EntityBody {
         this.controlOn = control;
     }
 
-    /**
-     * Updates bot difficulty according to botDiff.
-     * @param botDiff Bot's new difficulty.
-     */
-    public void setDifficulty(String botDiff) {
-        bot.setDifficulty(botDiff);
-    }
-
     public boolean getControlOn() {
         return controlOn;
+    }
+
+    public void setDifficulty(String difficulty) {
+        bot.setValues(difficulty);
     }
 }

@@ -15,6 +15,7 @@ import com.ciscominas.airhockeymania.controller.entities.LineBody;
 import com.ciscominas.airhockeymania.controller.entities.PowerUpBody;
 import com.ciscominas.airhockeymania.controller.entities.PuckBody;
 import com.ciscominas.airhockeymania.model.GameModel;
+import com.ciscominas.airhockeymania.model.entities.BotModel;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.model.entities.LineModel;
 import com.ciscominas.airhockeymania.utils.Constants;

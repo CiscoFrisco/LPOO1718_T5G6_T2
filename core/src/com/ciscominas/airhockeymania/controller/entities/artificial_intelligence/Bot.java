@@ -5,6 +5,7 @@ import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.controller.entities.BotBody;
 import com.ciscominas.airhockeymania.controller.entities.PuckBody;
 import com.ciscominas.airhockeymania.model.GameModel;
+import com.ciscominas.airhockeymania.model.entities.BotModel;
 import com.ciscominas.airhockeymania.utils.Constants;
 
 import java.lang.reflect.Array;
@@ -38,10 +39,6 @@ public class Bot {
      * Bot prediction to where the puck will move.
      */
     Vector2 prediction;
-    /**
-     * Bot difficulty. Affects other attributes like reaction_vel and alert_radius.
-     */
-    String difficulty;
 
     /**
      *  Bot constructor.
@@ -52,23 +49,15 @@ public class Bot {
         prediction = new Vector2();
         state = State.RESET;
         hasPrediction = false;
-    }
-
-    /**
-     * Updates the current difficulty and the attributes that depend from it.
-     * @param diff Bot intelligence
-     */
-    public void setDifficulty(String diff)
-    {
-        difficulty = diff;
-        setValues();
+        setValues(GameModel.getInstance().getBot().getDifficulty());
     }
 
     /**
      * According to the current difficulty sets default values to the alert_radius and reaction_vel attributes.
      */
-    private void setValues()
+    public void setValues(String difficulty)
     {
+        System.out.println(difficulty);
         if(difficulty == "Easy") {
             alert_radius = GameController.ARENA_WIDTH/3;
             reaction_vel = GameController.ARENA_WIDTH/8;
@@ -77,7 +66,7 @@ public class Bot {
             alert_radius = GameController.ARENA_WIDTH/2;
             reaction_vel = GameController.ARENA_WIDTH/4;
         }
-        else {
+        else if(difficulty == "Hard") {
             alert_radius = GameController.ARENA_HEIGHT / 3;
             reaction_vel = GameController.ARENA_WIDTH / 2;
         }
@@ -96,7 +85,7 @@ public class Bot {
 
         if(puck.getBody().getPosition().sub(GameController.getInstance().getBot().getBody().getPosition()).len() < alert_radius)
         {
-           if(puck.getBody().getLinearVelocity().len() < GameController.ARENA_HEIGHT /4.0 )
+            if(puck.getBody().getLinearVelocity().len() < GameController.ARENA_HEIGHT /4.0 )
                 state = State.ATTACK;
 
             else if (!hasPrediction && puck.getBody().getLinearVelocity().y > 0) {

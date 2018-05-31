@@ -13,6 +13,7 @@ import com.ciscominas.airhockeymania.view.MainView;
 import com.ciscominas.airhockeymania.view.PauseView;
 import com.ciscominas.airhockeymania.view.PreferencesView;
 import com.ciscominas.airhockeymania.view.ResultsView;
+import com.ciscominas.airhockeymania.view.Splash;
 
 import static com.ciscominas.airhockeymania.utils.Constants.MENU_MUSIC;
 import static com.ciscominas.airhockeymania.utils.Constants.MENU_SKIN;
@@ -25,7 +26,7 @@ public class AirHockeyMania extends Game {
 	/**
 	 * Screen IDs
 	 */
-	public enum Screen {MAIN, PREFERENCES, RESULTS, GAME, PAUSE}
+	public enum Screen {SPLASH, MAIN, PREFERENCES, RESULTS, GAME, PAUSE}
 
 
 	/**
@@ -108,7 +109,7 @@ public class AirHockeyMania extends Game {
 		assetManager.load(MENU_SKIN, Skin.class, params);
 		assetManager.finishLoading();
 
-		changeScreen(Screen.MAIN);
+		setScreen(new Splash(this));
 	}
 
     /**

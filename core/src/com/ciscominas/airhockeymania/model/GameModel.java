@@ -56,11 +56,20 @@ public class GameModel {
 
     /**
      * Sets the handles width
-     * @param width the new width
+     * @param ratio the handle's width will be multiplied by this ratio
      */
-    public void setHandle(float width)
+    public void setHandleWidth(float ratio)
     {
-        handle.multWidth(width);
+        handle.multWidth(ratio);
+    }
+
+    /**
+     * Sets the handles width
+     * @param ratio the bot's width will be multiplied by this ratio
+     */
+    public void setBotWidth(float ratio)
+    {
+        bot.multWidth(ratio);
     }
 
     /**
@@ -176,5 +185,9 @@ public class GameModel {
      */
     public void setLastTouch(EntityModel.ModelType lastTouch) {
         this.lastTouch = lastTouch;
+    }
+
+    public void setDifficulty(String difficulty) {
+        bot.setDifficulty(difficulty);
     }
 }

@@ -67,10 +67,10 @@ public class Functions {
         switch(number)
         {
             case 0:
-                powerUp = new SuperHandle();
+                powerUp = new SuperGoal();
                 break;
             case 1:
-                powerUp = new SuperGoal();
+                powerUp = new SuperHandle();
                 break;
             case 2:
                 powerUp = new FreezeHandle();

@@ -10,6 +10,8 @@ public class BotModel extends EntityModel{
      */
     private int score;
 
+    private String difficulty = "Medium";
+
     /**
      * Creates a BotModel object.
      * @param x the x-coordinate in meters
@@ -42,5 +44,15 @@ public class BotModel extends EntityModel{
     public void resetScore()
     {
         score = 0;
+    }
+
+    public String getDifficulty()
+    {
+        return difficulty;
+    }
+
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
     }
 }

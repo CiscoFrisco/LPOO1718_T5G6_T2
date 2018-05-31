@@ -5,8 +5,11 @@ import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
+import com.badlogic.gdx.utils.viewport.ExtendViewport;
+import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
 import com.ciscominas.airhockeymania.AirHockeyMania;
 
@@ -35,7 +38,22 @@ public abstract class MenuView extends ScreenAdapter {
     /**
      * The background image
      */
-    protected Texture background;
+    protected Image background;
+
+    protected static final float PIXEL_TO_METER = 0.04f;
+
+    protected static final float VIEWPORT_WIDTH = Gdx.graphics.getWidth()*PIXEL_TO_METER;
+
+    protected static final float VIEWPORT_HEIGHT = Gdx.graphics.getHeight()*PIXEL_TO_METER;
+
+    protected static final float DEFAULT_BUTTON_SIZE = VIEWPORT_WIDTH / 2;
+
+    protected static final float BUTTON_WIDTH = VIEWPORT_WIDTH / 2;
+
+    protected float BUTTON_EDGE = VIEWPORT_WIDTH/ 24;
+
+    protected float FONT_SIZE = VIEWPORT_WIDTH / 16;
+
 
     /**
      * Creates a MenuView object.
@@ -45,7 +63,9 @@ public abstract class MenuView extends ScreenAdapter {
         this.game = game;
         stage = new Stage(new ScreenViewport());
         skin = game.getAssetManager().get(MENU_SKIN);
-        background = game.getAssetManager().get("menu.png");
+        background = new Image(game.getAssetManager().get("menu.png", Texture.class));
+        background.setScale(Gdx.graphics.getWidth() / background.getWidth(), Gdx.graphics.getHeight() / background.getHeight());
+
         setUpElements();
     }
 
@@ -57,7 +77,7 @@ public abstract class MenuView extends ScreenAdapter {
     {
         Table table = new Table();
         table.setFillParent(true);
-        table.setDebug(true);
+        table.setDebug(false);
         stage.addActor(table);
 
         return table;
@@ -82,6 +102,7 @@ public abstract class MenuView extends ScreenAdapter {
     {
         stage.clear();
         Gdx.input.setInputProcessor(stage);
+        stage.addActor(background);
 
         Table table = createTable();
 
@@ -94,14 +115,9 @@ public abstract class MenuView extends ScreenAdapter {
         Gdx.gl.glClearColor(0f, 0f, 0f, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        game.getBatch().begin();
-        game.getBatch().draw(background, 0, 0);
-        game.getBatch().end();
-
         stage.act(Math.min(Gdx.graphics.getDeltaTime(), 1 / 30f));
         stage.draw();
     }
-
 
     @Override
     public void resize(int width, int height) {

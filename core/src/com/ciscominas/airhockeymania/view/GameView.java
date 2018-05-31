@@ -11,6 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.ciscominas.airhockeymania.AirHockeyMania;
 import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.controller.entities.powerups.DuplicatePucks;
@@ -19,7 +20,6 @@ import com.ciscominas.airhockeymania.model.entities.*;
 import com.ciscominas.airhockeymania.view.entities.EntityView;
 import com.ciscominas.airhockeymania.view.entities.ViewFactory;
 
-import java.awt.Image;
 import java.util.ArrayList;
 
 /**
@@ -28,7 +28,7 @@ import java.util.ArrayList;
  */
 public class GameView extends ScreenAdapter {
 
-    private static final boolean DEBUG_PHYSICS = true;
+    private static final boolean DEBUG_PHYSICS = false;
 
     public final static float PIXEL_TO_METER = 0.04f;
 
@@ -47,6 +47,8 @@ public class GameView extends ScreenAdapter {
     private Music bkg_music;
 
     private Texture pause;
+
+    private Texture background;
 
     private final float PAUSE_WIDTH = Gdx.graphics.getWidth()/8;
     protected final float PAUSE_X = VIEWPORT_WIDTH/PIXEL_TO_METER - PAUSE_WIDTH;
@@ -71,7 +73,9 @@ public class GameView extends ScreenAdapter {
 
         pause = game.getAssetManager().get("pause.png");
         score = new BitmapFont();
+        score.setColor(243/255f,12/255f,12/255f, 1);
         camera = createCamera();
+        background = game.getAssetManager().get("rink.png");
     }
 
     /**
@@ -104,10 +108,11 @@ public class GameView extends ScreenAdapter {
         manager.load("puck.png", Texture.class);
         manager.load("handle.png", Texture.class);
         manager.load("powerup.png", Texture.class);
-        manager.load("ice.png", Texture.class);
+        manager.load("blue.png", Texture.class);
         manager.load( "hit.mp3", Sound.class);
         manager.load( "bkg_music1.mp3", Music.class);
         manager.load("pause.png", Texture.class);
+        manager.load("rink.png",Texture.class);
         manager.finishLoading();
     }
 
@@ -147,6 +152,9 @@ public class GameView extends ScreenAdapter {
         Gdx.gl.glClear( GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT );
 
         game.getBatch().begin();
+
+        game.getBatch().draw(background,0,0, Gdx.graphics.getWidth(),Gdx.graphics.getHeight());
+
         drawEntities();
 
         game.getBatch().draw(pause, PAUSE_X,PAUSE_Y, PAUSE_WIDTH,PAUSE_WIDTH);
