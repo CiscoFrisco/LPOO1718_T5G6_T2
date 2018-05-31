@@ -1,6 +1,5 @@
 package com.ciscominas.airhockeymania.controller;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
@@ -8,22 +7,18 @@ import com.badlogic.gdx.physics.box2d.Body;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.utils.Array;
-import com.ciscominas.airhockeymania.controller.entities.BotBody;
-import com.ciscominas.airhockeymania.controller.entities.EntityBody;
-import com.ciscominas.airhockeymania.controller.entities.HandleBody;
-import com.ciscominas.airhockeymania.controller.entities.LineBody;
-import com.ciscominas.airhockeymania.controller.entities.PowerUpBody;
-import com.ciscominas.airhockeymania.controller.entities.PuckBody;
+
+import com.ciscominas.airhockeymania.controller.entities.*;
 import com.ciscominas.airhockeymania.model.GameModel;
-import com.ciscominas.airhockeymania.model.entities.BotModel;
-import com.ciscominas.airhockeymania.model.entities.EntityModel;
-import com.ciscominas.airhockeymania.model.entities.LineModel;
-import com.ciscominas.airhockeymania.utils.Constants;
-import com.ciscominas.airhockeymania.utils.Functions;
+import com.ciscominas.airhockeymania.model.entities.*;
+import com.ciscominas.airhockeymania.utils.*;
 import com.ciscominas.airhockeymania.view.GameView;
 
 import java.util.ArrayList;
 import java.util.Date;
+
+import static com.ciscominas.airhockeymania.view.Splash.GRAPHICS_HEIGHT;
+import static com.ciscominas.airhockeymania.view.Splash.GRAPHICS_WIDTH;
 
 /**
  * Implements the in-game logic bringing together all other classes from controller package and making the most of their capabilies.
@@ -139,12 +134,14 @@ public class GameController {
      */
     private void setUpBodies()
     {
+        GameModel gameModel = GameModel.getInstance();
         puckBodies = new ArrayList<PuckBody>();
-        puckBodies.add(new PuckBody(world, GameModel.getInstance().getPuck(), BodyDef.BodyType.DynamicBody));
 
-        handleBody = new HandleBody(world, GameModel.getInstance().getHandle(), BodyDef.BodyType.DynamicBody);
+        puckBodies.add(new PuckBody(world, gameModel.getPuck(), BodyDef.BodyType.DynamicBody));
 
-        botBody = new BotBody(world, GameModel.getInstance().getBot(), BodyDef.BodyType.DynamicBody);
+        handleBody = new HandleBody(world, gameModel.getHandle(), BodyDef.BodyType.DynamicBody);
+
+        botBody = new BotBody(world, gameModel.getBot(), BodyDef.BodyType.DynamicBody);
 
         createEdges();
     }
@@ -155,9 +152,9 @@ public class GameController {
      */
     public static void setUpDimensions()
     {
-        ARENA_WIDTH = Gdx.graphics.getWidth()*GameView.PIXEL_TO_METER;
+        ARENA_WIDTH = GRAPHICS_WIDTH * GameView.PIXEL_TO_METER;
 
-        ARENA_HEIGHT =  Gdx.graphics.getHeight()*GameView.PIXEL_TO_METER;
+        ARENA_HEIGHT = GRAPHICS_HEIGHT * GameView.PIXEL_TO_METER;
     }
 
     /**
@@ -218,6 +215,8 @@ public class GameController {
             world.step(1/60f, 6, 2);
             accumulator -= 1/60f;
         }
+
+        end = new Date();
     }
 
     /**
@@ -227,8 +226,6 @@ public class GameController {
     public void update(float delta)
     {
         step(delta);
-
-        end = new Date();
 
         checkPowerUp();
 
@@ -249,14 +246,10 @@ public class GameController {
 
         if(timeElapsed >= POWERUP_FREQUENCY && powerUpBody == null)
             setUpPowerUp();
-        else if(powerUpBody != null && !powerUpBody.isActive())
-        {
-            if(powerUpBody.check())
+        else if(powerUpBody != null && !powerUpBody.isActive() && powerUpBody.check())
                 begin = new Date();
-        }
         else if(timeElapsed >= POWERUP_FREQUENCY && powerUpBody.isActive())
             resetPowerUp();
-
     }
 
     /**
@@ -280,28 +273,31 @@ public class GameController {
     public boolean checkScore()
     {
         boolean changed = false;
+        HandleModel handle = GameModel.getInstance().getHandle();
+        BotModel bot = GameModel.getInstance().getBot();
+        float position;
 
         for(PuckBody puckBody: puckBodies) {
-            if (puckBody.getBody().getPosition().y < -2) {
-                GameModel.getInstance().getBot().incScore();
+            position = puckBody.getBody().getPosition().y;
+            if (position < -2) {
+                bot.incScore();
                 changed = true;
                 handleGoal();
                 break;
-
-            } else if (puckBody.getBody().getPosition().y > GameController.ARENA_HEIGHT + 2) {
-                GameModel.getInstance().getHandle().incScore();
+            } else if (position > GameController.ARENA_HEIGHT + 2) {
+                handle.incScore();
                 changed = true;
                 handleGoal();
                 break;
             }
         }
-            int scorePlayer = GameModel.getInstance().getHandle().getScore();
-            int scoreOpponent = GameModel.getInstance().getBot().getScore();
 
-            if ((scoreOpponent >= WIN_SCORE || scorePlayer >= WIN_SCORE) && Math.abs(scorePlayer - scoreOpponent) >= 2) {
-                gameOver = true;
-                changed = true;
-        }
+        int scorePlayer = handle.getScore();
+        int scoreOpponent = bot.getScore();
+
+        if ((scoreOpponent >= WIN_SCORE || scorePlayer >= WIN_SCORE) && Math.abs(scorePlayer - scoreOpponent) >= 2)
+            gameOver = true;
+
         return changed;
     }
 
@@ -315,6 +311,9 @@ public class GameController {
             resetPowerUp();
     }
 
+    /**
+     * Resets the current power up and restarts the timer.
+     */
     private void resetPowerUp()
     {
         powerUpBody.reset();

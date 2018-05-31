@@ -1,22 +1,23 @@
 package com.ciscominas.airhockeymania.controller.entities.artificial_intelligence;
 
 import com.badlogic.gdx.math.Vector2;
+
 import com.ciscominas.airhockeymania.controller.GameController;
-import com.ciscominas.airhockeymania.controller.entities.BotBody;
 import com.ciscominas.airhockeymania.controller.entities.PuckBody;
 import com.ciscominas.airhockeymania.model.GameModel;
-import com.ciscominas.airhockeymania.model.entities.BotModel;
 import com.ciscominas.airhockeymania.utils.Constants;
+import com.ciscominas.airhockeymania.utils.Functions;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.Random;
 
 /**
  * Controls the behaviour of the Bot
  */
 public class Bot {
 
+    /**
+     * The possible states of the bot
+     */
     public enum State {DEFEND, ATTACK, RESET};
 
     /**
@@ -57,7 +58,6 @@ public class Bot {
      */
     public void setValues(String difficulty)
     {
-        System.out.println(difficulty);
         if(difficulty == "Easy") {
             alert_radius = GameController.ARENA_WIDTH/3;
             reaction_vel = GameController.ARENA_WIDTH/8;
@@ -103,17 +103,23 @@ public class Bot {
 
     }
 
+    /**
+     * Checks and returns which puck is closest to the bot
+     *
+     * @param puckBodies the active pucks
+     * @return the closest puck to the bot
+     */
     private PuckBody getClosestPuck(ArrayList<PuckBody> puckBodies) {
 
         PuckBody puck = puckBodies.get(0);
         Vector2 puck_pos = puck.getBody().getPosition();
         Vector2 bot_pos = GameController.getInstance().getBot().getBody().getPosition();
-        float distance = getDistance(bot_pos,puck_pos);
+        float distance = Functions.getDistance(bot_pos,puck_pos);
         float min_distance = distance;
 
         for(PuckBody puckBody: puckBodies)
         {
-            distance = getDistance(puckBody.getBody().getPosition(),bot_pos);
+            distance = Functions.getDistance(puckBody.getBody().getPosition(),bot_pos);
 
             if(distance <= min_distance)
             {
@@ -123,11 +129,6 @@ public class Bot {
         }
 
         return puck;
-    }
-
-    private float getDistance(Vector2 vector1, Vector2 vector2){
-
-        return new Vector2(vector2.x - vector1.x, vector2.y - vector1.y).len();
     }
 
     /**

@@ -10,6 +10,9 @@ public class BotModel extends EntityModel{
      */
     private int score;
 
+    /**
+     * Difficulty/Intelligence of the bot, Medium by default
+     */
     private String difficulty = "Medium";
 
     /**
@@ -32,27 +35,36 @@ public class BotModel extends EntityModel{
         return ModelType.BOT;
     }
 
+    /**
+     * Returns this bot's score at the current game.
+     * @return the score
+     */
     public int getScore() {
         return score;
     }
 
+    /**
+     * Increments this bot's score
+     */
     public void incScore()
     {
         score++;
     }
 
+    /**
+     * Resets this bot's score
+     */
     public void resetScore()
     {
         score = 0;
     }
 
+    /**
+     * Returns this bot difficulty
+     * @return the difficulty
+     */
     public String getDifficulty()
     {
         return difficulty;
-    }
-
-
-    public void setDifficulty(String difficulty) {
-        this.difficulty = difficulty;
     }
 }

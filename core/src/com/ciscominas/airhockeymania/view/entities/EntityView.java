@@ -34,6 +34,11 @@ public abstract class EntityView {
         sprite.draw(batch);
     }
 
+    /**
+     * Creates the sprite for this entity, by fetching the texture from the asset manager
+     * @param game the main game class
+     * @return the sprite for this entity
+     */
     public abstract Sprite createSprite(AirHockeyMania game);
 
     /**
@@ -44,5 +49,9 @@ public abstract class EntityView {
         sprite.setCenter(model.getX() / PIXEL_TO_METER, model.getY() / PIXEL_TO_METER);
     }
 
+    /**
+     * Resizes the sprite to better fit on the screen.
+     * @param model the respective entity model
+     */
     public abstract void resize(EntityModel model);
 }

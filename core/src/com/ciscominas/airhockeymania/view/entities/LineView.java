@@ -7,6 +7,11 @@ import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.view.GameView;
 
+import static com.ciscominas.airhockeymania.utils.Constants.EDGE_FILE;
+
+/**
+ * Represents an Edge on the screen.
+ */
 public class LineView extends EntityView {
     public LineView(AirHockeyMania game) {
         super(game);
@@ -14,7 +19,7 @@ public class LineView extends EntityView {
 
     @Override
     public Sprite createSprite(AirHockeyMania game) {
-        Texture texture = game.getAssetManager().get("blue.png");
+        Texture texture = game.getAssetManager().get(EDGE_FILE);
 
         return new Sprite(texture, texture.getWidth(), texture.getHeight());
     }

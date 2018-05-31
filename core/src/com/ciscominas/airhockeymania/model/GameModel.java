@@ -1,32 +1,62 @@
 package com.ciscominas.airhockeymania.model;
 
 import com.badlogic.gdx.math.Vector2;
+
 import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.database.GameResult;
-import com.ciscominas.airhockeymania.model.entities.BotModel;
-import com.ciscominas.airhockeymania.model.entities.EntityModel;
-import com.ciscominas.airhockeymania.model.entities.HandleModel;
-import com.ciscominas.airhockeymania.model.entities.LineModel;
-import com.ciscominas.airhockeymania.model.entities.PowerUpModel;
-import com.ciscominas.airhockeymania.model.entities.PuckModel;
-import com.ciscominas.airhockeymania.utils.Functions;
-import com.ciscominas.airhockeymania.utils.Constants;
+import com.ciscominas.airhockeymania.model.entities.*;
+import com.ciscominas.airhockeymania.utils.*;
 
 import java.util.ArrayList;
 
-
+/**
+ * Stores the elements models, and manages their internal information.
+ */
 public class GameModel {
 
+    /**
+     * Singleton instance
+     */
     private static GameModel instance;
+
+    /**
+     * Edges models
+     */
     private ArrayList<LineModel> edges;
+
+    /**
+     * Handle model
+     */
     private HandleModel handle;
+
+    /**
+     * Puck model
+     */
     private PuckModel puck;
+
+    /**
+     * Bot model
+     */
     private BotModel bot;
+
+    /**
+     * Power up model
+     */
     private PowerUpModel powerUp;
 
+    /**
+     * Width of the arena
+     */
     private float WIDTH = GameController.ARENA_WIDTH;
+
+    /**
+     * Height of the arena
+     */
     private float HEIGHT = GameController.ARENA_HEIGHT;
 
+    /**
+     * Represents a duplicate puck that may be created by the DuplicatePucks powerup
+     */
     private PuckModel duplicate;
 
     /**
@@ -44,6 +74,10 @@ public class GameModel {
         return instance;
     }
 
+    /**
+     * Creates the only GameModel instance, setting up the main elements: puck, handle, bot, edges and
+     * power up.
+     */
     private GameModel() {
 
         puck = new PuckModel(Constants.PUCK_X, Constants.PUCK_Y, Constants.PUCK_RADIUS, 0);
@@ -185,9 +219,5 @@ public class GameModel {
      */
     public void setLastTouch(EntityModel.ModelType lastTouch) {
         this.lastTouch = lastTouch;
-    }
-
-    public void setDifficulty(String difficulty) {
-        bot.setDifficulty(difficulty);
     }
 }

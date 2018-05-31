@@ -6,6 +6,11 @@ import com.ciscominas.airhockeymania.AirHockeyMania;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.view.GameView;
 
+import static com.ciscominas.airhockeymania.utils.Constants.HANDLE_FILE;
+
+/**
+ * Represents a Bot on the screen.
+ */
 class BotView extends EntityView {
     public BotView(AirHockeyMania game) {
         super(game);
@@ -13,8 +18,7 @@ class BotView extends EntityView {
 
     @Override
     public Sprite createSprite(AirHockeyMania game) {
-
-        Texture texture = game.getAssetManager().get("handle.png");
+        Texture texture = game.getAssetManager().get(HANDLE_FILE);
 
         return new Sprite(texture, texture.getWidth(), texture.getHeight());
 

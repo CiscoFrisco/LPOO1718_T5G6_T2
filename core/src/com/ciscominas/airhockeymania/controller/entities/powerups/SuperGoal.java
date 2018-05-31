@@ -2,6 +2,7 @@ package com.ciscominas.airhockeymania.controller.entities.powerups;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+
 import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.controller.entities.EntityBody;
 import com.ciscominas.airhockeymania.controller.entities.LineBody;
@@ -61,22 +62,25 @@ public class SuperGoal implements PowerUpType {
     }
 
     /**
-     * Resizes both edges of the goal accoridng to a certain ratio.
+     * Resizes both edges of the goal according to a certain ratio.
      * @param which1 Edge of the goal.
      * @param which2 Edge of the goal.
      * @param ratio Ratio by which the current size will be multiplied.
      */
     private void effectEdges(int which1, int which2, float ratio)
     {
-        Functions.destroyBody(GameController.getInstance().getEdges().get(which1).getBody());
-        Functions.destroyBody(GameController.getInstance().getEdges().get(which2).getBody());
+        GameController controller = GameController.getInstance();
+        GameModel model = GameModel.getInstance();
 
-        GameModel.getInstance().setEdge(ratio, which1);
-        GameModel.getInstance().setEdge(ratio, which2);
+        Functions.destroyBody(controller.getEdges().get(which1).getBody());
+        Functions.destroyBody(controller.getEdges().get(which2).getBody());
 
-        ArrayList<LineModel> models =  GameModel.getInstance().getEdges();
-        World world = GameController.getInstance().getWorld();
-        GameController.getInstance().setLine(new LineBody(world, models.get(which1), BodyDef.BodyType.StaticBody, mask), which1);
-        GameController.getInstance().setLine(new LineBody(world, models.get(which2), BodyDef.BodyType.StaticBody, mask), which2);
+        model.setEdge(ratio, which1);
+        model.setEdge(ratio, which2);
+
+        ArrayList<LineModel> models =  model.getEdges();
+        World world = controller.getWorld();
+        controller.setLine(new LineBody(world, models.get(which1), BodyDef.BodyType.StaticBody, mask), which1);
+        controller.setLine(new LineBody(world, models.get(which2), BodyDef.BodyType.StaticBody, mask), which2);
     }
 }

@@ -2,7 +2,6 @@ package com.ciscominas.airhockeymania.controller.entities;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
-import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.controller.entities.artificial_intelligence.Bot;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 
@@ -42,6 +41,10 @@ public class BotBody extends EntityBody {
                 (short) (LINE_BODY |PUCK_BODY));
     }
 
+    /**
+     * Move this bot according to its type.
+     * @param puckBodies the active pucks in the game
+     */
     public void move(ArrayList<PuckBody> puckBodies)
     {
         if(controlOn)
@@ -77,10 +80,18 @@ public class BotBody extends EntityBody {
         this.controlOn = control;
     }
 
-    public boolean getControlOn() {
+    /**
+     * Returns the state of controlOn.
+     * @return controlOn
+     */
+    public boolean isControlOn() {
         return controlOn;
     }
 
+    /**
+     * Sets the difficulty of the bot
+     * @param difficulty the new difficulty
+     */
     public void setDifficulty(String difficulty) {
         bot.setValues(difficulty);
     }

@@ -7,6 +7,11 @@ import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.view.GameView;
 
+import static com.ciscominas.airhockeymania.utils.Constants.HANDLE_FILE;
+
+/**
+ * Represents a Handle on the screen.
+ */
 public class HandleView extends EntityView {
     public HandleView(AirHockeyMania game) {
         super(game);
@@ -14,7 +19,7 @@ public class HandleView extends EntityView {
 
     @Override
     public Sprite createSprite(AirHockeyMania game) {
-        Texture texture = game.getAssetManager().get("handle.png");
+        Texture texture = game.getAssetManager().get(HANDLE_FILE);
 
         return new Sprite(texture, texture.getWidth(), texture.getHeight());
     }

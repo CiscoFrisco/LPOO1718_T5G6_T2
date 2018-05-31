@@ -6,16 +6,24 @@ import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.ciscominas.airhockeymania.model.entities.EntityModel.ModelType.BOT;
-import static com.ciscominas.airhockeymania.model.entities.EntityModel.ModelType.HANDLE;
-import static com.ciscominas.airhockeymania.model.entities.EntityModel.ModelType.LINE;
-import static com.ciscominas.airhockeymania.model.entities.EntityModel.ModelType.POWERUP;
-import static com.ciscominas.airhockeymania.model.entities.EntityModel.ModelType.PUCK;
+import static com.ciscominas.airhockeymania.model.entities.EntityModel.ModelType.*;
 
+/**
+ * A factory for EntityView objects with cache
+ */
 public class ViewFactory {
+    /**
+     * Stores the entity views
+     */
     private static Map<EntityModel.ModelType, EntityView> cache =
             new HashMap<EntityModel.ModelType, EntityView>();
 
+    /**
+     * Returns a view for the given model, storing it in the cache if it isn't there already.
+     * @param game the main game class
+     * @param model the entity model
+     * @return the respective view
+     */
     public static EntityView makeView(AirHockeyMania game, EntityModel model) {
         if (!cache.containsKey(model.getType())) {
             if (model.getType() == HANDLE)

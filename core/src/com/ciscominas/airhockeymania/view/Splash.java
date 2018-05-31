@@ -9,8 +9,6 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
 import com.ciscominas.airhockeymania.AirHockeyMania;
 
-import static com.ciscominas.airhockeymania.utils.Constants.GRAPHICS_HEIGHT;
-import static com.ciscominas.airhockeymania.utils.Constants.GRAPHICS_WIDTH;
 
 /**
  * The first screen of the game, presenting the logo and developers
@@ -36,6 +34,16 @@ public class Splash extends ScreenAdapter {
      * File path for the logo
      */
     private final String LOGO = "logo.png";
+
+    /**
+     * Width of the specific device
+     */
+    public static final int GRAPHICS_WIDTH = Gdx.graphics.getWidth();
+
+    /**
+     * Height of the specific device
+     */
+    public static final int GRAPHICS_HEIGHT = Gdx.graphics.getHeight();
 
     /**
      * Creates a Splash screen, initializing the font and loading the logo.

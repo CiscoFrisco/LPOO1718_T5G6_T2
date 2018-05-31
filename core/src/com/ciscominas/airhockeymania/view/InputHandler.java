@@ -2,6 +2,7 @@ package com.ciscominas.airhockeymania.view;
 
 import com.badlogic.gdx.InputAdapter;
 import com.badlogic.gdx.math.Vector3;
+
 import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.model.GameModel;
 

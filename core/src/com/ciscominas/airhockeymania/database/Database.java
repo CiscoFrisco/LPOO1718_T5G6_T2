@@ -20,5 +20,4 @@ public interface Database {
      * @param result Result of a game, containing scores and date.
      */
     void insert(GameResult result);
-
 }

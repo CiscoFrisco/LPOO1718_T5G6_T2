@@ -7,8 +7,8 @@ import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.Statement;
 import java.sql.SQLException;
-import java.sql.Date;
 import java.sql.ResultSet;
+
 import java.util.ArrayList;
 
 import static com.ciscominas.airhockeymania.utils.Constants.DATABASE;
@@ -112,7 +112,10 @@ public class DesktopDatabase implements Database{
         return results;
     }
 
-    public void clear() {
+    /**
+     * Eliminates the last added row from the results table.
+     */
+    public void pop() {
 
         String sql = "DELETE FROM " + Constants.RESULTS_TABLE + " WHERE id = (SELECT MAX(id) FROM " +  Constants.RESULTS_TABLE + ")";
 

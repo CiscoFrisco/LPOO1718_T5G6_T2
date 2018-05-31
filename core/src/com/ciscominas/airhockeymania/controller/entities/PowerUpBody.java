@@ -2,6 +2,7 @@ package com.ciscominas.airhockeymania.controller.entities;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+
 import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.controller.entities.powerups.PowerUpType;
@@ -72,9 +73,7 @@ public class PowerUpBody extends EntityBody {
     public boolean check()
     {
         if(!active && body != null)
-        {
            return checkContact();
-        }
 
         return false;
     }

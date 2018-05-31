@@ -2,10 +2,16 @@ package com.ciscominas.airhockeymania.view.entities;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+
 import com.ciscominas.airhockeymania.AirHockeyMania;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.view.GameView;
 
+import static com.ciscominas.airhockeymania.utils.Constants.POWERUP_FILE;
+
+/**
+ * Represents a power up on the screen.
+ */
 public class PowerUpView extends EntityView {
     public PowerUpView(AirHockeyMania game) {
         super(game);
@@ -13,7 +19,7 @@ public class PowerUpView extends EntityView {
 
     @Override
     public Sprite createSprite(AirHockeyMania game) {
-        Texture texture = game.getAssetManager().get("powerup.png");
+        Texture texture = game.getAssetManager().get(POWERUP_FILE);
 
         return new Sprite(texture, texture.getWidth(), texture.getHeight());
     }

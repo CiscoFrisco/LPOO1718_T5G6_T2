@@ -99,6 +99,10 @@ public class Constants {
 
     public static final String DEFAULT_DIFFICULTY = "Medium";
 
-    public static final int GRAPHICS_WIDTH = Gdx.graphics.getWidth();
-    public static final int GRAPHICS_HEIGHT = Gdx.graphics.getHeight();
+    public static final String PUCK_FILE = "puck.png";
+    public static final String HANDLE_FILE = "handle.png";
+    public static final String EDGE_FILE = "blue.png";
+    public static final String POWERUP_FILE = "powerup.png";
+
+
 }

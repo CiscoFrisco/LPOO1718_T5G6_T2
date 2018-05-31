@@ -23,13 +23,13 @@ public class FreezeHandle implements PowerUpType {
     @Override
     public void effect() {
         lastTouch = GameModel.getInstance().getLastTouch();
-
+        GameController controller = GameController.getInstance();
         if (lastTouch == HANDLE) {
-            GameController.getInstance().getBot().setControlOn(false);
-            GameController.getInstance().getBot().setLinearVelocity(0, 0);
+            controller.getBot().setControlOn(false);
+            controller.getBot().setLinearVelocity(0, 0);
         } else {
-            GameController.getInstance().getHandle().setControlOn(false);
-            GameController.getInstance().getHandle().setLinearVelocity(0, 0);
+            controller.getHandle().setControlOn(false);
+            controller.getHandle().setLinearVelocity(0, 0);
         }
     }
 

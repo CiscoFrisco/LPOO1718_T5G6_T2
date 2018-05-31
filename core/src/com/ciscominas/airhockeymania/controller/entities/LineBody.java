@@ -2,6 +2,7 @@ package com.ciscominas.airhockeymania.controller.entities;
 
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
+
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 
 /**

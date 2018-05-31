@@ -6,6 +6,11 @@ import com.ciscominas.airhockeymania.AirHockeyMania;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.view.GameView;
 
+import static com.ciscominas.airhockeymania.utils.Constants.PUCK_FILE;
+
+/**
+ * Represents a Puck on the screen.
+ */
 public class PuckView extends EntityView {
     public PuckView(AirHockeyMania game) {
         super(game);
@@ -13,7 +18,7 @@ public class PuckView extends EntityView {
 
     @Override
     public Sprite createSprite(AirHockeyMania game) {
-        Texture texture = game.getAssetManager().get("puck.png");
+        Texture texture = game.getAssetManager().get(PUCK_FILE);
 
         return new Sprite(texture, texture.getWidth(), texture.getHeight());
     }

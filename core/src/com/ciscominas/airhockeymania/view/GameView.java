@@ -25,8 +25,13 @@ import com.ciscominas.airhockeymania.view.entities.ViewFactory;
 
 import java.util.ArrayList;
 
-import static com.ciscominas.airhockeymania.utils.Constants.GRAPHICS_HEIGHT;
-import static com.ciscominas.airhockeymania.utils.Constants.GRAPHICS_WIDTH;
+import static com.ciscominas.airhockeymania.utils.Constants.EDGE_FILE;
+import static com.ciscominas.airhockeymania.view.Splash.GRAPHICS_HEIGHT;
+import static com.ciscominas.airhockeymania.view.Splash.GRAPHICS_WIDTH;
+import static com.ciscominas.airhockeymania.utils.Constants.HANDLE_FILE;
+import static com.ciscominas.airhockeymania.utils.Constants.HIT_SOUND;
+import static com.ciscominas.airhockeymania.utils.Constants.POWERUP_FILE;
+import static com.ciscominas.airhockeymania.utils.Constants.PUCK_FILE;
 
 /**
  * The game screen. Responsible for showing the game elements to the user, receiving input,
@@ -64,6 +69,11 @@ public class GameView extends ScreenAdapter {
 
     private BitmapFont score;
 
+    private static final String PAUSE_FILE = "pause.png";
+    private static final String MUSIC_FILE = "bkg_music1.mp3";
+    private static final String BACKGROUND_FILE = "rink.png";
+
+
     /**
      * Builds a GameView object. Loads the assets, sets up the camera and sends the screen coordinates
      * to the GameController.
@@ -86,15 +96,15 @@ public class GameView extends ScreenAdapter {
      */
     private void setAssets()
     {
-        bkg_music = game.getAssetManager().get("bkg_music1.mp3");
+        bkg_music = game.getAssetManager().get(MUSIC_FILE);
         bkg_music.setLooping(true);
 
-        pause = game.getAssetManager().get("pause.png");
+        pause = game.getAssetManager().get(PAUSE_FILE);
 
         score = new BitmapFont();
         score.setColor(243/255f,12/255f,12/255f, 1);
 
-        background = game.getAssetManager().get("rink.png");
+        background = game.getAssetManager().get(BACKGROUND_FILE);
     }
 
     /**
@@ -124,14 +134,14 @@ public class GameView extends ScreenAdapter {
      */
     private void loadAssets() {
         AssetManager manager = game.getAssetManager();
-        manager.load("puck.png", Texture.class);
-        manager.load("handle.png", Texture.class);
-        manager.load("powerup.png", Texture.class);
-        manager.load("blue.png", Texture.class);
-        manager.load( "hit.mp3", Sound.class);
-        manager.load( "bkg_music1.mp3", Music.class);
-        manager.load("pause.png", Texture.class);
-        manager.load("rink.png",Texture.class);
+        manager.load(PUCK_FILE, Texture.class);
+        manager.load(HANDLE_FILE, Texture.class);
+        manager.load(POWERUP_FILE, Texture.class);
+        manager.load(EDGE_FILE, Texture.class);
+        manager.load( HIT_SOUND, Sound.class);
+        manager.load( MUSIC_FILE, Music.class);
+        manager.load(PAUSE_FILE, Texture.class);
+        manager.load(BACKGROUND_FILE,Texture.class);
         manager.finishLoading();
     }
 
@@ -177,9 +187,9 @@ public class GameView extends ScreenAdapter {
 
         batch.draw(background,0,0, GRAPHICS_WIDTH, GRAPHICS_HEIGHT);
 
-        batch.draw(pause, PAUSE_X,PAUSE_Y, PAUSE_WIDTH,PAUSE_WIDTH);
-
         drawEntities(controller, model, batch);
+
+        batch.draw(pause, PAUSE_X,PAUSE_Y, PAUSE_WIDTH,PAUSE_WIDTH);
 
         drawScore(model, batch);
 

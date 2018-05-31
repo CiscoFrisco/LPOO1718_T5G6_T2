@@ -113,4 +113,15 @@ public class Functions {
         else
             music.stop();
     }
+
+    /**
+     * Returns the distance between two vectors
+     * @param vector1
+     * @param vector2
+     * @return the distance between two vectors
+     */
+    public static float getDistance(Vector2 vector1, Vector2 vector2){
+
+        return new Vector2(vector2.x - vector1.x, vector2.y - vector1.y).len();
+    }
 }
