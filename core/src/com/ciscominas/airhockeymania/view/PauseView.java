@@ -16,12 +16,39 @@ import com.ciscominas.airhockeymania.controller.GameController;
  */
 public class PauseView extends MenuView {
 
+    /**
+     * Identifies the music checkbox
+     */
     private Label musicOnOffLabel;
+
+    /**
+     * Identifies the sound checkbox
+     */
     private Label soundOnOffLabel;
+
+    /**
+     * Presents the name of the screen
+     */
     private Label titleLabel;
+
+    /**
+     * Button that leads back to the game screen
+     */
     private TextButton resumeButton;
+
+    /**
+     * Button that leads to the main screen, forfeiting the game
+     */
     private TextButton exitButton;
+
+    /**
+     * Allows the user to enable/disable music
+     */
     private CheckBox musicCheckbox;
+
+    /**
+     * Allows the user to enable/disable sound effects
+     */
     private CheckBox soundEffectsCheckbox;
 
     /**

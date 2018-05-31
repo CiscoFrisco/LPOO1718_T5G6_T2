@@ -1,5 +1,6 @@
 package com.ciscominas.airhockeymania.utils;
 
+import com.badlogic.gdx.Gdx;
 import com.ciscominas.airhockeymania.controller.GameController;
 
 /**
@@ -41,16 +42,6 @@ public class Constants {
      * Limit for the number of results that may be retrieved from the database
      */
     public static final int LIMIT = 10;
-
-    /**
-     * Name of the menu's music file
-     */
-    public static final String MENU_MUSIC = "menu.mp3";
-
-    /**
-     * Name of the menu's table skin file
-     */
-    public static final String MENU_SKIN =  "skin/glassy-ui.json";
 
     /**
      * Initial x coordinate of the puck in meters
@@ -105,4 +96,9 @@ public class Constants {
     public static final String PUCK_IMAGE_PATH = "puck.png";
     public static final String LOGO_IMAGE_PATH = "air_hockey_mania.png";
     public static final String HIT_SOUND = "hit.mp3";
+
+    public static final String DEFAULT_DIFFICULTY = "Medium";
+
+    public static final int GRAPHICS_WIDTH = Gdx.graphics.getWidth();
+    public static final int GRAPHICS_HEIGHT = Gdx.graphics.getHeight();
 }

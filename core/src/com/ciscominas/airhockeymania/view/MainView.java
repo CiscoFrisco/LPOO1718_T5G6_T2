@@ -1,12 +1,11 @@
 package com.ciscominas.airhockeymania.view;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Actor;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
 import com.ciscominas.airhockeymania.AirHockeyMania;
 
 /**
@@ -14,9 +13,24 @@ import com.ciscominas.airhockeymania.AirHockeyMania;
  */
 public class MainView extends MenuView {
 
+    /**
+     * New game button, leading to Game screen
+     */
     private TextButton newGame;
+
+    /**
+     * Button leading to Preferences screen
+     */
     private TextButton preferences;
+
+    /**
+     * Button that exits the game
+     */
     private TextButton exit;
+
+    /**
+     * Button leading to the results screen
+     */
     private TextButton results;
 
     /**
@@ -25,8 +39,6 @@ public class MainView extends MenuView {
      */
     public MainView(AirHockeyMania game) {
         super(game);
-       game.getAssetManager().load("logo.png", Texture.class);
-       game.getAssetManager().finishLoading();
     }
 
     /**
@@ -35,16 +47,9 @@ public class MainView extends MenuView {
     protected void setUpElements()
     {
         newGame = new TextButton("New Game", skin);
-        newGame.getLabel().setFontScale(FONT_SIZE, FONT_SIZE);
-
         preferences = new TextButton("Preferences", skin);
-        preferences.getLabel().setFontScale(FONT_SIZE, FONT_SIZE);
-
         results = new TextButton("Results", skin);
-        results.getLabel().setFontScale(FONT_SIZE, FONT_SIZE);
-
         exit = new TextButton("Exit", skin);
-        exit.getLabel().setFontScale(FONT_SIZE, FONT_SIZE);
 
         exit.addListener(new ChangeListener() {
             @Override
@@ -90,26 +95,4 @@ public class MainView extends MenuView {
         table.row().pad(0, 0, 0, 0);
         table.add(exit).fillX().uniformX();
     }
-
-    /**
-     * Checks if the music is activated, playing it with the volume set by the user (or default).
-     */
-    private void checkMusic()
-    {
-        if(game.getPreferences().isMusicEnabled())
-        {
-            game.getMenuMusic().setVolume(game.getPreferences().getMusicVolume());
-            game.getMenuMusic().play();
-        }
-        else
-            game.getMenuMusic().stop();
-    }
-
-    @Override
-    public void render(float delta) {
-        super.render(delta);
-
-        checkMusic();
-    }
-
 }

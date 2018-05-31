@@ -3,6 +3,7 @@ package com.ciscominas.airhockeymania;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.ciscominas.airhockeymania.model.GameModel;
+import com.ciscominas.airhockeymania.utils.Constants;
 
 /**
  * Provides access to current settings of the game, which include music, sound and bot difficulty.
@@ -10,11 +11,34 @@ import com.ciscominas.airhockeymania.model.GameModel;
  */
 public class AppPreferences {
 
+    /**
+     * Identifier for the music volume slider setting
+     */
     private static final String PREF_MUSIC_VOLUME = "volume";
+
+    /**
+     * Identifier for the music checkbox setting
+     */
     private static final String PREF_MUSIC_ENABLED = "music.enabled";
+
+    /**
+     * Identifier for the sound checkbox setting
+     */
     private static final String PREF_SOUND_ENABLED = "sound.enabled";
+
+    /**
+     * Identifier for the sound volume slider setting
+     */
     private static final String PREF_SOUND_VOL = "sound";
+
+    /**
+     * Identifier for the game's preferences file
+     */
     private static final String PREFS_NAME = "AirHockeyMania";
+
+    /**
+     * Identifier for the bot difficulty dropdown list setting
+     */
     private static final String PREF_DIFFICULTY = "difficulty";
 
     /**
@@ -101,7 +125,6 @@ public class AppPreferences {
      */
     public void setDifficulty(String difficulty) {
         getPrefs().putString(PREF_DIFFICULTY, difficulty);
-        GameModel.getInstance().setDifficulty(difficulty);
         getPrefs().flush();
     }
 
@@ -110,6 +133,6 @@ public class AppPreferences {
      * @return the bot's difficulty
      */
     public String getDifficulty() {
-        return getPrefs().getString(PREF_DIFFICULTY, "Medium");
+        return getPrefs().getString(PREF_DIFFICULTY, Constants.DEFAULT_DIFFICULTY);
     }
 }

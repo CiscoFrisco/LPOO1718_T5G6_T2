@@ -11,7 +11,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
-import com.badlogic.gdx.scenes.scene2d.ui.Image;
+
 import com.ciscominas.airhockeymania.AirHockeyMania;
 import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.controller.entities.powerups.DuplicatePucks;
@@ -24,7 +24,7 @@ import java.util.ArrayList;
 
 /**
  * The game screen. Responsible for showing the game elements to the user, receiving input,
- * and senting it to the game controller.
+ * and sending it to the game controller.
  */
 public class GameView extends ScreenAdapter {
 
@@ -122,7 +122,6 @@ public class GameView extends ScreenAdapter {
     @Override
     public void show() {
         super.show();
-        game.getMenuMusic().stop();
         GameController.getInstance().setBegin();
         Gdx.input.setInputProcessor(new InputHandler(this));
 

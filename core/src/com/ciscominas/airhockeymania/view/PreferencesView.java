@@ -10,6 +10,7 @@ import com.badlogic.gdx.scenes.scene2d.ui.Slider;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
 import com.badlogic.gdx.scenes.scene2d.ui.TextButton;
 import com.badlogic.gdx.scenes.scene2d.utils.ChangeListener;
+
 import com.ciscominas.airhockeymania.AirHockeyMania;
 
 /**
@@ -17,19 +18,66 @@ import com.ciscominas.airhockeymania.AirHockeyMania;
  */
 public class PreferencesView extends MenuView {
 
+    /**
+     * Identifies the difficulty selector
+     */
     private Label difficultyLabel;
+
+    /**
+     * Identifies the title of the screen
+     */
     private Label titleLabel;
+
+    /**
+     * Identifies the music volume slider
+     */
     private Label volumeMusicLabel;
+
+    /**
+     * Identifies the sound volume slider
+     */
     private Label volumeSoundLabel;
+
+    /**
+     * Identifies the music checkbox
+     */
     private Label musicOnOffLabel;
+
+    /**
+     * Identifies the sound checkbox
+     */
     private Label soundOnOffLabel;
 
+    /**
+     * Allows the user to change bot difficulty
+     */
     private SelectBox<String> difficultySelect;
+
+    /**
+     * Allows the user to change the volume of the music
+     */
     private Slider volumeMusicSlider;
+
+    /**
+     * Allows the user to change the volume of the sound
+     */
     private Slider soundMusicSlider;
-    private TextButton backButton;
+
+    /**
+     * Allows the user to enable/disable music
+     */
     private CheckBox musicCheckbox;
+
+    /**
+     * Allows the user to enable/disable sound effects
+     */
     private CheckBox soundEffectsCheckbox;
+
+    /**
+     * Button that leads to the main menu
+     */
+    private TextButton backButton;
+
 
     /**
      * Creates a PreferencesView object.
@@ -69,9 +117,7 @@ public class PreferencesView extends MenuView {
                                              game.getPreferences().setDifficulty(difficultySelect.getSelected());
                                              return true;
                                          }
-                                     }
-
-        );
+                                     });
 
         volumeMusicSlider = new Slider(0f, 1f, 0.1f, false, skin);
         volumeMusicSlider.addListener(new EventListener() {

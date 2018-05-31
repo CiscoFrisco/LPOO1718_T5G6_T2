@@ -15,11 +15,31 @@ import java.util.ArrayList;
  */
 public class ResultsView extends MenuView {
 
+    /**
+     * Presents the name of the screen
+     */
     private Label titleLabel;
+
+    /**
+     * Identifies the player score column
+     */
     private Label score1Label;
+
+    /**
+     * Identifies the bot score column
+     */
     private Label score2Label;
+
+    /**
+     * Identifies the date column
+     */
     private Label dateLabel;
+
+    /**
+     * Button that leads to the main menu
+     */
     private TextButton backButton;
+
 
     /**
      * Creates a ResultsView object.

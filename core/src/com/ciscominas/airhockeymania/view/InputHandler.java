@@ -12,10 +12,26 @@ import static com.ciscominas.airhockeymania.view.GameView.PIXEL_TO_METER;
  */
 public class InputHandler extends InputAdapter {
 
+    /**
+     * This handler is meant for the gameview
+     */
     private final GameView view;
+
+    /**
+     * Touchpoint on the screen
+     */
     private Vector3 touchPoint;
+
+    /**
+     * X-coordinate of the touchpoint, in meters
+     */
     private float x;
+
+    /**
+     * Y-coordinate of the touchpoint, in meters
+     */
     private float y;
+
 
     /**
      * Creates an InputHandler object for the view
@@ -28,6 +44,8 @@ public class InputHandler extends InputAdapter {
     }
 
     /**
+     * Allows the user to drag his handle around, limiting his movement to the lower half
+     * of the screen.
      *
      * @param screenX
      * @param screenY
@@ -94,7 +112,7 @@ public class InputHandler extends InputAdapter {
      */
     public boolean checkLimits(float x, float y)
     {
-        return x <GameController.ARENA_WIDTH - GameModel.getInstance().getHandle().getWidth() && x > GameModel.getInstance().getHandle().getWidth() && y > GameModel.getInstance().getHandle().getWidth() && y < GameController.ARENA_HEIGHT/2 - GameModel.getInstance().getHandle().getWidth();
+        return x < GameController.ARENA_WIDTH - GameModel.getInstance().getHandle().getWidth() && x > GameModel.getInstance().getHandle().getWidth() && y > GameModel.getInstance().getHandle().getWidth() && y < GameController.ARENA_HEIGHT/2 - GameModel.getInstance().getHandle().getWidth();
     }
 
 }

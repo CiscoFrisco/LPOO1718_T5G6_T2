@@ -2,18 +2,18 @@ package com.ciscominas.airhockeymania.view;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.ScreenAdapter;
+import com.badlogic.gdx.assets.AssetManager;
+import com.badlogic.gdx.assets.loaders.SkinLoader;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.scenes.scene2d.Stage;
 import com.badlogic.gdx.scenes.scene2d.ui.Image;
 import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.badlogic.gdx.scenes.scene2d.ui.Table;
-import com.badlogic.gdx.utils.viewport.ExtendViewport;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.utils.viewport.ScreenViewport;
-import com.ciscominas.airhockeymania.AirHockeyMania;
 
-import static com.ciscominas.airhockeymania.utils.Constants.MENU_SKIN;
+import com.ciscominas.airhockeymania.AirHockeyMania;
 
 /**
  * Represents a Menu.
@@ -36,37 +36,71 @@ public abstract class MenuView extends ScreenAdapter {
     protected Skin skin;
 
     /**
+     * Music to be played in the menus
+     */
+    protected Music menuMusic;
+
+    /**
      * The background image
      */
     protected Image background;
 
-    protected static final float PIXEL_TO_METER = 0.04f;
+    /**
+     * The menu's background file path
+     */
+    protected static final String MENU = "menu.png";
 
-    protected static final float VIEWPORT_WIDTH = Gdx.graphics.getWidth()*PIXEL_TO_METER;
+    /**
+     * The menu's skin file path
+     */
+    protected static final String MENU_SKIN = "skin/glassy-ui.json";
 
-    protected static final float VIEWPORT_HEIGHT = Gdx.graphics.getHeight()*PIXEL_TO_METER;
-
-    protected static final float DEFAULT_BUTTON_SIZE = VIEWPORT_WIDTH / 2;
-
-    protected static final float BUTTON_WIDTH = VIEWPORT_WIDTH / 2;
-
-    protected float BUTTON_EDGE = VIEWPORT_WIDTH/ 24;
-
-    protected float FONT_SIZE = VIEWPORT_WIDTH / 16;
-
+    protected static final String MENU_MUSIC = "menu.mp3";
 
     /**
      * Creates a MenuView object.
      * @param game the main game class
      */
     protected MenuView(AirHockeyMania game) {
+
         this.game = game;
         stage = new Stage(new ScreenViewport());
-        skin = game.getAssetManager().get(MENU_SKIN);
-        background = new Image(game.getAssetManager().get("menu.png", Texture.class));
-        background.setScale(Gdx.graphics.getWidth() / background.getWidth(), Gdx.graphics.getHeight() / background.getHeight());
+
+        AssetManager manager = game.getAssetManager();
+
+        loadMusic(manager);
+
+        loadSkin(manager);
+
+        setBackground(manager);
 
         setUpElements();
+    }
+
+    /**
+     * Loads the menu's table skin.
+     * @param manager the game's asset manager
+     */
+    private void loadSkin(AssetManager manager) {
+
+        SkinLoader.SkinParameter params = new SkinLoader.SkinParameter("skin/glassy-ui.atlas");
+        manager.load(MENU_SKIN, Skin.class, params);
+        manager.finishLoading();
+
+        skin = manager.get(MENU_SKIN);
+    }
+
+    /**
+     * Sets the menu's background, by fetching it from the asset manager and scaling it to the screen.
+     * @param manager the game's asset manager
+     */
+    private void setBackground(AssetManager manager) {
+
+        manager.load(MENU, Texture.class);
+        manager.finishLoading();
+
+        background = new Image(manager.get(MENU, Texture.class));
+        background.setScale(Gdx.graphics.getWidth() / background.getWidth(), Gdx.graphics.getHeight() / background.getHeight());
     }
 
     /**
@@ -81,6 +115,20 @@ public abstract class MenuView extends ScreenAdapter {
         stage.addActor(table);
 
         return table;
+    }
+
+    /**
+     * Checks if the music is activated, playing it with the volume set by the user (or default).
+     */
+    protected void checkMusic()
+    {
+        if(game.getPreferences().isMusicEnabled())
+        {
+            menuMusic.setVolume(game.getPreferences().getMusicVolume());
+            menuMusic.play();
+        }
+        else
+            menuMusic.stop();
     }
 
     /**
@@ -107,6 +155,14 @@ public abstract class MenuView extends ScreenAdapter {
         Table table = createTable();
 
         setUpTable(table);
+        checkMusic();
+    }
+
+    @Override
+    public void hide() {
+        super.hide();
+        if(game.getCurrentScreen() == AirHockeyMania.Screen.GAME)
+            menuMusic.stop();
     }
 
     @Override
@@ -127,5 +183,18 @@ public abstract class MenuView extends ScreenAdapter {
     @Override
     public void dispose() {
         stage.dispose();
+    }
+
+    /**
+     * Loads the menu's music
+     * @param manager the game's asset manager
+     */
+    public void loadMusic(AssetManager manager)
+    {
+        manager.load(MENU_MUSIC, Music.class);
+        manager.finishLoading();
+
+        menuMusic = manager.get(MENU_MUSIC);
+        menuMusic.setLooping(true);
     }
 }

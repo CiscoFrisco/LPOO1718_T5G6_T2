@@ -78,7 +78,6 @@ public class Bot {
      * It will also call the respective functions according to the current state, acting like a state machine.
      * @param puckBodies Array of Pucks
      */
-    //provavelmente vai-se mudar o parametro desta função
     public void move(ArrayList<PuckBody> puckBodies){
 
         PuckBody puck = getClosestPuck(puckBodies);

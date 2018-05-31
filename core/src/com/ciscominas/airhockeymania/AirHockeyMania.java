@@ -1,12 +1,9 @@
 package com.ciscominas.airhockeymania;
 
 import com.badlogic.gdx.Game;
+import com.badlogic.gdx.ScreenAdapter;
 import com.badlogic.gdx.assets.AssetManager;
-import com.badlogic.gdx.assets.loaders.SkinLoader;
-import com.badlogic.gdx.audio.Music;
-import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.scenes.scene2d.ui.Skin;
 import com.ciscominas.airhockeymania.database.Database;
 import com.ciscominas.airhockeymania.view.GameView;
 import com.ciscominas.airhockeymania.view.MainView;
@@ -15,19 +12,20 @@ import com.ciscominas.airhockeymania.view.PreferencesView;
 import com.ciscominas.airhockeymania.view.ResultsView;
 import com.ciscominas.airhockeymania.view.Splash;
 
-import static com.ciscominas.airhockeymania.utils.Constants.MENU_MUSIC;
-import static com.ciscominas.airhockeymania.utils.Constants.MENU_SKIN;
+import java.util.HashMap;
+
 
 /**
  * Main game class
  */
 public class AirHockeyMania extends Game {
 
-	/**
+    /**
 	 * Screen IDs
 	 */
 	public enum Screen {SPLASH, MAIN, PREFERENCES, RESULTS, GAME, PAUSE}
 
+	private Screen currentScreen;
 
 	/**
 	 * Database to store game results
@@ -44,40 +42,12 @@ public class AirHockeyMania extends Game {
 	 */
 	private AssetManager assetManager;
 
-	/**
-	 * Main menu
-	 */
-	private MainView mainMenu;
-
-	/**
-	 * Game screen
-	 */
-	private GameView gameScreen;
-
-	/**
-	 * Preferences screen
-	 */
-	private PreferencesView preferencesScreen;
-
-	/**
-	 * Pause screen
-	 */
-	private PauseView pauseScreen;
-
-	/**
-	 * Results screen
-	 */
-	private ResultsView resultsScreen;
+	private HashMap<Screen, ScreenAdapter> screens;
 
 	/**
 	 * Game preferences
 	 */
 	private AppPreferences preferences;
-
-	/**
-	 * Music to be played in the menus
-	 */
-	private Music menuMusic;
 
 	/**
 	 * Builds an AirHockeyMania object. Necessary here in order to correctly initialize the database
@@ -99,55 +69,29 @@ public class AirHockeyMania extends Game {
 		assetManager = new AssetManager();
 		batch = new SpriteBatch();
 
-		loadMusic();
-		menuMusic = assetManager.get(MENU_MUSIC);
-		menuMusic.setLooping(true);
-
-		assetManager.load("menu.png", Texture.class);
-
-		SkinLoader.SkinParameter params = new SkinLoader.SkinParameter("skin/glassy-ui.atlas");
-		assetManager.load(MENU_SKIN, Skin.class, params);
-		assetManager.finishLoading();
-
-		setScreen(new Splash(this));
+		setUpScreens();
 	}
 
-    /**
-     * Loads the menu music.
-     */
-	public void loadMusic()
-	{
-		assetManager.load(MENU_MUSIC, Music.class);
-		assetManager.finishLoading();
+	private void setUpScreens() {
+		screens = new HashMap<Screen, ScreenAdapter>();
+		screens.put(Screen.SPLASH, new Splash(this));
+		screens.put(Screen.MAIN, new MainView(this));
+		screens.put(Screen.PREFERENCES, new PreferencesView(this));
+		screens.put(Screen.RESULTS, new ResultsView(this));
+		screens.put(Screen.GAME, new GameView(this));
+		screens.put(Screen.PAUSE, new PauseView(this));
+
+		setScreen(screens.get(Screen.SPLASH));
 	}
+
 
     /**
      * Changes the current screen to the desired one.
      * @param screen screen identifier
      */
 	public void changeScreen(Screen screen){
-		switch(screen){
-			case MAIN:
-				if(mainMenu == null) mainMenu = new MainView(this);
-				this.setScreen(mainMenu);
-				break;
-			case PREFERENCES:
-				if(preferencesScreen == null) preferencesScreen = new PreferencesView(this);
-				this.setScreen(preferencesScreen);
-				break;
-			case RESULTS:
-				if(resultsScreen == null) resultsScreen = new ResultsView(this);
-				this.setScreen(resultsScreen);
-				break;
-			case GAME:
-				if(gameScreen == null) gameScreen = new GameView(this);
-				this.setScreen(gameScreen);
-				break;
-			case PAUSE:
-				if(pauseScreen == null) pauseScreen = new PauseView(this);
-				this.setScreen(pauseScreen);
-				break;
-		}
+	    currentScreen = screen;
+		setScreen(screens.get(screen));
 	}
 
     /**
@@ -191,11 +135,11 @@ public class AirHockeyMania extends Game {
 		return database;
 	}
 
-    /**
-     * Returns the menu music.
-     * @return the menu music.
-     */
-	public Music getMenuMusic() {
-		return menuMusic;
+	/**
+	 * Returns the ID of the current screen of the game.
+	 * @return the ID of the current screen of the game.
+	 */
+	public Screen getCurrentScreen() {
+		return currentScreen;
 	}
 }
