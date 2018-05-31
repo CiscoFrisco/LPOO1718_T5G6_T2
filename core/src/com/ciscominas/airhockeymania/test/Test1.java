@@ -16,6 +16,7 @@ import com.ciscominas.airhockeymania.controller.entities.powerups.SuperHandle;
 import com.ciscominas.airhockeymania.database.DesktopDatabase;
 import com.ciscominas.airhockeymania.database.GameResult;
 import com.ciscominas.airhockeymania.model.GameModel;
+import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.model.entities.HandleModel;
 import com.ciscominas.airhockeymania.model.entities.PowerUpModel;
 import com.ciscominas.airhockeymania.model.entities.PuckModel;
@@ -111,7 +112,7 @@ public class Test1 {
         PowerUpType type;
         PowerUpModel model = new PowerUpModel(0, 0, 1, 0);
         PowerUpBody body;
-        GameModel.getInstance().setLastTouch("PLAYER");
+        GameModel.getInstance().setLastTouch(EntityModel.ModelType.HANDLE);
 
         body = new PowerUpBody(world, model, BodyDef.BodyType.StaticBody);
         type = new SuperGoal();

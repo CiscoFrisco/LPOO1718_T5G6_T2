@@ -5,8 +5,10 @@ import com.badlogic.gdx.physics.box2d.Contact;
 import com.badlogic.gdx.physics.box2d.ContactImpulse;
 import com.badlogic.gdx.physics.box2d.ContactListener;
 import com.badlogic.gdx.physics.box2d.Manifold;
+import com.ciscominas.airhockeymania.controller.entities.artificial_intelligence.Bot;
 import com.ciscominas.airhockeymania.model.GameModel;
 import com.ciscominas.airhockeymania.model.entities.BotModel;
+import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.model.entities.HandleModel;
 import com.ciscominas.airhockeymania.model.entities.LineModel;
 import com.ciscominas.airhockeymania.model.entities.PuckModel;
@@ -34,7 +36,7 @@ public class ContactHandler implements ContactListener {
         if(b1UserData instanceof PuckModel && b2UserData instanceof HandleModel)
         {
             b1.setLinearVelocity(controller.getHandle().getVel().add(b1.getLinearVelocity()));
-            model.setLastTouch("PLAYER");
+            model.setLastTouch(EntityModel.ModelType.HANDLE);
 
             if(controller.isSoundEnabled())
                 controller.getHit().play(controller.getVolume());
@@ -42,7 +44,7 @@ public class ContactHandler implements ContactListener {
         else if (b2UserData instanceof PuckModel && b1UserData instanceof HandleModel)
         {
             b2.setLinearVelocity(controller.getHandle().getVel().add(b2.getLinearVelocity()));
-            model.setLastTouch("PLAYER");
+            model.setLastTouch(EntityModel.ModelType.HANDLE);
 
             if(controller.isSoundEnabled())
                 controller.getHit().play(controller.getVolume());
@@ -50,13 +52,13 @@ public class ContactHandler implements ContactListener {
         }
         else if(b1UserData instanceof PuckModel && b2UserData instanceof BotModel)
         {
-            model.setLastTouch("BOT");
-            controller.getBot().getBehaviour().changeState("RESET");
+            model.setLastTouch(EntityModel.ModelType.BOT);
+            controller.getBot().getBehaviour().changeState(Bot.State.RESET);
             if(controller.isSoundEnabled())
                 controller.getHit().play(controller.getVolume()); }
         else if (b2UserData instanceof PuckModel && b1UserData instanceof BotModel) {
-            model.setLastTouch("BOT");
-            controller.getBot().getBehaviour().changeState("RESET");
+            model.setLastTouch(EntityModel.ModelType.BOT);
+            controller.getBot().getBehaviour().changeState(Bot.State.RESET);
             if(controller.isSoundEnabled())
                 controller.getHit().play(controller.getVolume());
         }

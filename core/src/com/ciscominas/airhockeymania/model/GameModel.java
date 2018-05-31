@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.database.GameResult;
 import com.ciscominas.airhockeymania.model.entities.BotModel;
+import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.model.entities.HandleModel;
 import com.ciscominas.airhockeymania.model.entities.LineModel;
 import com.ciscominas.airhockeymania.model.entities.PowerUpModel;
@@ -31,7 +32,7 @@ public class GameModel {
     /**
      * Keeps track of the last player touching the puck.
      */
-    private String lastTouch;
+    private EntityModel.ModelType lastTouch;
 
     /**
      * Returns the instance of the GameModel, creating it if it doesn't already exist.
@@ -165,7 +166,7 @@ public class GameModel {
      *  Returns the person who last touched the puck.
      * @return Person who last touched the puck.
      */
-    public String getLastTouch() {
+    public EntityModel.ModelType getLastTouch() {
         return lastTouch;
     }
 
@@ -173,7 +174,7 @@ public class GameModel {
      * Sets lastTouch as parameter lasTouch. Called every time there's a collision between a puck and a handle or bot.
      * @param lastTouch Last touch.
      */
-    public void setLastTouch(String lastTouch) {
+    public void setLastTouch(EntityModel.ModelType lastTouch) {
         this.lastTouch = lastTouch;
     }
 }

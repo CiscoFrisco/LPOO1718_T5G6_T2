@@ -16,6 +16,8 @@ import java.util.Random;
  */
 public class Bot {
 
+    public enum State {DEFEND, ATTACK, RESET};
+
     /**
      * Bot alert range. It will only react when a puck enters the area within this range.
      */
@@ -27,7 +29,7 @@ public class Bot {
     /**
      * Represents the bot current state, affecting the current behaviour (attacking, defending or waiting)
      */
-    String state;
+    State state;
     /**
      * Indicates whether or not the bot as calculated a prediction to where the puck will move.
      */
@@ -48,7 +50,7 @@ public class Bot {
     public Bot(){
 
         prediction = new Vector2();
-        state = "RESET";
+        state = State.RESET;
         hasPrediction = false;
     }
 
@@ -95,18 +97,18 @@ public class Bot {
         if(puck.getBody().getPosition().sub(GameController.getInstance().getBot().getBody().getPosition()).len() < alert_radius)
         {
            if(puck.getBody().getLinearVelocity().len() < GameController.ARENA_HEIGHT /4.0 )
-                state = "ATTACK";
+                state = State.ATTACK;
 
             else if (!hasPrediction && puck.getBody().getLinearVelocity().y > 0) {
-                state = "DEFEND";
+                state = State.DEFEND;
                 getTrajectory(puck);
                 hasPrediction= true;
             }
         }
 
-        if (state == "DEFEND" && hasPrediction)
+        if (state == State.DEFEND && hasPrediction)
             defend(prediction, puck);
-        else if (state == "ATTACK")
+        else if (state == State.ATTACK)
             attack(puck);
         else
             reset();
@@ -158,7 +160,7 @@ public class Bot {
                 GameController.getInstance().getBot().setLinearVelocity(0, 0);
         }
         else
-            changeState("RESET");
+            changeState(State.RESET);
     }
 
     /**
@@ -166,7 +168,7 @@ public class Bot {
      * Changes current state to initial state(RESET) to prevent the bot from start following the puck's movement.
      */
     public void attack(PuckBody puck){
-        state = "RESET";
+        state = State.RESET;
         Vector2 bot_pos = GameController.getInstance().getBot().getBody().getPosition();
         Vector2 puck_pos = puck.getBody().getPosition();
         Vector2 vel = new Vector2((puck_pos.x - bot_pos.x) * reaction_vel, (puck_pos.y - bot_pos.y) * reaction_vel);
@@ -177,7 +179,7 @@ public class Bot {
      * Changes the current state of the bot
      * @param new_state New state to which the bot will be updated
      */
-    public void changeState(String new_state){
+    public void changeState(State new_state){
         state = new_state;
     }
 
@@ -268,7 +270,7 @@ public class Bot {
         }
     }
     
-    public String getState()
+    public State getState()
     {
         return state;
     }

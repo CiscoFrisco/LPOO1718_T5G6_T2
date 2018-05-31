@@ -6,6 +6,7 @@ import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.controller.entities.EntityBody;
 import com.ciscominas.airhockeymania.controller.entities.LineBody;
 import com.ciscominas.airhockeymania.model.GameModel;
+import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.model.entities.LineModel;
 import com.ciscominas.airhockeymania.utils.Functions;
 
@@ -16,9 +17,9 @@ import java.util.ArrayList;
  */
 public class SuperGoal implements PowerUpType {
     /**
-     * String referring to who was the last to touch the puck. This entity is referred as the powerUp owner.
+     * Refers to who was the last to touch the puck. This entity is referred as the powerUp owner.
      */
-    private String lastTouch;
+    private EntityModel.ModelType lastTouch;
 
     /**
      * Resize ratio applied once the powerUp is activated.
@@ -41,7 +42,7 @@ public class SuperGoal implements PowerUpType {
     public void effect() {
         lastTouch = GameModel.getInstance().getLastTouch();
 
-       if(lastTouch == "PLAYER")
+       if(lastTouch == EntityModel.ModelType.HANDLE)
             effectEdges(2,3, EFFECT_RATIO);
         else
             effectEdges(0,1, EFFECT_RATIO);
@@ -53,7 +54,7 @@ public class SuperGoal implements PowerUpType {
     @Override
     public void reset() {
 
-        if(lastTouch == "PLAYER")
+        if(lastTouch == EntityModel.ModelType.HANDLE)
             effectEdges(2,3, RESET_RATIO);
         else
             effectEdges(0,1, RESET_RATIO);

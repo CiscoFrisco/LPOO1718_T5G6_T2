@@ -5,6 +5,7 @@ import com.ciscominas.airhockeymania.controller.GameController;
 import com.ciscominas.airhockeymania.controller.entities.BotBody;
 import com.ciscominas.airhockeymania.controller.entities.HandleBody;
 import com.ciscominas.airhockeymania.model.GameModel;
+import com.ciscominas.airhockeymania.model.entities.EntityModel;
 import com.ciscominas.airhockeymania.utils.Functions;
 
 /**
@@ -15,7 +16,7 @@ public class SuperHandle implements PowerUpType {
     /**
      * String referring to who was the last to touch the puck. This entity is referred as the powerUp owner.
      */
-    private String lastTouch;
+    private EntityModel.ModelType lastTouch;
 
     /**
      * This powerUp has the purpose of helping the player that was the last to touch the puck.
@@ -25,7 +26,7 @@ public class SuperHandle implements PowerUpType {
     public void effect() {
         lastTouch = GameModel.getInstance().getLastTouch();
 
-        if(lastTouch == "PLAYER")
+        if(lastTouch == EntityModel.ModelType.HANDLE)
         {
             Functions.destroyBody(GameController.getInstance().getHandle().getBody());
             GameModel.getInstance().setHandle(2f);
@@ -44,7 +45,7 @@ public class SuperHandle implements PowerUpType {
      */
     @Override
     public void reset() {
-        if(lastTouch == "PLAYER")
+        if(lastTouch == EntityModel.ModelType.HANDLE)
         {
             Functions.destroyBody(GameController.getInstance().getHandle().getBody());
             GameModel.getInstance().setHandle(0.5f);
