@@ -109,6 +109,13 @@ As explained above, we had to follow some external tutorials in order to complet
 
 ### Menus
 
+#### Splash
+
+Its only purpose is to show the game logo, and its creators. To continue to the main menu, touch anywhere on the screen
+![splash](res/screens/splash.png)
+
+#### Main
+
 By clicking the buttons, the user will be redirected to their respective menus. Besides New Game, all of them have a Back Button to allow them to comeback to the main menu.
 In the Game screen, there is a pause button, which also allows the user to quit and comeback to the main menu.
 
@@ -116,9 +123,16 @@ In the Game screen, there is a pause button, which also allows the user to quit 
 
 - Preferences: Allows the user to change settings like Music, Sound and bot difficulty.
 
+![settings](res/screens/settings.png)
+
 - Results: Shows (at most) the 10 latest results to the user: the game score and date.
 
+![results](res/screens/results.png)
+
 - Exit: Exits the game.
+
+![main](res/screens/main.png)
+
 
 ### In-Game
 
@@ -128,4 +142,8 @@ In order to score, hit the puck and hope the bot lets it go into the net.
 Some power ups may show up, in order to gain them, send the puck in their direction, and it will
 be activated. Some of them may spoil the bot, but be careful. The bot may also get the powerup, thus affecting you!
 
+![game](res/screens/game.png)
+
 You can pause the game by pressing the button at the top right corner. There are options to activate/deactivate music and sounds and to resume/exit the game.
+
+![pause](res/screens/pause.png)
