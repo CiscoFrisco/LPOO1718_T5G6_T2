@@ -73,7 +73,7 @@ public class PowerUpBody extends EntityBody {
     {
         if(!active && body != null)
         {
-            checkContact();
+           return checkContact();
         }
 
         return false;
@@ -83,14 +83,16 @@ public class PowerUpBody extends EntityBody {
      * Checks if the powerUp body collides with the puck.
      * If it does then the currentPowerUp is activated and its body is destroyed.
      */
-    public void checkContact() {
+    public boolean checkContact() {
         if (Functions.checkIntersection(body, GameController.getInstance().getPuckBodies().get(0).getBody(),0.5))
         {
             effect();
             Functions.destroyBody(body);
             body = null;
+            return true;
         }
 
+        return false;
     }
 
     /**

@@ -248,8 +248,14 @@ public class GameController {
 
         if(timeElapsed >= POWERUP_FREQUENCY && powerUpBody == null)
             setUpPowerUp();
-        else if(powerUpBody != null)
-            powerUpBody.check();
+        else if(powerUpBody != null && !powerUpBody.isActive())
+        {
+            if(powerUpBody.check())
+                begin = new Date();
+        }
+        else if(timeElapsed >= POWERUP_FREQUENCY && powerUpBody.isActive())
+            resetPowerUp();
+
     }
 
     /**
@@ -305,11 +311,14 @@ public class GameController {
 
         resetBodies();
         if(powerUpBody!=null && powerUpBody.isActive())
-        {
-            powerUpBody.reset();
-            powerUpBody = null;
-            begin = new Date();
-        }
+            resetPowerUp();
+    }
+
+    private void resetPowerUp()
+    {
+        powerUpBody.reset();
+        powerUpBody = null;
+        begin = new Date();
     }
 
     /**
