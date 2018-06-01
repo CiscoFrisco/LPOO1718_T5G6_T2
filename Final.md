@@ -26,6 +26,8 @@ Android: Run the provided .apk, after allowing installation of external apps.
 
 ### State Diagram
 
+![State Diagram](res/diagrams/state_diagram.png)
+
 ## Design Patterns
 
 - Model-View-Controller
