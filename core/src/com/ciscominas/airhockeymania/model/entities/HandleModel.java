@@ -9,6 +9,10 @@ public class HandleModel extends EntityModel {
      * Number of goals scored in a single game
      */
     private int score;
+    /**
+     * Boolean that indicates whether or not the handle is able to move.
+     */
+    private boolean controlOn = true;
 
     /**
      * Creates a HandleModel object.
@@ -52,5 +56,21 @@ public class HandleModel extends EntityModel {
     public void resetScore()
     {
         score = 0;
+    }
+
+    /**
+     * Updates hanlde's ability to move.
+     * @param controlOn Indicates whether or not the handle is able to move.
+     */
+    public void setControlOn(boolean controlOn) {
+        this.controlOn = controlOn;
+    }
+
+    /**
+     * Gets controlOn attribute that indicates whether or not the handle is able to move.
+     * @return Boolean that indicates whether or not the handle is able to move.
+     */
+    public boolean getControlOn() {
+        return controlOn;
     }
 }

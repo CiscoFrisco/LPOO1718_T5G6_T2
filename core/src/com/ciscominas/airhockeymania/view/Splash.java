@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
 
+import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.ciscominas.airhockeymania.AirHockeyMania;
 
 
@@ -45,6 +46,12 @@ public class Splash extends ScreenAdapter {
      */
     public static final int GRAPHICS_HEIGHT = Gdx.graphics.getHeight();
 
+
+    /**
+     * Width of the 'authors' text
+     */
+    private float textWidth;
+
     /**
      * Creates a Splash screen, initializing the font and loading the logo.
      * @param game
@@ -53,6 +60,7 @@ public class Splash extends ScreenAdapter {
     {
         this.game = game;
         font = new BitmapFont();
+        textWidth = getTextWidth();
         loadLogo();
     }
 
@@ -67,6 +75,17 @@ public class Splash extends ScreenAdapter {
         logo = assetManager.get(LOGO);
     }
 
+    /**
+     * Returns the width of the authors text
+     * @return the width of the authors text
+     */
+    private float getTextWidth()
+    {
+        GlyphLayout layout = new GlyphLayout();
+        layout.setText(font, "By zephyrminas and CiscoFrisco");
+        return layout.width;
+    }
+
     @Override
     public void render(float delta) {
         super.render(delta);
@@ -74,10 +93,18 @@ public class Splash extends ScreenAdapter {
 
         game.getBatch().begin();
         game.getBatch().draw(logo, 0, GRAPHICS_HEIGHT / 3, GRAPHICS_WIDTH, GRAPHICS_HEIGHT / 3);
-        font.draw(game.getBatch(), "By zephyrminas and CiscoFrisco", GRAPHICS_WIDTH / 4, GRAPHICS_HEIGHT / 6);
+        font.draw(game.getBatch(), "By zephyrminas and CiscoFrisco", GRAPHICS_WIDTH/2 - textWidth/2, GRAPHICS_HEIGHT / 6);
+
+
         game.getBatch().end();
 
         if (Gdx.input.justTouched())
             game.changeScreen(AirHockeyMania.Screen.MAIN);
+    }
+
+    @Override
+    public void dispose(){
+        font.dispose();
+        logo.dispose();
     }
 }

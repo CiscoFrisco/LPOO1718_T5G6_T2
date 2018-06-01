@@ -83,6 +83,7 @@ public class PowerUpBody extends EntityBody {
      * If it does then the currentPowerUp is activated and its body is destroyed.
      */
     public boolean checkContact() {
+
         if (Functions.checkIntersection(body, GameController.getInstance().getPuckBodies().get(0).getBody(),0.5))
         {
             effect();

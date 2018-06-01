@@ -14,6 +14,10 @@ public class BotModel extends EntityModel{
      * Difficulty/Intelligence of the bot, Medium by default
      */
     private String difficulty = "Medium";
+    /**
+     * Boolean that indicates whether or not the handle is able to move.
+     */
+    private boolean controlOn = true;
 
     /**
      * Creates a BotModel object.
@@ -66,5 +70,25 @@ public class BotModel extends EntityModel{
     public String getDifficulty()
     {
         return difficulty;
+    }
+
+    /**
+     * Updates hanlde's ability to move.
+     * @param controlOn Indicates whether or not the handle is able to move.
+     */
+    public void setControlOn(boolean controlOn) {
+        this.controlOn = controlOn;
+    }
+
+    /**
+     * Gets controlOn attribute that indicates whether or not the handle is able to move.
+     * @return Boolean that indicates whether or not the handle is able to move.
+     */
+    public boolean getControlOn() {
+        return controlOn;
+    }
+
+    public void setDifficulty(String difficulty) {
+        this.difficulty = difficulty;
     }
 }

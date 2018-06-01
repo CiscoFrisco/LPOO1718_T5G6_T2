@@ -43,7 +43,7 @@ public class GameView extends ScreenAdapter {
 
     public final static float PIXEL_TO_METER = 0.04f;
 
-    public static final float VIEWPORT_WIDTH = GameController.ARENA_WIDTH;
+    public static final float VIEWPORT_WIDTH = Gdx.graphics.getWidth()*PIXEL_TO_METER;
 
     public static float VIEWPORT_HEIGHT;
 
@@ -61,7 +61,7 @@ public class GameView extends ScreenAdapter {
 
     private Texture background;
 
-    private final float PAUSE_WIDTH = GRAPHICS_WIDTH/8;
+    private final float PAUSE_WIDTH = Gdx.graphics.getWidth()/8;
 
     protected final float PAUSE_X = VIEWPORT_WIDTH/PIXEL_TO_METER - PAUSE_WIDTH;
 
@@ -81,14 +81,15 @@ public class GameView extends ScreenAdapter {
      */
     public GameView(AirHockeyMania game) {
         this.game = game;
-        camera = createCamera();
 
         loadAssets();
 
-        GameController.getInstance().setSounds(game.getAssetManager());
         GameController.getInstance().setUpDimensions();
+        GameController.getInstance().setUpBodies();
+        GameController.getInstance().setSounds(game.getAssetManager());
 
         setAssets();
+        camera = createCamera();
     }
 
     /**
@@ -155,11 +156,12 @@ public class GameView extends ScreenAdapter {
         GameController controller = GameController.getInstance();
         AppPreferences preferences = game.getPreferences();
 
+        GameModel.getInstance().getBot().setDifficulty(preferences.getDifficulty());
+        controller.getBot().setDifficulty();
+
         controller.setBegin();
 
         Gdx.input.setInputProcessor(new InputHandler(this));
-
-        controller.setBotDiff(preferences.getDifficulty());
 
         Functions.checkMusic(preferences, bkg_music);
 

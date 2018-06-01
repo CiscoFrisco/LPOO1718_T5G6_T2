@@ -1,5 +1,6 @@
 package com.ciscominas.airhockeymania.controller;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.assets.AssetManager;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.math.Vector2;
@@ -122,7 +123,6 @@ public class GameController {
     private GameController() {
 
         world = new World(new Vector2(0, 0), true);
-        setUpBodies();
 
         begin = new Date();
         world.setContactListener(new ContactHandler());
@@ -132,7 +132,7 @@ public class GameController {
     /**
      * Creates all elements to be present in the world (puck, handle, bot and edges) except the powerUp.
      */
-    private void setUpBodies()
+    public void setUpBodies()
     {
         GameModel gameModel = GameModel.getInstance();
         puckBodies = new ArrayList<PuckBody>();
@@ -152,9 +152,9 @@ public class GameController {
      */
     public static void setUpDimensions()
     {
-        ARENA_WIDTH = GRAPHICS_WIDTH * GameView.PIXEL_TO_METER;
+        ARENA_WIDTH = Gdx.graphics.getWidth()*GameView.PIXEL_TO_METER;
 
-        ARENA_HEIGHT = GRAPHICS_HEIGHT * GameView.PIXEL_TO_METER;
+        ARENA_HEIGHT =  Gdx.graphics.getHeight()*GameView.PIXEL_TO_METER;
     }
 
     /**
@@ -411,8 +411,8 @@ public class GameController {
      */
     public void reset() {
         gameOver = false;
-        handleBody.setControlOn(true);
-        botBody.setControlOn(true);
+        GameModel.getInstance().getBot().setControlOn(true);
+        GameModel.getInstance().getHandle().setControlOn(true);
         resetBodies();
         GameModel.getInstance().getBot().resetScore();
         GameModel.getInstance().getHandle().resetScore();
@@ -472,13 +472,5 @@ public class GameController {
      */
     public float getVolume() {
         return volume;
-    }
-
-    /**
-     * Sets bot difficulty as botDiff.
-     * @param botDiff Bot difficulty.
-     */
-    public void setBotDiff(String botDiff) {
-        this.botBody.setDifficulty(botDiff);
     }
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 
+import com.ciscominas.airhockeymania.model.GameModel;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 
 
@@ -24,10 +25,7 @@ public class HandleBody extends EntityBody {
      * Handle's current position.
      */
     private Vector2 currentPos;
-    /**
-     * Boolean that indicates whether or not the handle is able to move.
-     */
-    private boolean controlOn;
+
 
     /**
      * HandleBody constructor.Calls super class constructor with the respective parameters.
@@ -42,7 +40,7 @@ public class HandleBody extends EntityBody {
 
         this.currentPos = new Vector2(model.getX(), model.getY());
         this.vel = new  Vector2(0,0);
-        controlOn = true;
+
 
         createFixture(body, createShape(model.getWidth(), CIRCLE, 0), density, friction, restitution, HANDLE_BODY,
                 (short) (LINE_BODY |PUCK_BODY));
@@ -55,7 +53,7 @@ public class HandleBody extends EntityBody {
      */
     public void move(float x, float y)
     {
-        if(controlOn)
+        if(GameModel.getInstance().getHandle().getControlOn())
         {
             this.lastPos = this.currentPos;
             setTransform(x, y,0);
@@ -80,21 +78,5 @@ public class HandleBody extends EntityBody {
     public void reset(float handleX, float handleY) {
         body.setTransform(handleX, handleY, 0);
         body.setLinearVelocity(0,0);
-    }
-
-    /**
-     * Updates hanlde's ability to move.
-     * @param controlOn Indicates whether or not the handle is able to move.
-     */
-    public void setControlOn(boolean controlOn) {
-        this.controlOn = controlOn;
-    }
-
-    /**
-     * Gets controlOn attribute that indicates whether or not the handle is able to move.
-     * @return Boolean that indicates whether or not the handle is able to move.
-     */
-    public boolean getControlOn() {
-        return controlOn;
     }
 }

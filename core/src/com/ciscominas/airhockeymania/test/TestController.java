@@ -43,8 +43,8 @@ public class TestController {
         HandleModel model = new HandleModel(Constants.HANDLE_X, Constants.HANDLE_Y, Constants.HANDLE_RADIUS, 0);
         HandleBody handle = new HandleBody(world, model, BodyDef.BodyType.DynamicBody);
 
-        handle.setControlOn(true);
-        assertTrue(GameController.getInstance().getHandle().getControlOn());
+        model.setControlOn(true);
+        assertTrue(GameModel.getInstance().getHandle().getControlOn());
 
         handle.move(9, 3);
 
@@ -76,50 +76,4 @@ public class TestController {
         assertNotEquals(controller.getHandle().getBody().getPosition().y, Constants.HANDLE_Y);
         assertEquals(GameModel.getInstance().getLastTouch(), EntityModel.ModelType.HANDLE);
     }
-
-    /*
-    @Test
-    public void checkGoal()
-    {
-        GameController controller = GameController.getInstance();
-
-        Vector2 direction = controller.getBot().getBody().getPosition();
-        direction.sub(controller.getPuckBodies().get(0).getBody().getPosition());
-        direction.nor();
-        controller.getBot().getBody().setTransform(14, Constants.BOT_Y, 0);
-        float speed = 10;
-        controller.getPuckBodies().get(0).getBody().setLinearVelocity(direction.scl(speed));
-
-        float delta = 0;
-        while(GameModel.getInstance().getHandle().getScore() != 1)
-        {
-            controller.update(delta);
-            delta+=1f;
-        }
-
-        assertEquals(GameModel.getInstance().getHandle().getScore(), 1);
-        GameModel.getInstance().getHandle().resetScore();
-    }*/
-
-       /* @Test(timeout = 10000)
-    public void testBot()
-    {
-        GameController controller = GameController.getInstance();
-
-        Vector2 direction = controller.getBot().getBody().getPosition();
-        direction.sub(controller.getPuckBodies().get(0).getBody().getPosition());
-        direction.nor();
-
-        float speed = 10;
-        controller.getPuckBodies().get(0).getBody().setLinearVelocity(direction.scl(speed));
-
-        float delta = 0;
-        while(controller.getBot().getBehaviour().getState() == "RESET")
-        {
-            controller.update(delta);
-            delta+=1f;
-        }
-
-        assertTrue(controller.getBot().getBehaviour().getPrediction());
-    }*/
 }

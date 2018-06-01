@@ -3,6 +3,7 @@ package com.ciscominas.airhockeymania.controller.entities;
 import com.badlogic.gdx.physics.box2d.BodyDef;
 import com.badlogic.gdx.physics.box2d.World;
 import com.ciscominas.airhockeymania.controller.entities.artificial_intelligence.Bot;
+import com.ciscominas.airhockeymania.model.GameModel;
 import com.ciscominas.airhockeymania.model.entities.EntityModel;
 
 import java.util.ArrayList;
@@ -16,10 +17,6 @@ public class BotBody extends EntityBody {
      * Bot's behaviour
      */
     private Bot bot;
-    /**
-     * Boolean that indicates whether or not the bot is able to move.
-     */
-    boolean controlOn;
 
     /**
      * BotBody constructor. Calls super class constructor with the respective parameters.
@@ -33,7 +30,6 @@ public class BotBody extends EntityBody {
         super(world, model, type);
 
         bot = new Bot();
-        controlOn = true;
 
         float density = 200000f, friction = 1f, restitution = 0.5f;
 
@@ -47,7 +43,7 @@ public class BotBody extends EntityBody {
      */
     public void move(ArrayList<PuckBody> puckBodies)
     {
-        if(controlOn)
+        if(GameModel.getInstance().getBot().getControlOn())
             bot.move(puckBodies);
     }
 
@@ -72,27 +68,9 @@ public class BotBody extends EntityBody {
     }
 
     /**
-     * Updates the controlOn attribute according to the control parameter.
-     * @param control Boolean referring to whether or not the bot is able to move.
-     */
-    public void setControlOn(boolean control)
-    {
-        this.controlOn = control;
-    }
-
-    /**
-     * Returns the state of controlOn.
-     * @return controlOn
-     */
-    public boolean isControlOn() {
-        return controlOn;
-    }
-
-    /**
      * Sets the difficulty of the bot
-     * @param difficulty the new difficulty
      */
-    public void setDifficulty(String difficulty) {
-        bot.setValues(difficulty);
+    public void setDifficulty() {
+        bot.setValues(GameModel.getInstance().getBot().getDifficulty());
     }
 }

@@ -61,7 +61,7 @@ public class Constants {
     /**
      * Radius of the handle in meters
      */
-    public static final float HANDLE_RADIUS = GameController.ARENA_WIDTH/16;
+    public static final float HANDLE_RADIUS = GameController.ARENA_WIDTH/16.0f;
 
     /**
      * Initial x coordinate of the handle in meters
@@ -82,19 +82,7 @@ public class Constants {
      * Initial y coordinate of the bot in meters
      */
     public static final float BOT_Y = 11*GameController.ARENA_HEIGHT/12;
-    public static final float HARD_BOT_SENS = 5f;
-    public static final float NORMAL_BOT_SENS = 3f;
-    public static final float EASY_BOT_SENS = 1f;
-    public static final float HARD_BOT_MAX_OFF = 0.5f;
-    public static final float NORMAL_BOT_MAX_OFFSET = 1.0f;
-    public static final float EASY_BOT_MAX_OFFSET = 2.0f;
 
-
-
-
-    public static final String HANDLE_IMAGE_PATH = "handle.png";
-    public static final String PUCK_IMAGE_PATH = "puck.png";
-    public static final String LOGO_IMAGE_PATH = "air_hockey_mania.png";
     public static final String HIT_SOUND = "hit.mp3";
 
     public static final String DEFAULT_DIFFICULTY = "Medium";

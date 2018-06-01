@@ -35,7 +35,7 @@ public class ContactHandler implements ContactListener {
 
         if(b1UserData instanceof PuckModel && b2UserData instanceof HandleModel)
         {
-            b1.setLinearVelocity(controller.getHandle().getVel());//.add(b1.getLinearVelocity()));
+            b1.setLinearVelocity(controller.getHandle().getVel().add(b1.getLinearVelocity()));
             model.setLastTouch(EntityModel.ModelType.HANDLE);
 
             if(controller.isSoundEnabled())
@@ -43,7 +43,7 @@ public class ContactHandler implements ContactListener {
             }
         else if (b2UserData instanceof PuckModel && b1UserData instanceof HandleModel)
         {
-            b2.setLinearVelocity(controller.getHandle().getVel());//.add(b2.getLinearVelocity()));
+            b2.setLinearVelocity(controller.getHandle().getVel().add(b2.getLinearVelocity()));
             model.setLastTouch(EntityModel.ModelType.HANDLE);
 
             if(controller.isSoundEnabled())
