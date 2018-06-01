@@ -1,5 +1,9 @@
 # Final Check-Point
 
+## Documentation
+
+The full javadoc documentation can be found online [here](https://mrzephyr17.github.io/).
+
 ## Project Setup
 
 The project was developed with Android Studio.
@@ -16,7 +20,9 @@ Android: Run the provided .apk, after allowing installation of external apps.
 
 ## UML
 
-### Package and Class Diagram
+### Class Diagram
+
+![class diagram](res/diagrams/class_final.jpg)
 
 ### State Diagram
 
